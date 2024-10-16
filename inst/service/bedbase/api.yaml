@@ -3,7 +3,7 @@
   "info": {
     "description": "BED file/sets statistics and image server API",
     "title": "bedhost",
-    "version": "0.5.0"
+    "version": "0.6.0"
   },
   "paths": {
     "/": {
@@ -42,6 +42,48 @@
         "summary": "API intro page"
       }
     },
+    "/v1/bed/embed": {
+      "post": {
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "format": "binary",
+            "in": "formData",
+            "name": "file",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {
+              "items": {
+                "type": "number"
+              },
+              "title": "Response Embed Bed File V1 Bed Embed Post",
+              "type": "array"
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/HTTPValidationError"
+            }
+          }
+        },
+        "tags": [
+          "bed"
+        ],
+        "description": "Create embedding for bed file",
+        "operationId": "embed_bed_file_v1_bed_embed_post",
+        "summary": "Get embeddings for a bed file."
+      }
+    },
     "/v1/bed/example": {
       "get": {
         "produces": [
@@ -52,7 +94,7 @@
           "200": {
             "description": "Successful Response",
             "schema": {
-              "$ref": "#/definitions/BedMetadata"
+              "$ref": "#/definitions/BedMetadataAll"
             }
           }
         },
@@ -145,8 +187,10 @@
             "type": "integer"
           },
           {
+            "format": "binary",
             "in": "formData",
-            "name": "body"
+            "name": "file",
+            "type": "string"
           }
         ],
         "responses": {
@@ -287,7 +331,7 @@
           "200": {
             "description": "Successful Response",
             "schema": {
-              "$ref": "#/definitions/BedMetadata"
+              "$ref": "#/definitions/BedMetadataAll"
             }
           },
           "422": {
@@ -1248,8 +1292,9 @@
       "title": "BedListSearchResult",
       "type": "object"
     },
-    "BedMetadata": {
+    "BedMetadataAll": {
       "properties": {
+        "annotation": {},
         "bed_format": {
           "title": "Bed Format",
           "type": "string"
@@ -1308,11 +1353,12 @@
       "required": [
         "id"
       ],
-      "title": "BedMetadata",
+      "title": "BedMetadataAll",
       "type": "object"
     },
     "BedMetadataBasic": {
       "properties": {
+        "annotation": {},
         "bed_format": {
           "title": "Bed Format",
           "type": "string"
@@ -1564,60 +1610,28 @@
     "BedPlots": {
       "properties": {
         "chrombins": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/FileModel"
-            }
-          ]
+          "$ref": "#/definitions/FileModel"
         },
         "cumulative_partitions": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/FileModel"
-            }
-          ]
+          "$ref": "#/definitions/FileModel"
         },
         "expected_partitions": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/FileModel"
-            }
-          ]
+          "$ref": "#/definitions/FileModel"
         },
         "gccontent": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/FileModel"
-            }
-          ]
+          "$ref": "#/definitions/FileModel"
         },
         "neighbor_distances": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/FileModel"
-            }
-          ]
+          "$ref": "#/definitions/FileModel"
         },
         "open_chromatin": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/FileModel"
-            }
-          ]
+          "$ref": "#/definitions/FileModel"
         },
         "partitions": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/FileModel"
-            }
-          ]
+          "$ref": "#/definitions/FileModel"
         },
         "widths_histogram": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/FileModel"
-            }
-          ]
+          "$ref": "#/definitions/FileModel"
         }
       },
       "title": "BedPlots",
@@ -1733,11 +1747,7 @@
     "BedSetPlots": {
       "properties": {
         "region_commonality": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/FileModel"
-            }
-          ]
+          "$ref": "#/definitions/FileModel"
         }
       },
       "title": "BedSetPlots",
@@ -1746,18 +1756,10 @@
     "BedSetStats": {
       "properties": {
         "mean": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/BedStatsModel"
-            }
-          ]
+          "$ref": "#/definitions/BedStatsModel"
         },
         "sd": {
-          "allOf": [
-            {
-              "$ref": "#/definitions/BedStatsModel"
-            }
-          ]
+          "$ref": "#/definitions/BedStatsModel"
         }
       },
       "title": "BedSetStats",
@@ -1832,6 +1834,17 @@
         }
       },
       "title": "Body_bed_to_bed_search_v1_bed_search_bed_post",
+      "type": "object"
+    },
+    "Body_embed_bed_file_v1_bed_embed_post": {
+      "properties": {
+        "file": {
+          "format": "binary",
+          "title": "File",
+          "type": "string"
+        }
+      },
+      "title": "Body_embed_bed_file_v1_bed_embed_post",
       "type": "object"
     },
     "ComponentVersions": {
@@ -2093,6 +2106,100 @@
         "embedding_models"
       ],
       "title": "ServiceInfoResponse",
+      "type": "object"
+    },
+    "StandardMeta": {
+      "description": "Standardized Bed file metadata",
+      "properties": {
+        "antibody": {
+          "default": "",
+          "description": "Antibody used in the assay",
+          "title": "Antibody",
+          "type": "string"
+        },
+        "cell_line": {
+          "default": "",
+          "description": "population of cells derived from a single cell and cultured in the lab for extended use, e.g. HeLa, HepG2, k562",
+          "title": "Cell Line",
+          "type": "string"
+        },
+        "cell_type": {
+          "default": "",
+          "description": "specific kind of cell with distinct characteristics found in an organism. e.g. Neurons, Hepatocytes, Adipocytes",
+          "title": "Cell Type",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "title": "Description"
+        },
+        "exp_protocol": {
+          "default": "",
+          "description": "Experimental protocol (e.g. ChIP-seq)",
+          "title": "Exp Protocol",
+          "type": "string"
+        },
+        "genotype": {
+          "default": "",
+          "description": "Genotype of the sample",
+          "title": "Genotype",
+          "type": "string"
+        },
+        "global_experiment_id": {
+          "default": "",
+          "description": "Global experiment identifier. e.g. GSE000",
+          "title": "Global Experiment Id",
+          "type": "string"
+        },
+        "global_sample_id": {
+          "default": "",
+          "description": "Global sample identifier. e.g. GSM000",
+          "title": "Global Sample Id",
+          "type": "string"
+        },
+        "library_source": {
+          "default": "",
+          "description": "Library source (e.g. genomic, transcriptomic)",
+          "title": "Library Source",
+          "type": "string"
+        },
+        "organism": {
+          "default": "",
+          "description": "Name of species. e.g. Homo sapiens.",
+          "title": "Organism",
+          "type": "string"
+        },
+        "phenotype": {
+          "default": "",
+          "description": "Phenotype of the sample",
+          "title": "Phenotype",
+          "type": "string"
+        },
+        "species_id": {
+          "default": "",
+          "title": "Species Id",
+          "type": "string"
+        },
+        "target": {
+          "default": "",
+          "description": "Target of the assay (e.g. H3K4me3)",
+          "title": "Target",
+          "type": "string"
+        },
+        "tissue": {
+          "default": "",
+          "description": "Tissue type",
+          "title": "Tissue",
+          "type": "string"
+        },
+        "treatment": {
+          "default": "",
+          "description": "Treatment of the sample (e.g. drug treatment)",
+          "title": "Treatment",
+          "type": "string"
+        }
+      },
+      "title": "StandardMeta",
       "type": "object"
     },
     "StatsReturn": {
