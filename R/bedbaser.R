@@ -37,9 +37,6 @@
 #'
 #' @param cache_path string() cache
 #'
-#' @importFrom AnVIL Service
-#' @importFrom rlang warn
-#'
 #' @return BEDbase object
 #'
 #' @examples
@@ -52,7 +49,7 @@ BEDbase <- function(cache_path) {
     suppressWarnings(
         .BEDbase(
             cache = BiocFileCache::BiocFileCache(cache_path),
-            Service(
+            AnVIL::Service(
                 service = "bedbase",
                 host = "api.bedbase.org",
                 api_reference_version = .BEDBASE_API_REFERENCE_VERSION,
@@ -135,7 +132,6 @@ setMethod(
 #' @param .deprecated (default FALSE) if deprecated
 #'
 #' @importFrom AnVIL operations
-#' @importFrom methods callNextMethod
 #'
 #' @return list() API end points
 #'
@@ -147,7 +143,7 @@ setMethod(
 setMethod(
     "operations", "BEDbase",
     function(x, ..., .deprecated = FALSE) {
-        callNextMethod(x, ..., .deprecated = .deprecated)
+        methods::callNextMethod(x, ..., .deprecated = .deprecated)
     }
 )
 
@@ -155,8 +151,6 @@ setMethod(
 #'
 #' @param api API object of BEDbase created from BEDbase()
 #' @param rec_type character() bed or bedset
-#'
-#' @importFrom httr content
 #'
 #' @return list() bed or bedset
 #'
@@ -173,7 +167,7 @@ bb_example <- function(api, rec_type = c("bed", "bedset")) {
     } else {
         rsp <- api$get_example_bedset_record_v1_bedset_example_get()
     }
-    content(rsp)
+    httr::content(rsp)
 }
 
 #' Get metadata for a BED file or BEDset
@@ -187,9 +181,6 @@ bb_example <- function(api, rec_type = c("bed", "bedset")) {
 #' @param id integer() record or object identifier
 #' @param full logical() (default FALSE) include full record with stats, files,
 #' and metadata
-#'
-#' @importFrom httr content
-#' @importFrom rlang abort
 #'
 #' @return list() metadata
 #'
@@ -214,11 +205,11 @@ bb_metadata <- function(api, id, full = FALSE) {
             full = full
         )
     }
-    result <- content(rsp)
+    result <- httr::content(rsp)
     if (rsp$status_code == 404) {
-        abort(message = result$detail)
+        rlang::abort(message = result$detail)
     } else if (rsp$status != 200) {
-        abort(message = "{result$type}: input {result$input} {result$msg}")
+        rlang::abort(message = "{result$type}: input {result$input} {result$msg}")
     } else {
         result
     }
@@ -234,10 +225,6 @@ bb_metadata <- function(api, id, full = FALSE) {
 #' @param limit integer() (default 1000) maximum records
 #' @param offset integer() (default 0) page token of records
 #'
-#' @importFrom dplyr bind_rows
-#' @importFrom httr content
-#' @importFrom purrr map_depth
-#'
 #' @return tibble() of BED records
 #'
 #' @examples
@@ -252,14 +239,11 @@ bb_list_beds <- function(
         genome = genome, bed_type = bed_type,
         limit = limit, offset = offset
     )
-    recs <- content(rsp)
-    results <- tibble()
+    recs <- httr::content(rsp)
+    results <- tibble::tibble()
     if (recs$count) {
-        results <- map_depth(
-            .x = recs$results, 2,
-            ~ replace(.x, is.null(.x), NA)
-        ) |>
-            bind_rows()
+      results <- do.call(dplyr::bind_rows,
+                         lapply(recs$results, function(x) {unlist(x)}))
     }
     results
 }
@@ -272,11 +256,6 @@ bb_list_beds <- function(
 #' @param query character() (default NULL) keyword
 #' @param limit integer() (default 1000) maximum records of bedsets
 #' @param offset integer() (default 0) page token of records
-#'
-#' @importFrom dplyr bind_rows
-#' @importFrom httr content
-#' @importFrom purrr map_depth
-#' @importFrom tidyr unnest
 #'
 #' @return tibble() of BEDset records
 #'
@@ -291,11 +270,11 @@ bb_list_bedsets <- function(api, query = NULL, limit = 1000, offset = 0) {
         limit = limit,
         offset = offset
     )
-    recs <- content(rsp)
-    results <- tibble()
+    recs <- httr::content(rsp)
+    results <- tibble::tibble()
     if (recs$count) {
-        results <- bind_rows(recs$results) |>
-            unnest(cols = c(bed_ids))
+        results <- dplyr::bind_rows(recs$results) |>
+            tidyr::unnest(cols = c(bed_ids))
     }
     results
 }
@@ -307,11 +286,7 @@ bb_list_bedsets <- function(api, query = NULL, limit = 1000, offset = 0) {
 #' @param api API object of BEDbase created from BEDbase()
 #' @param bedset_id integer() BEDset record identifier
 #'
-#' @importFrom httr content
-#' @importFrom dplyr bind_rows
-#' @importFrom tibble tibble
-#'
-#' @return list() BED record identifiers
+#' @return tibble() information of BED files in BEDset
 #'
 #' @examples
 #' api <- BEDbase()
@@ -323,10 +298,11 @@ bb_beds_in_bedset <- function(api, bedset_id) {
     rsp <- api$get_bedfiles_in_bedset_v1_bedset__bedset_id__bedfiles_get(
         bedset_id = bedset_id
     )
-    recs <- content(rsp)
-    results <- tibble()
+    recs <- httr::content(rsp)
+    results <- tibble::tibble()
     if (recs$count) {
-        results <- bind_rows(recs$results)
+      results <- do.call(dplyr::bind_rows,
+          lapply(recs$results, function(x) {unlist(x)}))
     }
     results
 }
@@ -342,12 +318,6 @@ bb_beds_in_bedset <- function(api, bedset_id) {
 #' @param limit integer() (default 10) maximum number of results
 #' @param offset integer() (default 0) page offset of results
 #'
-#' @importFrom dplyr bind_rows
-#' @importFrom httr content
-#' @importFrom purrr map_depth
-#' @importFrom tibble tibble
-#' @importFrom utils URLencode
-#'
 #' @return tibble()
 #'
 #' @examples
@@ -356,17 +326,17 @@ bb_beds_in_bedset <- function(api, bedset_id) {
 #'
 #' @export
 bb_bed_text_search <- function(api, query, limit = 10, offset = 0) {
-    encoded_query <- URLencode(query, reserved = TRUE)
+    encoded_query <- utils::URLencode(query, reserved = TRUE)
     rsp <- api$text_to_bed_search_v1_bed_search_text_post(
         query = encoded_query,
         limit = limit,
         offset = offset
     )
-    recs <- content(rsp)
-    results <- tibble()
+    recs <- httr::content(rsp)
+    results <- tibble::tibble()
     if (recs$count) {
-        results <- map_depth(.x = recs$results, 1, \(y) unlist(y)) |>
-            bind_rows()
+        results <- purrr::map_depth(.x = recs$results, 1, \(y) unlist(y)) |>
+            dplyr::bind_rows()
     }
     results
 }
@@ -383,11 +353,6 @@ bb_bed_text_search <- function(api, query, limit = 10, offset = 0) {
 #' @param extra_cols character() (default NULL) extra column names to
 #'        construct GRanges objects
 #' @param quietly logical() (default TRUE) display messages
-#'
-#' @importFrom dplyr filter
-#' @importFrom R.utils gunzip
-#' @importFrom rtracklayer import.bb
-#' @importFrom rlang warn
 #'
 #' @return GRanges() object
 #'
@@ -408,12 +373,12 @@ bb_to_granges <- function(
         .bed_file_to_granges(file_path, metadata, extra_cols, quietly)
     } else if (file_type == "bigbed") {
         if (.Platform$OS.type == "windows") {
-            warn("This feature does not work on Windows.")
+            rlang::warn("This feature does not work on Windows.")
         } else {
             if (quietly) {
-                suppressMessages(import.bb(file_path, format = "bigBed"))
+                suppressMessages(rtracklayer::import.bb(file_path, format = "bigBed"))
             } else {
-                import.bb(file_path, format = "bigBed")
+                rtracklayer::import.bb(file_path, format = "bigBed")
             }
         }
     }
@@ -426,8 +391,6 @@ bb_to_granges <- function(
 #' @param api API object of BEDbase created from BEDbase()
 #' @param bedset_id integer() BEDset record identifier
 #' @param quietly logical() (default TRUE) display messages
-#'
-#' @importFrom GenomicRanges GRangesList
 #'
 #' @return GRangesList() object
 #'
@@ -444,7 +407,7 @@ bb_to_grangeslist <- function(api, bedset_id, quietly = TRUE) {
         gro <- bb_to_granges(api, bed_id, quietly = quietly)
         gros[[length(gros) + 1]] <- gro
     }
-    GRangesList(gros)
+    GenomicRanges::GRangesList(gros)
 }
 
 #' Save a BED or BEDset files to a path given an id

@@ -3,7 +3,7 @@ test_that(".format_metadata_files returns a tibble with a url column", {
     ex_bed <- bb_example(api, "bed")
     ex_md <- bb_metadata(api, ex_bed$id, TRUE)
     mdf <- .format_metadata_files(ex_md$files)
-    expect_equal("tbl_df", class(mdf)[1])
+    expect_true(is((mdf)[1], "tbl_df"))
     expect_true("url" %in% names(mdf))
 })
 

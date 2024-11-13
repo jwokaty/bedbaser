@@ -6,10 +6,6 @@
 #' @param bfc BiocFileCache object
 #' @param quietly logical() (default TRUE) display message
 #'
-#' @importFrom BiocFileCache BiocFileCache bfcadd bfcdownload bfcneedsupdate
-#'     bfcquery bfcrpath
-#' @importFrom rlang inform
-#'
 #' @return filepath character()
 #'
 #' @examples
@@ -21,15 +17,15 @@
 #'
 #' @noRd
 .download_to_cache <- function(url, bfc, quietly = TRUE) {
-    rid <- bfcquery(bfc, url, "rname")$rid
+    rid <- BiocFileCache::bfcquery(bfc, url, "rname")$rid
     if (!length(rid)) {
         if (!quietly) {
-            inform(paste("Downloading", url, "..."))
+            rlang::inform(paste("Downloading", url, "..."))
         }
-        rid <- names(bfcadd(bfc,
+        rid <- names(BiocFileCache::bfcadd(bfc,
             rname = url, fpath = url, rtype = "web",
             download = TRUE, verbose = !quietly
         ))
     }
-    bfcrpath(bfc, rids = rid)
+    BiocFileCache::bfcrpath(bfc, rids = rid)
 }

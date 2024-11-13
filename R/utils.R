@@ -2,9 +2,6 @@
 #'
 #' @param records list() metadata
 #'
-#' @importFrom dplyr bind_rows
-#' @importFrom tidyr unnest_wider
-#'
 #' @return tibble() file metadata
 #'
 #' @examples
@@ -15,9 +12,9 @@
 #'
 #' @noRd
 .format_metadata_files <- function(metadata) {
-    bind_rows(metadata) |>
-        unnest_wider(access_methods) |>
-        unnest_wider(access_url)
+    dplyr::bind_rows(metadata) |>
+        tidyr::unnest_wider(access_methods) |>
+        tidyr::unnest_wider(access_url)
 }
 
 #' Save a file from BEDbase to the cache or a path
@@ -29,9 +26,6 @@
 #' @param access_type character() s3 or http
 #' @param cache_or_path BiocFileCache or character() cache or save path
 #' @param quietly logical() (default TRUE) display messages
-#'
-#' @importFrom R.utils gunzip
-#' @importFrom dplyr filter
 #'
 #' @return character() file path
 #'
@@ -46,14 +40,14 @@
         metadata, file_type = c("bed", "bigbed"),
         access_type = c("s3", "http"), cache_or_path, quietly = TRUE) {
     file_details <- .format_metadata_files(metadata$files) |>
-        filter(
+        dplyr::filter(
             name == paste(file_type, "file", sep = "_"),
             access_id == access_type
         )
     if (class(cache_or_path) == "BiocFileCache") {
         cached_file <- .download_to_cache(file_details$url, cache_or_path, quietly)
         bedbase_file <- tryCatch(
-            gunzip(cached_file, remove = FALSE),
+            R.utils::gunzip(cached_file, remove = FALSE),
             error = function(e) {
                 gsub(".gz", "", cached_file)
             }
@@ -74,9 +68,6 @@
 #' @param x double() the x in BEDX+Y
 #' @param y double() the y in BEDX+Y
 #'
-#' @importFrom stats setNames
-#' @importFrom utils read.table
-#'
 #' @return vector representing extraCols for rtracklayer
 #'
 #' @examples
@@ -91,7 +82,7 @@
 #'
 #' @noRd
 .get_extra_cols <- function(file_path, x, y) {
-    t <- read.table(file_path, sep = "\t")
+    t <- utils::read.table(file_path, sep = "\t")
     extra_cols <- c()
     stopifnot(x + y == dim(t)[2])
     t_seq <- seq(from = x + 1, to = x + y)
@@ -103,7 +94,7 @@
         }
         extra_cols <- c(extra_cols, col_type)
     }
-    setNames(extra_cols, names(t[t_seq]))
+    stats::setNames(extra_cols, names(t[t_seq]))
 }
 
 #' Create GRanges object from a BED file
@@ -120,10 +111,6 @@
 #'     GRanges objects
 #' @param quietly boolean() (default TRUE) Display information messages
 #'
-#' @importFrom rlang abort inform
-#' @importFrom rtracklayer import
-#' @importFrom stringr str_replace str_split_1
-#'
 #' @return GRanges() object representing BED
 #'
 #' @examples
@@ -138,31 +125,31 @@
         file_path, metadata, extra_cols = NULL,
         quietly = TRUE) {
     bed_format <- gsub("peak", "Peak", metadata$bed_format)
-    nums <- str_replace(metadata$bed_type, "bed", "") |>
-        str_split_1("\\+") |>
+    nums <- stringr::str_replace(metadata$bed_type, "bed", "") |>
+        stringr::str_split_1("\\+") |>
         as.double()
 
     if (!is.null(extra_cols) && (nums[2] != length(extra_cols))) {
-        abort("`extra_cols` length must match the Y value in `bed_type`.")
+        rlang::abort("`extra_cols` length must match the Y value in `bed_type`.")
     }
 
     if (!grepl("Peak", bed_format) && nums[2] != 0) {
         if (is.null(extra_cols)) {
             if (!quietly) {
-                inform("Assigning column names and types.")
+                rlang::inform("Assigning column names and types.")
             }
             extra_cols <- .get_extra_cols(file_path, nums[1], nums[2])
         }
         if (quietly) {
             suppressMessages(
-                import(file_path,
+                rtracklayer::import(file_path,
                     format = "bed",
                     extraCols = extra_cols,
                     genome = metadata$genome_alias
                 )
             )
         } else {
-            import(file_path,
+            rtracklayer::import(file_path,
                 format = "bed",
                 extraCols = extra_cols,
                 genome = metadata$genome_alias
@@ -171,13 +158,13 @@
     } else {
         if (quietly) {
             suppressMessages(
-                import(file_path,
+                rtracklayer::import(file_path,
                     format = bed_format,
                     genome = metadata$genome_alias
                 )
             )
         } else {
-            import(file_path,
+            rtracklayer::import(file_path,
                 format = bed_format,
                 genome = metadata$genome_alias
             )

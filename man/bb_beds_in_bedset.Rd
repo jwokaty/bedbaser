@@ -12,7 +12,7 @@ bb_beds_in_bedset(api, bedset_id)
 \item{bedset_id}{integer() BEDset record identifier}
 }
 \value{
-list() BED record identifiers
+tibble() information of BED files in BEDset
 }
 \description{
 Get BEDs associated with BEDset
