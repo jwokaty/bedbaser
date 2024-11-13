@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bedbaser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.9</span>
       </span>
     </div>
 
@@ -99,6 +99,15 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $embed_bed_file_v1_bed_embed_post</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> embed_bed_file_v1_bed_embed_post </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Get embeddings for a bed file. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Description:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Create embedding for bed file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameters:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   file (string)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $get_example_bed_record_v1_bed_example_get</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> get_example_bed_record_v1_bed_example_get </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Get example BED record metadata </span>
@@ -121,6 +130,17 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   bed_type (string)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     filter by bed type. e.g. 'bed6+4'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $missing_plots_v1_bed_missing_plots_get</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> missing_plots_v1_bed_missing_plots_get </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Get missing plots for a bed file. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Description:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Get missing plots for a bed file</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   example -&gt; plot_id: gccontent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameters:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   plot_id (string)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $bed_to_bed_search_v1_bed_search_bed_post</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bed_to_bed_search_v1_bed_search_bed_post </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Search for similar bed files </span>
@@ -128,7 +148,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   limit (integer)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   offset (integer)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   body ()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   file (string)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $text_to_bed_search_v1_bed_search_text_post</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> text_to_bed_search_v1_bed_search_text_post </span>
@@ -311,9 +331,44 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   bedset_id (string)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $get_bedset_pep_v1_bedset__bedset_id__pep_get</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> get_bedset_pep_v1_bedset__bedset_id__pep_get </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Download PEP project for a single BEDset record </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Description:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Example bed_id: gse218680</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameters:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   bedset_id (string)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $get_track_hub_bedset_v1_bedset__bedset_id__track_hub_get</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> get_track_hub_bedset_v1_bedset__bedset_id__track_hub_get </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Get Track Hub Bedset </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Description:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Generate track hub files for the BED set</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameters:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   bedset_id (string)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $get_track_hub_bedset_v1_bedset__bedset_id__track_hub_head</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> get_track_hub_bedset_v1_bedset__bedset_id__track_hub_head </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Get Track Hub Bedset </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Description:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Generate track hub files for the BED set</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameters:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   bedset_id (string)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $changelog_v1_docs_changelog_get</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> changelog_v1_docs_changelog_get </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Release notes </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameters:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $get_bedbase_db_stats_v1_genomes_get</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> get_bedbase_db_stats_v1_genomes_get </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Get available genomes </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Description:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Returns statistics</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Parameters:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

@@ -19,7 +19,7 @@ GRanges object and a BEDset by its id into a GRangesList."><!-- mathjax --><scri
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bedbaser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.9</span>
       </span>
     </div>
 
@@ -60,16 +60,38 @@ functions for common tasks, such as to import a BED file by id into a
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">BEDbase</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">BEDbase</span><span class="op">(</span><span class="va">cache_path</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">getCache</span><span class="op">(</span><span class="va">x</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">setCache</span><span class="op">(</span><span class="va">x</span>, <span class="va">cache_path</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
+    <div id="arguments">
+    <h2>Arguments</h2>
+
+
+<dl><dt id="arg-cache-path">cache_path<a class="anchor" aria-label="anchor" href="#arg-cache-path"></a></dt>
+<dd><p>character()</p></dd>
+
+
+<dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
+<dd><p>BEDbase object</p></dd>
+
+
+<dt id="arg-quietly">quietly<a class="anchor" aria-label="anchor" href="#arg-quietly"></a></dt>
+<dd><p>(default TRUE) display messages</p></dd>
+
+</dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Service object</p>
+    <p>BEDbase object</p>
     </div>
     <div id="details">
     <h2>Details</h2>
     <p>The convenience functions are as follows</p><ul><li><p><code>bedbaser::BEDbase()</code>: API service constructor</p></li>
+<li><p><code>bedbaser::getCache()</code>: Retrieve cache</p></li>
+<li><p><code>bedbaser::setCache()</code>: Set path to cache</p></li>
 <li><p><code><a href="bb_example.html">bedbaser::bb_example()</a></code>: Retrieve an example BED file or BEDset</p></li>
 <li><p><code><a href="bb_metadata.html">bedbaser::bb_metadata()</a></code>: Retrieve metadata for a BED file or BEDset</p></li>
 <li><p><code><a href="bb_list_beds.html">bedbaser::bb_list_beds()</a></code>: List all BED files</p></li>
@@ -77,9 +99,8 @@ functions for common tasks, such as to import a BED file by id into a
 <li><p><code><a href="bb_beds_in_bedset.html">bedbaser::bb_beds_in_bedset()</a></code>: List BED files in BEDset</p></li>
 <li><p><code><a href="bb_bed_text_search.html">bedbaser::bb_bed_text_search()</a></code>: Search BED files by text</p></li>
 <li><p><code><a href="bb_to_granges.html">bedbaser::bb_to_granges()</a></code>: Create a <code>GRanges</code> object from a BED id</p></li>
-<li><p><code><a href="bb_to_grangeslist.html">bedbaser::bb_to_grangeslist()</a></code>: Create a <code>GrangesList</code> from a BEDset id
-Set the environment variable <code>BEDBASER_CACHE</code> to alter the cache path for
-downloaded BED files.</p></li>
+<li><p><code><a href="bb_to_grangeslist.html">bedbaser::bb_to_grangeslist()</a></code>: Create a <code>GrangesList</code> from a BEDset id</p></li>
+<li><p><code><a href="bb_save.html">bedbaser::bb_save()</a></code>: Save a BED file to a path.</p></li>
 </ul></div>
 
     <div id="ref-examples">
@@ -87,26 +108,26 @@ downloaded BED files.</p></li>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">BEDbase</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> service: bedbase</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> tags(); use bedbase$&lt;tab completion&gt;:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 32 × 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 38 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    tag   operation                                                       summary</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> base  get_bedbase_db_stats_v1_stats_get                               Get su…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> base  service_info_v1_service_info_get                                GA4GH …</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> bed   bed_to_bed_search_v1_bed_search_bed_post                        Search…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> bed   get_bed_classification_v1_bed__bed_id__metadata_classification… Get cl…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> bed   get_bed_embedding_v1_bed__bed_id__embedding_get                 Get em…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> bed   get_bed_files_v1_bed__bed_id__metadata_files_get                Get me…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> bed   get_bed_metadata_v1_bed__bed_id__metadata_get                   Get me…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> bed   get_bed_pephub_v1_bed__bed_id__metadata_raw_get                 Get ra…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> bed   get_bed_plots_v1_bed__bed_id__metadata_plots_get                Get pl…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> bed   get_bed_stats_v1_bed__bed_id__metadata_stats_get                Get st…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 22 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> base  get_bedbase_db_stats_v1_genomes_get                             Get av…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> base  get_bedbase_db_stats_v1_stats_get                               Get su…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> base  service_info_v1_service_info_get                                GA4GH …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> bed   bed_to_bed_search_v1_bed_search_bed_post                        Search…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> bed   embed_bed_file_v1_bed_embed_post                                Get em…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> bed   get_bed_classification_v1_bed__bed_id__metadata_classification… Get cl…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> bed   get_bed_embedding_v1_bed__bed_id__embedding_get                 Get em…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> bed   get_bed_files_v1_bed__bed_id__metadata_files_get                Get me…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> bed   get_bed_metadata_v1_bed__bed_id__metadata_get                   Get me…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> bed   get_bed_pephub_v1_bed__bed_id__metadata_raw_get                 Get ra…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 28 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> tag values:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   base, bed, bedset, home, objects, search, NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> schemas():</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   AccessMethod, AccessURL, BedClassification, BedEmbeddingResult,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   BedFiles</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   # ... with 34 more elements</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   AccessMethod, AccessURL, BaseListResponse, BedClassification,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   BedEmbeddingResult</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   # ... with 37 more elements</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

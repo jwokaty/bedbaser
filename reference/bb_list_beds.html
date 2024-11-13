@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bedbaser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.9</span>
       </span>
     </div>
 
@@ -92,22 +92,26 @@
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">api</span> <span class="op">&lt;-</span> <span class="fu"><a href="BEDbase.html">BEDbase</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">bb_list_beds</span><span class="op">(</span><span class="va">api</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,000 × 11</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,000 × 26</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    name         genome_alias genome_digest bed_type bed_format id    description</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> Human_LnCaP… hg19         baa91c8f6e27… bed4+1   bed        04c4…  <span style="color: #BB0000;">NA</span>        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> hg19.Boyle.… hg19         baa91c8f6e27… bed3+3   bed        2723… <span style="color: #949494;">"</span>Defined b…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> hg19.Bernst… hg19         baa91c8f6e27… bed3+4   bed        6dc4… <span style="color: #949494;">"</span>Defined f…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> hg19.Birney… hg19         baa91c8f6e27… bed3+4   bed        e868… <span style="color: #949494;">"</span>Defined b…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> JS_L180_ATA… hg38         <span style="color: #BB0000;">NA</span>            bed3+0   bed        486b… <span style="color: #949494;">"</span>JS_L180<span style="color: #949494;">"</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> JS_L181_ATA… hg38         <span style="color: #BB0000;">NA</span>            bed3+0   bed        bf46… <span style="color: #949494;">"</span>JS_L181<span style="color: #949494;">"</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> JS_L182_ATA… hg38         2230c535660f… bed3+0   bed        fa90… <span style="color: #949494;">"</span>JS_L182<span style="color: #949494;">"</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> JS_L183_ATA… hg38         <span style="color: #BB0000;">NA</span>            bed3+0   bed        d175… <span style="color: #949494;">"</span>JS_L183<span style="color: #949494;">"</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> JS_L184_ATA… hg38         <span style="color: #BB0000;">NA</span>            bed3+0   bed        7331… <span style="color: #949494;">"</span>JS_L184<span style="color: #949494;">"</span>  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> LNCaP_METTL… hg38         <span style="color: #BB0000;">NA</span>            bed3+0   bed        1ac4… <span style="color: #949494;">""</span>         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> encode_7040  hg38         2230c535660f… bed6+4   narrowpeak 0006… <span style="color: #949494;">"</span>CUX1 TF C…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> encode_12401 hg38         2230c535660f… bed6+4   narrowpeak 000a… <span style="color: #949494;">"</span>ZBTB2 TF …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> encode_12948 hg38         2230c535660f… bed6+3   broadpeak  0011… <span style="color: #949494;">"</span>DNase-seq…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> tissue,infi… hg38         2230c535660f… bed3+0   bed        0014… <span style="color: #949494;">""</span>         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> encode_10146 hg38         2230c535660f… bed6+4   narrowpeak 0019… <span style="color: #949494;">"</span>H3K9ac Hi…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> hg38.Kundaj… hg38         2230c535660f… bed3+2   bed        0019… <span style="color: #949494;">"</span>Defined a…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> encode_4782  hg38         2230c535660f… bed6+4   narrowpeak 001d… <span style="color: #949494;">"</span>FASTKD2 e…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> encode_14119 hg38         2230c535660f… bed6+3   broadpeak  001f… <span style="color: #949494;">"</span>DNase-seq…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> encode_10920 hg38         2230c535660f… bed6+4   narrowpeak 0020… <span style="color: #949494;">"</span>ZNF621 TF…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> encode_16747 hg38         2230c535660f… bed6+4   narrowpeak 002b… <span style="color: #949494;">"</span>POLR2A TF…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 990 more rows</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 more variables: submission_date &lt;chr&gt;, last_update_date &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   is_universe &lt;lgl&gt;, license_id &lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 19 more variables: submission_date &lt;chr&gt;, last_update_date &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   is_universe &lt;chr&gt;, license_id &lt;chr&gt;, annotation.organism &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   annotation.species_id &lt;chr&gt;, annotation.genotype &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   annotation.phenotype &lt;chr&gt;, annotation.description &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   annotation.cell_type &lt;chr&gt;, annotation.cell_line &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   annotation.tissue &lt;chr&gt;, annotation.library_source &lt;chr&gt;, …</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bedbaser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.9</span>
       </span>
     </div>
 
@@ -106,11 +106,8 @@ functions, such as to create GRanges and GRangesList objects.</p>
 <div class="section level3">
 <h3 id="optional-set-the-cache">(Optional) Set the cache<a class="anchor" aria-label="anchor" href="#optional-set-the-cache"></a>
 </h3>
-<p>Set the cache path with the environment variable
-<code>BEDBASER_CACHE</code>; otherwise, bedbaser will choose the default
-cache location.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span><span class="st">"BEDBASER_CACHE"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Set the cache path with the argument <code>cache_path</code>;
+otherwise, bedbaser will choose the default cache location.</p>
 </div>
 </div>
 <div class="section level2">
@@ -126,119 +123,128 @@ files, and creating <code>GRanges</code> objects.</p>
 browse available resources in BEDbase. Both functions display the id and
 names of BED files and BEDsets. An id can be used to access a specific
 resource.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/bb_list_beds.html">bb_list_beds</a></span><span class="op">(</span><span class="va">api</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 1,000 × 11</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 1,000 × 26</span></span></span>
 <span><span class="co">##    name         genome_alias genome_digest bed_type bed_format id    description</span></span>
 <span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> Human_LnCaP… hg19         baa91c8f6e27… bed4+1   bed        04c4…  <span style="color: #BB0000;">NA</span>        </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> hg19.Boyle.… hg19         baa91c8f6e27… bed3+3   bed        2723… <span style="color: #949494;">"</span>Defined b…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> hg19.Bernst… hg19         baa91c8f6e27… bed3+4   bed        6dc4… <span style="color: #949494;">"</span>Defined f…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> hg19.Birney… hg19         baa91c8f6e27… bed3+4   bed        e868… <span style="color: #949494;">"</span>Defined b…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> JS_L180_ATA… hg38         <span style="color: #BB0000;">NA</span>            bed3+0   bed        486b… <span style="color: #949494;">"</span>JS_L180<span style="color: #949494;">"</span>  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> JS_L181_ATA… hg38         <span style="color: #BB0000;">NA</span>            bed3+0   bed        bf46… <span style="color: #949494;">"</span>JS_L181<span style="color: #949494;">"</span>  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> JS_L182_ATA… hg38         2230c535660f… bed3+0   bed        fa90… <span style="color: #949494;">"</span>JS_L182<span style="color: #949494;">"</span>  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> JS_L183_ATA… hg38         <span style="color: #BB0000;">NA</span>            bed3+0   bed        d175… <span style="color: #949494;">"</span>JS_L183<span style="color: #949494;">"</span>  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> JS_L184_ATA… hg38         <span style="color: #BB0000;">NA</span>            bed3+0   bed        7331… <span style="color: #949494;">"</span>JS_L184<span style="color: #949494;">"</span>  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> LNCaP_METTL… hg38         <span style="color: #BB0000;">NA</span>            bed3+0   bed        1ac4… <span style="color: #949494;">""</span>         </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> encode_7040  hg38         2230c535660f… bed6+4   narrowpeak 0006… <span style="color: #949494;">"</span>CUX1 TF C…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> encode_12401 hg38         2230c535660f… bed6+4   narrowpeak 000a… <span style="color: #949494;">"</span>ZBTB2 TF …</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> encode_12948 hg38         2230c535660f… bed6+3   broadpeak  0011… <span style="color: #949494;">"</span>DNase-seq…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> tissue,infi… hg38         2230c535660f… bed3+0   bed        0014… <span style="color: #949494;">""</span>         </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> encode_10146 hg38         2230c535660f… bed6+4   narrowpeak 0019… <span style="color: #949494;">"</span>H3K9ac Hi…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> hg38.Kundaj… hg38         2230c535660f… bed3+2   bed        0019… <span style="color: #949494;">"</span>Defined a…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> encode_4782  hg38         2230c535660f… bed6+4   narrowpeak 001d… <span style="color: #949494;">"</span>FASTKD2 e…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> encode_14119 hg38         2230c535660f… bed6+3   broadpeak  001f… <span style="color: #949494;">"</span>DNase-seq…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> encode_10920 hg38         2230c535660f… bed6+4   narrowpeak 0020… <span style="color: #949494;">"</span>ZNF621 TF…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> encode_16747 hg38         2230c535660f… bed6+4   narrowpeak 002b… <span style="color: #949494;">"</span>POLR2A TF…</span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 990 more rows</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 4 more variables: submission_date &lt;chr&gt;, last_update_date &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   is_universe &lt;lgl&gt;, license_id &lt;chr&gt;</span></span></span></code></pre>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<span><span class="co">## <span style="color: #949494;"># ℹ 19 more variables: submission_date &lt;chr&gt;, last_update_date &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   is_universe &lt;chr&gt;, license_id &lt;chr&gt;, annotation.organism &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   annotation.species_id &lt;chr&gt;, annotation.genotype &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   annotation.phenotype &lt;chr&gt;, annotation.description &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   annotation.cell_type &lt;chr&gt;, annotation.cell_line &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   annotation.tissue &lt;chr&gt;, annotation.library_source &lt;chr&gt;, …</span></span></span></code></pre>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/bb_list_bedsets.html">bb_list_bedsets</a></span><span class="op">(</span><span class="va">api</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 4,588 × 5</span></span></span>
-<span><span class="co">##    id        name      md5sum                           description      bed_ids</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> gse246900 gse246900 ab910211c1b997df45d8072a742f32c4 <span style="color: #949494;">"</span>Data from [GEO… 2e7287…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> gse246900 gse246900 ab910211c1b997df45d8072a742f32c4 <span style="color: #949494;">"</span>Data from [GEO… 40dde5…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> gse246900 gse246900 ab910211c1b997df45d8072a742f32c4 <span style="color: #949494;">"</span>Data from [GEO… 4243db…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> gse246900 gse246900 ab910211c1b997df45d8072a742f32c4 <span style="color: #949494;">"</span>Data from [GEO… d6f44f…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> gse246900 gse246900 ab910211c1b997df45d8072a742f32c4 <span style="color: #949494;">"</span>Data from [GEO… eb1db3…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> gse246900 gse246900 ab910211c1b997df45d8072a742f32c4 <span style="color: #949494;">"</span>Data from [GEO… f2695a…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> gse234441 gse234441 0a1b9971fa1029266a591a83deae8edd <span style="color: #949494;">"</span>Data from [GEO… 796305…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> gse274883 gse274883 8361562afc52f8f8a613f3e11930174d <span style="color: #949494;">"</span>Data from [GEO… 30e209…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> gse274883 gse274883 8361562afc52f8f8a613f3e11930174d <span style="color: #949494;">"</span>Data from [GEO… abe04b…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> gse247593 gse247593 6ee9806c7f0757c0f4e65ef2fcb26533 <span style="color: #949494;">"</span>Data from [GEO… 015de3…</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 4,578 more rows</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 18,978 × 9</span></span></span>
+<span><span class="co">##    id          name  md5sum submission_date last_update_date description bed_ids</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> encode_bat… enco… 6dc4c… 2024-11-03T18:… 2024-11-03T18:2… <span style="color: #949494;">"</span>Encode pr… 000a10…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> encode_bat… enco… 6dc4c… 2024-11-03T18:… 2024-11-03T18:2… <span style="color: #949494;">"</span>Encode pr… 00116c…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> encode_bat… enco… 6dc4c… 2024-11-03T18:… 2024-11-03T18:2… <span style="color: #949494;">"</span>Encode pr… 00205a…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> encode_bat… enco… 6dc4c… 2024-11-03T18:… 2024-11-03T18:2… <span style="color: #949494;">"</span>Encode pr… 002f49…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> encode_bat… enco… 6dc4c… 2024-11-03T18:… 2024-11-03T18:2… <span style="color: #949494;">"</span>Encode pr… 003c20…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> encode_bat… enco… 6dc4c… 2024-11-03T18:… 2024-11-03T18:2… <span style="color: #949494;">"</span>Encode pr… 00903c…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> encode_bat… enco… 6dc4c… 2024-11-03T18:… 2024-11-03T18:2… <span style="color: #949494;">"</span>Encode pr… 00a4ac…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> encode_bat… enco… 6dc4c… 2024-11-03T18:… 2024-11-03T18:2… <span style="color: #949494;">"</span>Encode pr… 00b0c9…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> encode_bat… enco… 6dc4c… 2024-11-03T18:… 2024-11-03T18:2… <span style="color: #949494;">"</span>Encode pr… 00c021…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> encode_bat… enco… 6dc4c… 2024-11-03T18:… 2024-11-03T18:2… <span style="color: #949494;">"</span>Encode pr… 00d062…</span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 18,968 more rows</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 2 more variables: author &lt;chr&gt;, source &lt;chr&gt;</span></span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="examine-metadata">Examine metadata<a class="anchor" aria-label="anchor" href="#examine-metadata"></a>
 </h3>
 <p>Use <code><a href="../reference/bb_metadata.html">bb_metadata()</a></code> to learn more about a BED or BEDset
 associated with an id.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ex_bed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_example.html">bb_example</a></span><span class="op">(</span><span class="va">api</span>, <span class="st">"bed"</span><span class="op">)</span></span>
 <span><span class="va">md</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_metadata.html">bb_metadata</a></span><span class="op">(</span><span class="va">api</span>, <span class="va">ex_bed</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">md</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## $name</span></span>
-<span><span class="co">## [1] "Human_LnCaP_H3K9me3_R1881-16hr_Chinnaiyan"</span></span>
+<span><span class="co">## [1] "encode_3676"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $genome_alias</span></span>
-<span><span class="co">## [1] "hg19"</span></span>
+<span><span class="co">## [1] "hg38"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $genome_digest</span></span>
-<span><span class="co">## [1] "baa91c8f6e2780cfd8fd1040ff37f51c379947a2a4820d6c"</span></span>
+<span><span class="co">## [1] "2230c535660fb4774114bfa966a62f823fdb6d21acf138d4"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $bed_type</span></span>
-<span><span class="co">## [1] "bed4+1"</span></span>
+<span><span class="co">## [1] "bed6+4"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $bed_format</span></span>
-<span><span class="co">## [1] "bed"</span></span>
+<span><span class="co">## [1] "narrowpeak"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $id</span></span>
-<span><span class="co">## [1] "04c46b96264ef40bca93f03b10345da5"</span></span></code></pre>
+<span><span class="co">## [1] "95900d67ed6411a322af35098e445eb0"</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="show-bed-files-in-bedset">Show BED files in BEDset<a class="anchor" aria-label="anchor" href="#show-bed-files-in-bedset"></a>
 </h3>
 <p>Use <code><a href="../reference/bb_beds_in_bedset.html">bb_beds_in_bedset()</a></code> to display the id of BEDs in a
 BEDset.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/bb_beds_in_bedset.html">bb_beds_in_bedset</a></span><span class="op">(</span><span class="va">api</span>, <span class="st">"excluderanges"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 80 × 11</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 80 × 26</span></span></span>
 <span><span class="co">##    name         genome_alias genome_digest bed_type bed_format id    description</span></span>
 <span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> hg19.Boyle.… hg19         baa91c8f6e27… bed3+3   bed        2723… Defined by…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> hg19.Bernst… hg19         baa91c8f6e27… bed3+4   bed        6dc4… Defined fr…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> hg19.Birney… hg19         baa91c8f6e27… bed3+4   bed        e868… Defined by…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> dm3.UCSC.sc… dm3          <span style="color: #BB0000;">NA</span>            bed3+8   bed        57f3… Gaps betwe…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> hg38.Kundaj… hg38         2230c535660f… bed3+2   bed        0019… Defined as…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> mm10.UCSC.s… mm10         0f10d83b1050… bed3+8   bed        027d… Gaps on th…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> mm9.Lareau.… mm9          <span style="color: #BB0000;">NA</span>            bed3+2   bed        04db… ENCODE exc…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> mm39.exclud… mm39         <span style="color: #BB0000;">NA</span>            bed3+3   bed        0c37… Defined by…</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;"> 5</span> TAIR10.UCSC… tair10       <span style="color: #BB0000;">NA</span>            bed3+3   bed        0f77… Gaps in th…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> mm39.UCSC.t… mm39         <span style="color: #BB0000;">NA</span>            bed3+8   bed        43bd… Gaps from …</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> mm39.UCSC.c… mm39         <span style="color: #BB0000;">NA</span>            bed3+8   bed        7d73… Gaps betwe…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> mm39.UCSC.s… mm39         <span style="color: #BB0000;">NA</span>            bed3+8   bed        18ff… Gaps betwe…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> mm10.UCSC.t… mm10         0f10d83b1050… bed3+8   bed        6bc6… Gaps from …</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> mm10.UCSC.s… mm10         0f10d83b1050… bed3+8   bed        027d… Gaps on th…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> mm10.Lareau… mm10         0f10d83b1050… bed3+8   bed        1139… Regions of…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> mm39.UCSC.s… mm39         <span style="color: #BB0000;">NA</span>            bed3+8   bed        18ff… Gaps betwe…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> mm9.UCSC.fr… mm9          <span style="color: #BB0000;">NA</span>            bed3+8   bed        1ae4… Gaps betwe…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> dm3.UCSC.co… dm3          <span style="color: #BB0000;">NA</span>            bed3+8   bed        1dab… Gaps betwe…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> hg19.UCSC.c… hg19         baa91c8f6e27… bed3+8   bed        254e… Gaps betwe…</span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 70 more rows</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 4 more variables: submission_date &lt;chr&gt;, last_update_date &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   is_universe &lt;lgl&gt;, license_id &lt;chr&gt;</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;"># ℹ 19 more variables: submission_date &lt;chr&gt;, last_update_date &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   is_universe &lt;chr&gt;, license_id &lt;chr&gt;, annotation.species_name &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   annotation.species_id &lt;chr&gt;, annotation.genotype &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   annotation.phenotype &lt;chr&gt;, annotation.description &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   annotation.cell_type &lt;chr&gt;, annotation.cell_line &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   annotation.tissue &lt;chr&gt;, annotation.library_source &lt;chr&gt;, …</span></span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="search-for-a-bed-file-by-keyword">Search for a BED file by keyword<a class="anchor" aria-label="anchor" href="#search-for-a-bed-file-by-keyword"></a>
 </h3>
 <p>Search for BED files by keywords. <code><a href="../reference/bb_bed_text_search.html">bb_bed_text_search()</a></code>
 returns all BED files scored against a keyword query.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/bb_bed_text_search.html">bb_bed_text_search</a></span><span class="op">(</span><span class="va">api</span>, <span class="st">"cancer"</span>, limit <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 10 × 28</span></span></span>
-<span><span class="co">##    id                       payload.antibody payload.cell_line payload.cell_type</span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> d9abb65f-d77d-fea6-8cab… <span style="color: #949494;">"</span>c_MYC<span style="color: #949494;">"</span>          <span style="color: #949494;">""</span>                MCF-7            </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 24c58fb7-1758-cf62-4308… <span style="color: #949494;">"</span>H3K9me3<span style="color: #949494;">"</span>        <span style="color: #949494;">""</span>                LnCaP            </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 28de3d3d-6d38-fd32-6607… <span style="color: #949494;">"</span>Polll<span style="color: #949494;">"</span>          <span style="color: #949494;">""</span>                VCaP             </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> c1dc09ce-da0d-44fd-f5e8… <span style="color: #949494;">"</span>H3K9me3<span style="color: #949494;">"</span>        <span style="color: #949494;">""</span>                VCaP             </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> df6661a1-4693-eb22-7e44… <span style="color: #949494;">"</span>H3K4me2<span style="color: #949494;">"</span>        <span style="color: #949494;">""</span>                LnCaP            </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> 9591e90a-d5e3-513b-0dc8… <span style="color: #949494;">"</span>H3K4me2<span style="color: #949494;">"</span>        <span style="color: #949494;">""</span>                LnCaP            </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> b27e2b35-e384-7403-2c2b… <span style="color: #949494;">"</span>Polll<span style="color: #949494;">"</span>          <span style="color: #949494;">""</span>                VCaP             </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> af737892-f1ca-e7aa-2285… <span style="color: #949494;">"</span>Pan-H3<span style="color: #949494;">"</span>         <span style="color: #949494;">""</span>                VCaP             </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> 8c00d959-c69e-e567-bd12… <span style="color: #949494;">""</span>               <span style="color: #949494;">""</span>                Hepg2            </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> 95a593b8-3370-74a3-34b4… <span style="color: #949494;">"</span>ERG<span style="color: #949494;">"</span>            <span style="color: #949494;">""</span>                metastatic prost…</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 24 more variables: payload.description &lt;chr&gt;, payload.exp_protocol &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   payload.genome &lt;chr&gt;, payload.genotype &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   payload.global_experiment_id &lt;chr&gt;, payload.global_sample_id &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   payload.library_source &lt;chr&gt;, payload.organism &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   payload.sample_name &lt;chr&gt;, payload.species_id &lt;chr&gt;, payload.target &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   payload.tissue &lt;chr&gt;, payload.treatment &lt;chr&gt;, score &lt;chr&gt;,</span></span></span>
-<span><span class="co">## <span style="color: #949494;">#   metadata.name &lt;chr&gt;, metadata.genome_alias &lt;chr&gt;, …</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 10 × 43</span></span></span>
+<span><span class="co">##    id                   payload.species_name payload.species_id payload.genotype</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> 9455677c-9039-928b-… Homo sapiens         9606               <span style="color: #949494;">""</span>              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> 3919e978-9020-690d-… Homo sapiens         9606               <span style="color: #949494;">""</span>              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> 26fb0de5-5b10-9a0d-… Homo sapiens         9606               <span style="color: #949494;">""</span>              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> ffc1e5ac-45d9-2313-… Homo sapiens         9606               <span style="color: #949494;">""</span>              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> a07d627d-d3d7-cff9-… Homo sapiens         9606               <span style="color: #949494;">""</span>              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> f2f0eee0-0aaa-4629-… Homo sapiens         9606               <span style="color: #949494;">""</span>              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> cfefafeb-002e-c744-… Homo sapiens         9606               <span style="color: #949494;">""</span>              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> b4857063-a3fb-f9e2-… Homo sapiens         9606               <span style="color: #949494;">""</span>              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> e0b3c20c-f147-29d8-… Homo sapiens         9606               <span style="color: #949494;">""</span>              </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> 2f11d929-c18a-b99b-… Homo sapiens         9606               <span style="color: #949494;">""</span>              </span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 39 more variables: payload.phenotype &lt;chr&gt;, payload.description &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   payload.cell_type &lt;chr&gt;, payload.cell_line &lt;chr&gt;, payload.tissue &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   payload.library_source &lt;chr&gt;, payload.assay &lt;chr&gt;, payload.antibody &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   payload.target &lt;chr&gt;, payload.treatment &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   payload.global_sample_id &lt;chr&gt;, payload.global_experiment_id &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   score &lt;chr&gt;, metadata.name &lt;chr&gt;, metadata.genome_alias &lt;chr&gt;,</span></span></span>
+<span><span class="co">## <span style="color: #949494;">#   metadata.bed_type &lt;chr&gt;, metadata.bed_format &lt;chr&gt;, metadata.id &lt;chr&gt;, …</span></span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="import-a-bed-into-a-granges-object">Import a BED into a GRanges object<a class="anchor" aria-label="anchor" href="#import-a-bed-into-a-granges-object"></a>
@@ -246,55 +252,68 @@ returns all BED files scored against a keyword query.</p>
 <p>Create a GRanges object with a BED id with
 <code>bb_to_granges</code>, which downloads and imports a BED file using
 <em><a href="https://bioconductor.org/packages/3.20/rtracklayer" class="external-link">rtracklayer</a></em>.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ex_bed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_example.html">bb_example</a></span><span class="op">(</span><span class="va">api</span>, <span class="st">"bed"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ex_bed</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## $name</span></span>
-<span><span class="co">## [1] "Human_LnCaP_H3K9me3_R1881-16hr_Chinnaiyan"</span></span>
+<span><span class="co">## [1] "encode_3676"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $genome_alias</span></span>
-<span><span class="co">## [1] "hg19"</span></span>
+<span><span class="co">## [1] "hg38"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $genome_digest</span></span>
-<span><span class="co">## [1] "baa91c8f6e2780cfd8fd1040ff37f51c379947a2a4820d6c"</span></span>
+<span><span class="co">## [1] "2230c535660fb4774114bfa966a62f823fdb6d21acf138d4"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $bed_type</span></span>
-<span><span class="co">## [1] "bed4+1"</span></span>
+<span><span class="co">## [1] "bed6+4"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $bed_format</span></span>
-<span><span class="co">## [1] "bed"</span></span>
+<span><span class="co">## [1] "narrowpeak"</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $id</span></span>
-<span><span class="co">## [1] "04c46b96264ef40bca93f03b10345da5"</span></span></code></pre>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<span><span class="co">## [1] "95900d67ed6411a322af35098e445eb0"</span></span></code></pre>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Allow bedbaser to assign column names and types</span></span>
 <span><span class="fu"><a href="../reference/bb_to_granges.html">bb_to_granges</a></span><span class="op">(</span><span class="va">api</span>, <span class="va">ex_bed</span><span class="op">$</span><span class="va">id</span>, quietly <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## GRanges object with 4675 ranges and 2 metadata columns:</span></span>
-<span><span class="co">##          seqnames            ranges strand |           name        V5</span></span>
-<span><span class="co">##             &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; |    &lt;character&gt; &lt;numeric&gt;</span></span>
-<span><span class="co">##      [1]     chr1        9872-10760      * |    MACS_peak_1    509.71</span></span>
-<span><span class="co">##      [2]     chr1     563962-570848      * |    MACS_peak_2   3100.00</span></span>
-<span><span class="co">##      [3]     chr1     608244-608641      * |    MACS_peak_3    159.53</span></span>
-<span><span class="co">##      [4]     chr1     723803-727662      * |    MACS_peak_4   1397.24</span></span>
-<span><span class="co">##      [5]     chr1     824433-825382      * |    MACS_peak_5     77.21</span></span>
-<span><span class="co">##      ...      ...               ...    ... .            ...       ...</span></span>
-<span><span class="co">##   [4671]     chrY 59012797-59015258      * | MACS_peak_4671    193.82</span></span>
-<span><span class="co">##   [4672]     chrY 59015838-59019249      * | MACS_peak_4672    289.09</span></span>
-<span><span class="co">##   [4673]     chrY 59019496-59021043      * | MACS_peak_4673    159.15</span></span>
-<span><span class="co">##   [4674]     chrY 59021914-59022958      * | MACS_peak_4674     80.73</span></span>
-<span><span class="co">##   [4675]     chrY 59025695-59026670      * | MACS_peak_4675     75.78</span></span>
+<pre><code><span><span class="co">## GRanges object with 57761 ranges and 6 metadata columns:</span></span>
+<span><span class="co">##           seqnames              ranges strand |        name     score</span></span>
+<span><span class="co">##              &lt;Rle&gt;           &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">##       [1]     chr7   99556889-99560178      * |      Peak_1      1000</span></span>
+<span><span class="co">##       [2]     chr7 105530992-105534384      * |      Peak_2       976</span></span>
+<span><span class="co">##       [3]     chr7   44982405-44988303      * |      Peak_3       969</span></span>
+<span><span class="co">##       [4]     chr4   48830246-48833027      * |      Peak_4       953</span></span>
+<span><span class="co">##       [5]     chr7   74209131-74211593      * |      Peak_5       952</span></span>
+<span><span class="co">##       ...      ...                 ...    ... .         ...       ...</span></span>
+<span><span class="co">##   [57757]     chr8     8881307-8881578      * |  Peak_57757        10</span></span>
+<span><span class="co">##   [57758]     chr9       589353-589606      * |  Peak_57758        10</span></span>
+<span><span class="co">##   [57759]    chr19   51138137-51138357      * |  Peak_57759        10</span></span>
+<span><span class="co">##   [57760]     chr6 156659590-156660000      * |  Peak_57760        10</span></span>
+<span><span class="co">##   [57761]     chr7 154976160-154976403      * |  Peak_57761        10</span></span>
+<span><span class="co">##           signalValue    pValue    qValue      peak</span></span>
+<span><span class="co">##             &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;integer&gt;</span></span>
+<span><span class="co">##       [1]     50.4952   587.814   579.279      1420</span></span>
+<span><span class="co">##       [2]     47.9550   574.182   566.517      1362</span></span>
+<span><span class="co">##       [3]     42.1230   569.985   562.559      3866</span></span>
+<span><span class="co">##       [4]     58.4641   560.289   553.038      1109</span></span>
+<span><span class="co">##       [5]     50.5395   559.634   552.401      1172</span></span>
+<span><span class="co">##       ...         ...       ...       ...       ...</span></span>
+<span><span class="co">##   [57757]     1.73028   2.03201   0.42519       108</span></span>
+<span><span class="co">##   [57758]     1.73028   2.03201   0.42519       203</span></span>
+<span><span class="co">##   [57759]     2.01695   2.03088   0.42430        78</span></span>
+<span><span class="co">##   [57760]     1.64774   2.03023   0.42430        35</span></span>
+<span><span class="co">##   [57761]     1.64774   2.03023   0.42430       223</span></span>
 <span><span class="co">##   -------</span></span>
-<span><span class="co">##   seqinfo: 298 sequences (2 circular) from hg19 genome</span></span></code></pre>
+<span><span class="co">##   seqinfo: 711 sequences (1 circular) from hg38 genome</span></span></code></pre>
 <p>For BEDX+Y formats, a named list with column types may be passed
 through <code>extra_cols</code> if the column name and type are known.
 Otherwise, <code>bb_to_granges</code> guesses the column types and
 assigns column names.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Manually assign column name and type using `extra_cols`</span></span>
 <span><span class="fu"><a href="../reference/bb_to_granges.html">bb_to_granges</a></span><span class="op">(</span><span class="va">api</span>, <span class="va">ex_bed</span><span class="op">$</span><span class="va">id</span>, extra_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"column_name"</span> <span class="op">=</span> <span class="st">"character"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><code>bb_to_granges</code> automatically assigns the column names and
 types for broad peak and narrow peak files.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bed_id</span> <span class="op">&lt;-</span> <span class="st">"bbad85f21962bb8d972444f7f9a3a932"</span></span>
 <span><span class="va">md</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_metadata.html">bb_metadata</a></span><span class="op">(</span><span class="va">api</span>, <span class="va">bed_id</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">md</span><span class="op">)</span></span></code></pre></div>
@@ -315,7 +334,7 @@ types for broad peak and narrow peak files.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## $id</span></span>
 <span><span class="co">## [1] "bbad85f21962bb8d972444f7f9a3a932"</span></span></code></pre>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/bb_to_granges.html">bb_to_granges</a></span><span class="op">(</span><span class="va">api</span>, <span class="va">bed_id</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## GRanges object with 26210 ranges and 6 metadata columns:</span></span>
 <span><span class="co">##           seqnames            ranges strand |                   name     score</span></span>
@@ -347,35 +366,48 @@ types for broad peak and narrow peak files.</p>
 <span><span class="co">##   -------</span></span>
 <span><span class="co">##   seqinfo: 711 sequences (1 circular) from hg38 genome</span></span></code></pre>
 <p><code>bb_to_granges</code> can also import big BED files.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ex_bed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_example.html">bb_example</a></span><span class="op">(</span><span class="va">api</span>, <span class="st">"bed"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/bb_to_granges.html">bb_to_granges</a></span><span class="op">(</span><span class="va">api</span>, <span class="va">ex_bed</span><span class="op">$</span><span class="va">id</span>, <span class="st">"bigbed"</span>, quietly <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## GRanges object with 4675 ranges and 2 metadata columns:</span></span>
-<span><span class="co">##          seqnames            ranges strand |           name      field6</span></span>
-<span><span class="co">##             &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; |    &lt;character&gt; &lt;character&gt;</span></span>
-<span><span class="co">##      [1]     chr1        9871-10760      * |    MACS_peak_1      509.71</span></span>
-<span><span class="co">##      [2]     chr1     563961-570848      * |    MACS_peak_2     3100.00</span></span>
-<span><span class="co">##      [3]     chr1     608243-608641      * |    MACS_peak_3      159.53</span></span>
-<span><span class="co">##      [4]     chr1     723802-727662      * |    MACS_peak_4     1397.24</span></span>
-<span><span class="co">##      [5]     chr1     824432-825382      * |    MACS_peak_5       77.21</span></span>
-<span><span class="co">##      ...      ...               ...    ... .            ...         ...</span></span>
-<span><span class="co">##   [4671]     chrY 59012796-59015258      * | MACS_peak_4671      193.82</span></span>
-<span><span class="co">##   [4672]     chrY 59015837-59019249      * | MACS_peak_4672      289.09</span></span>
-<span><span class="co">##   [4673]     chrY 59019495-59021043      * | MACS_peak_4673      159.15</span></span>
-<span><span class="co">##   [4674]     chrY 59021913-59022958      * | MACS_peak_4674       80.73</span></span>
-<span><span class="co">##   [4675]     chrY 59025694-59026670      * | MACS_peak_4675       75.78</span></span>
+<pre><code><span><span class="co">## GRanges object with 57761 ranges and 6 metadata columns:</span></span>
+<span><span class="co">##           seqnames            ranges strand |        name     score      field8</span></span>
+<span><span class="co">##              &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt; &lt;integer&gt; &lt;character&gt;</span></span>
+<span><span class="co">##       [1]     chr1     777827-778195      * |  Peak_33839        27     5.26766</span></span>
+<span><span class="co">##       [2]     chr1     778361-778761      * |  Peak_15349       142    17.67560</span></span>
+<span><span class="co">##       [3]     chr1     778884-779471      * |  Peak_18464        96    13.26751</span></span>
+<span><span class="co">##       [4]     chr1     779527-780059      * |  Peak_22729        61     9.51248</span></span>
+<span><span class="co">##       [5]     chr1     826634-827013      * |  Peak_26078        45     7.71659</span></span>
+<span><span class="co">##       ...      ...               ...    ... .         ...       ...         ...</span></span>
+<span><span class="co">##   [57757]     chrY 20726456-20727106      * |  Peak_26091        45     7.71659</span></span>
+<span><span class="co">##   [57758]     chrY 20731782-20732102      * |  Peak_43849        17     3.67835</span></span>
+<span><span class="co">##   [57759]     chrY 20732243-20732510      * |  Peak_46498        16     3.19705</span></span>
+<span><span class="co">##   [57760]     chrY 20734468-20736884      * |  Peak_20414        78    10.64534</span></span>
+<span><span class="co">##   [57761]     chrY 20798030-20798986      * |  Peak_22217        65    10.00227</span></span>
+<span><span class="co">##                field9     field10     field11</span></span>
+<span><span class="co">##           &lt;character&gt; &lt;character&gt; &lt;character&gt;</span></span>
+<span><span class="co">##       [1]    12.17603    10.32837         187</span></span>
+<span><span class="co">##       [2]    80.41011    78.17186         195</span></span>
+<span><span class="co">##       [3]    53.33309    51.20127         389</span></span>
+<span><span class="co">##       [4]    32.48199    30.45850         200</span></span>
+<span><span class="co">##       [5]    23.13210    21.17438         186</span></span>
+<span><span class="co">##       ...         ...         ...         ...</span></span>
+<span><span class="co">##   [57757]    23.13210    21.17438         378</span></span>
+<span><span class="co">##   [57758]     6.60524     4.84712         177</span></span>
+<span><span class="co">##   [57759]     5.85335     4.11228         209</span></span>
+<span><span class="co">##   [57760]    42.32733    40.24815        1383</span></span>
+<span><span class="co">##   [57761]    34.66776    32.63152         397</span></span>
 <span><span class="co">##   -------</span></span>
-<span><span class="co">##   seqinfo: 24 sequences from an unspecified genome</span></span></code></pre>
+<span><span class="co">##   seqinfo: 28 sequences from an unspecified genome</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="import-a-bedset-into-a-grangeslist">Import a BEDset into a GRangesList<a class="anchor" aria-label="anchor" href="#import-a-bedset-into-a-grangeslist"></a>
 </h3>
 <p>Create a GRangesList given a BEDset id with
 <code>bb_to_grangeslist</code>.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bedset_id</span> <span class="op">&lt;-</span> <span class="st">"lola_hg38_ucsc_features"</span></span>
 <span><span class="fu"><a href="../reference/bb_to_grangeslist.html">bb_to_grangeslist</a></span><span class="op">(</span><span class="va">api</span>, <span class="va">bedset_id</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## GRangesList object of length 10:</span></span>
+<pre><code><span><span class="co">## GRangesList object of length 11:</span></span>
 <span><span class="co">## [[1]]</span></span>
 <span><span class="co">## GRanges object with 28633 ranges and 0 metadata columns:</span></span>
 <span><span class="co">##           seqnames            ranges strand</span></span>
@@ -395,7 +427,7 @@ types for broad peak and narrow peak files.</p>
 <span><span class="co">##   seqinfo: 711 sequences (1 circular) from hg38 genome</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## ...</span></span>
-<span><span class="co">## &lt;9 more elements&gt;</span></span></code></pre>
+<span><span class="co">## &lt;10 more elements&gt;</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -403,42 +435,42 @@ types for broad peak and narrow peak files.</p>
 </h2>
 <p>Because bedbaser uses the <em><a href="https://bioconductor.org/packages/3.20/AnVIL" class="external-link">AnVIL</a></em>
 Service class, it’s possible to access any endpoint of the <a href="https://api.bedbase.org/v1/docs" class="external-link">BEDbase API</a>.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">show</span><span class="op">(</span><span class="va">api</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## service: bedbase</span></span>
 <span><span class="co">## tags(); use bedbase$&lt;tab completion&gt;:</span></span>
-<span><span class="co">## <span style="color: #949494;"># A tibble: 32 × 3</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># A tibble: 38 × 3</span></span></span>
 <span><span class="co">##    tag   operation                                                       summary</span></span>
 <span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> base  get_bedbase_db_stats_v1_stats_get                               Get su…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> base  service_info_v1_service_info_get                                GA4GH …</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> bed   bed_to_bed_search_v1_bed_search_bed_post                        Search…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> bed   get_bed_classification_v1_bed__bed_id__metadata_classification… Get cl…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> bed   get_bed_embedding_v1_bed__bed_id__embedding_get                 Get em…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> bed   get_bed_files_v1_bed__bed_id__metadata_files_get                Get me…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> bed   get_bed_metadata_v1_bed__bed_id__metadata_get                   Get me…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> bed   get_bed_pephub_v1_bed__bed_id__metadata_raw_get                 Get ra…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> bed   get_bed_plots_v1_bed__bed_id__metadata_plots_get                Get pl…</span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> bed   get_bed_stats_v1_bed__bed_id__metadata_stats_get                Get st…</span></span>
-<span><span class="co">## <span style="color: #949494;"># ℹ 22 more rows</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> base  get_bedbase_db_stats_v1_genomes_get                             Get av…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> base  get_bedbase_db_stats_v1_stats_get                               Get su…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> base  service_info_v1_service_info_get                                GA4GH …</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> bed   bed_to_bed_search_v1_bed_search_bed_post                        Search…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> bed   embed_bed_file_v1_bed_embed_post                                Get em…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> bed   get_bed_classification_v1_bed__bed_id__metadata_classification… Get cl…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> bed   get_bed_embedding_v1_bed__bed_id__embedding_get                 Get em…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> bed   get_bed_files_v1_bed__bed_id__metadata_files_get                Get me…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> bed   get_bed_metadata_v1_bed__bed_id__metadata_get                   Get me…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> bed   get_bed_pephub_v1_bed__bed_id__metadata_raw_get                 Get ra…</span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 28 more rows</span></span></span>
 <span><span class="co">## tag values:</span></span>
 <span><span class="co">##   base, bed, bedset, home, objects, search, NA</span></span>
 <span><span class="co">## schemas():</span></span>
-<span><span class="co">##   AccessMethod, AccessURL, BedClassification, BedEmbeddingResult,</span></span>
-<span><span class="co">##   BedFiles</span></span>
-<span><span class="co">##   # ... with 34 more elements</span></span></code></pre>
+<span><span class="co">##   AccessMethod, AccessURL, BaseListResponse, BedClassification,</span></span>
+<span><span class="co">##   BedEmbeddingResult</span></span>
+<span><span class="co">##   # ... with 37 more elements</span></span></code></pre>
 <p>For example, to access a BED file’s stats, access the endpoint with
 <code>$</code> and use <em><a href="https://CRAN.R-project.org/package=httr" class="external-link">httr</a></em> to get the
 result. <code>show</code> will display information about the
 endpoint.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://httr.r-lib.org/" class="external-link">httr</a></span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## Attaching package: 'httr'</span></span></code></pre>
 <pre><code><span><span class="co">## The following object is masked from 'package:Biobase':</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">##     content</span></span></code></pre>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">show</span><span class="op">(</span><span class="va">api</span><span class="op">$</span><span class="va">get_bed_stats_v1_bed__bed_id__metadata_stats_get</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## get_bed_stats_v1_bed__bed_id__metadata_stats_get </span></span>
 <span><span class="co">## Get stats for a single BED record </span></span>
@@ -448,11 +480,11 @@ endpoint.</p>
 <span><span class="co">## Parameters:</span></span>
 <span><span class="co">##   bed_id (string)</span></span>
 <span><span class="co">##     BED digest</span></span></code></pre>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">id</span> <span class="op">&lt;-</span> <span class="st">"bbad85f21962bb8d972444f7f9a3a932"</span></span>
 <span><span class="va">rsp</span> <span class="op">&lt;-</span> <span class="va">api</span><span class="op">$</span><span class="fu">get_bed_stats_v1_bed__bed_id__metadata_stats_get</span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://httr.r-lib.org/reference/content.html" class="external-link">content</a></span><span class="op">(</span><span class="va">rsp</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## $regions_no</span></span>
+<pre><code><span><span class="co">## $number_of_regions</span></span>
 <span><span class="co">## [1] 26210</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## $gc_content</span></span>
@@ -514,7 +546,7 @@ to convert one genomic coordinate system to another.</p>
 <p>Install <em><a href="https://bioconductor.org/packages/3.20/liftOver" class="external-link">liftOver</a></em>
 and <em><a href="https://bioconductor.org/packages/3.20/rtracklayer" class="external-link">rtracklayer</a></em>
 then load the packages.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="st">"BiocManager"</span> <span class="op"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/installed.packages.html" class="external-link">installed.packages</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
@@ -525,7 +557,7 @@ then load the packages.</p>
 <p>Create a GRanges object from a <a href="https://bedbase.org/bed/7816f807ffe1022f438e1f5b094acf1a" class="external-link">mouse
 genome</a>. Create a BEDbase Service instance. Use the instance to
 create a GRanges object from the BEDbase <code>id</code>.</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">id</span> <span class="op">&lt;-</span> <span class="st">"7816f807ffe1022f438e1f5b094acf1a"</span></span>
 <span><span class="va">api</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/BEDbase.html">BEDbase</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">gro</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bb_to_granges.html">bb_to_granges</a></span><span class="op">(</span><span class="va">api</span>, <span class="va">id</span><span class="op">)</span></span>
@@ -561,7 +593,7 @@ create a GRanges object from the BEDbase <code>id</code>.</p>
 <span><span class="co">##   seqinfo: 239 sequences (1 circular) from mm10 genome</span></span></code></pre>
 <p>Download the <a href="https://hgdownload.cse.ucsc.edu/downloads.html#liftover" class="external-link">chain
 file</a> from UCSC.</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chain_url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span></span>
 <span>    <span class="st">"https://hgdownload.cse.ucsc.edu/goldenPath/mm10/liftOver/"</span>,</span>
 <span>    <span class="st">"mm10ToMm39.over.chain.gz"</span></span>
@@ -572,7 +604,7 @@ file</a> from UCSC.</p>
 <span><span class="fu">gunzip</span><span class="op">(</span><span class="va">gz</span>, remove <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>Import the chain, set the sequence levels style, and set the genome
 for the GRanges object.</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ch</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rtracklayer/man/Chain-class.html" class="external-link">import.chain</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">tmpdir</span>, <span class="st">"mm10ToMm39.over.chain"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">seqlevelsStyle</span><span class="op">(</span><span class="va">gro</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"UCSC"</span></span>
 <span><span class="va">gro39</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rtracklayer/man/liftOver.html" class="external-link">liftOver</a></span><span class="op">(</span><span class="va">gro</span>, <span class="va">ch</span><span class="op">)</span></span>
@@ -612,7 +644,7 @@ for the GRanges object.</p>
 <div class="section level2">
 <h2 id="sessioninfo">SessionInfo()<a class="anchor" aria-label="anchor" href="#sessioninfo"></a>
 </h2>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## R version 4.4.1 (2024-06-14)</span></span>
 <span><span class="co">## Platform: x86_64-pc-linux-gnu</span></span>
@@ -639,77 +671,77 @@ for the GRanges object.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
 <span><span class="co">##  [1] httr_1.4.7                             </span></span>
-<span><span class="co">##  [2] bedbaser_0.99.2                        </span></span>
-<span><span class="co">##  [3] liftOver_1.29.0                        </span></span>
+<span><span class="co">##  [2] bedbaser_0.99.9                        </span></span>
+<span><span class="co">##  [3] liftOver_1.30.0                        </span></span>
 <span><span class="co">##  [4] Homo.sapiens_1.3.1                     </span></span>
 <span><span class="co">##  [5] TxDb.Hsapiens.UCSC.hg19.knownGene_3.2.2</span></span>
 <span><span class="co">##  [6] org.Hs.eg.db_3.20.0                    </span></span>
 <span><span class="co">##  [7] GO.db_3.20.0                           </span></span>
-<span><span class="co">##  [8] OrganismDbi_1.47.0                     </span></span>
-<span><span class="co">##  [9] GenomicFeatures_1.57.1                 </span></span>
-<span><span class="co">## [10] AnnotationDbi_1.67.0                   </span></span>
-<span><span class="co">## [11] Biobase_2.65.1                         </span></span>
-<span><span class="co">## [12] gwascat_2.37.0                         </span></span>
+<span><span class="co">##  [8] OrganismDbi_1.48.0                     </span></span>
+<span><span class="co">##  [9] GenomicFeatures_1.58.0                 </span></span>
+<span><span class="co">## [10] AnnotationDbi_1.68.0                   </span></span>
+<span><span class="co">## [11] Biobase_2.66.0                         </span></span>
+<span><span class="co">## [12] gwascat_2.38.0                         </span></span>
 <span><span class="co">## [13] R.utils_2.12.3                         </span></span>
 <span><span class="co">## [14] R.oo_1.26.0                            </span></span>
 <span><span class="co">## [15] R.methodsS3_1.8.2                      </span></span>
-<span><span class="co">## [16] rtracklayer_1.65.0                     </span></span>
-<span><span class="co">## [17] GenomicRanges_1.57.1                   </span></span>
-<span><span class="co">## [18] GenomeInfoDb_1.41.2                    </span></span>
-<span><span class="co">## [19] IRanges_2.39.2                         </span></span>
-<span><span class="co">## [20] S4Vectors_0.43.2                       </span></span>
-<span><span class="co">## [21] BiocGenerics_0.51.3                    </span></span>
-<span><span class="co">## [22] BiocStyle_2.33.1                       </span></span>
+<span><span class="co">## [16] rtracklayer_1.66.0                     </span></span>
+<span><span class="co">## [17] GenomicRanges_1.58.0                   </span></span>
+<span><span class="co">## [18] GenomeInfoDb_1.42.0                    </span></span>
+<span><span class="co">## [19] IRanges_2.40.0                         </span></span>
+<span><span class="co">## [20] S4Vectors_0.44.0                       </span></span>
+<span><span class="co">## [21] BiocGenerics_0.52.0                    </span></span>
+<span><span class="co">## [22] BiocStyle_2.34.0                       </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##   [1] jsonlite_1.8.9              magrittr_2.0.3             </span></span>
 <span><span class="co">##   [3] rmarkdown_2.28              fs_1.6.4                   </span></span>
-<span><span class="co">##   [5] BiocIO_1.15.2               zlibbioc_1.51.1            </span></span>
+<span><span class="co">##   [5] BiocIO_1.16.0               zlibbioc_1.52.0            </span></span>
 <span><span class="co">##   [7] ragg_1.3.3                  vctrs_0.6.5                </span></span>
-<span><span class="co">##   [9] memoise_2.0.1               Rsamtools_2.21.2           </span></span>
+<span><span class="co">##   [9] memoise_2.0.1               Rsamtools_2.22.0           </span></span>
 <span><span class="co">##  [11] RCurl_1.98-1.16             htmltools_0.5.8.1          </span></span>
-<span><span class="co">##  [13] S4Arrays_1.5.10             BiocBaseUtils_1.7.3        </span></span>
+<span><span class="co">##  [13] S4Arrays_1.6.0              BiocBaseUtils_1.8.0        </span></span>
 <span><span class="co">##  [15] progress_1.2.3              lambda.r_1.2.4             </span></span>
-<span><span class="co">##  [17] curl_5.2.3                  SparseArray_1.5.44         </span></span>
+<span><span class="co">##  [17] curl_5.2.3                  SparseArray_1.6.0          </span></span>
 <span><span class="co">##  [19] sass_0.4.9                  bslib_0.8.0                </span></span>
 <span><span class="co">##  [21] htmlwidgets_1.6.4           desc_1.4.3                 </span></span>
 <span><span class="co">##  [23] httr2_1.0.5                 futile.options_1.0.1       </span></span>
-<span><span class="co">##  [25] cachem_1.1.0                GenomicAlignments_1.41.0   </span></span>
+<span><span class="co">##  [25] cachem_1.1.0                GenomicAlignments_1.42.0   </span></span>
 <span><span class="co">##  [27] mime_0.12                   lifecycle_1.0.4            </span></span>
-<span><span class="co">##  [29] pkgconfig_2.0.3             Matrix_1.7-0               </span></span>
+<span><span class="co">##  [29] pkgconfig_2.0.3             Matrix_1.7-1               </span></span>
 <span><span class="co">##  [31] R6_2.5.1                    fastmap_1.2.0              </span></span>
 <span><span class="co">##  [33] shiny_1.9.1                 GenomeInfoDbData_1.2.13    </span></span>
-<span><span class="co">##  [35] MatrixGenerics_1.17.0       digest_0.6.37              </span></span>
+<span><span class="co">##  [35] MatrixGenerics_1.18.0       digest_0.6.37              </span></span>
 <span><span class="co">##  [37] textshaping_0.4.0           RSQLite_2.3.7              </span></span>
 <span><span class="co">##  [39] filelock_1.0.3              fansi_1.0.6                </span></span>
 <span><span class="co">##  [41] abind_1.4-8                 compiler_4.4.1             </span></span>
-<span><span class="co">##  [43] withr_3.0.1                 bit64_4.5.2                </span></span>
-<span><span class="co">##  [45] BiocParallel_1.39.0         DBI_1.2.3                  </span></span>
-<span><span class="co">##  [47] biomaRt_2.61.3              rappdirs_0.3.3             </span></span>
-<span><span class="co">##  [49] DelayedArray_0.31.14        rjson_0.2.23               </span></span>
+<span><span class="co">##  [43] withr_3.0.2                 bit64_4.5.2                </span></span>
+<span><span class="co">##  [45] BiocParallel_1.40.0         DBI_1.2.3                  </span></span>
+<span><span class="co">##  [47] biomaRt_2.62.0              rappdirs_0.3.3             </span></span>
+<span><span class="co">##  [49] DelayedArray_0.32.0         rjson_0.2.23               </span></span>
 <span><span class="co">##  [51] tools_4.4.1                 httpuv_1.6.15              </span></span>
 <span><span class="co">##  [53] glue_1.8.0                  restfulr_0.0.15            </span></span>
 <span><span class="co">##  [55] promises_1.3.0              grid_4.4.1                 </span></span>
-<span><span class="co">##  [57] generics_0.1.3              BSgenome_1.73.1            </span></span>
+<span><span class="co">##  [57] generics_0.1.3              BSgenome_1.74.0            </span></span>
 <span><span class="co">##  [59] tzdb_0.4.0                  tidyr_1.3.1                </span></span>
 <span><span class="co">##  [61] hms_1.1.3                   xml2_1.3.6                 </span></span>
-<span><span class="co">##  [63] utf8_1.2.4                  XVector_0.45.0             </span></span>
+<span><span class="co">##  [63] utf8_1.2.4                  XVector_0.46.0             </span></span>
 <span><span class="co">##  [65] pillar_1.9.0                stringr_1.5.1              </span></span>
 <span><span class="co">##  [67] later_1.3.2                 splines_4.4.1              </span></span>
-<span><span class="co">##  [69] dplyr_1.1.4                 BiocFileCache_2.13.0       </span></span>
+<span><span class="co">##  [69] dplyr_1.1.4                 BiocFileCache_2.14.0       </span></span>
 <span><span class="co">##  [71] lattice_0.22-6              survival_3.7-0             </span></span>
 <span><span class="co">##  [73] bit_4.5.0                   tidyselect_1.2.1           </span></span>
-<span><span class="co">##  [75] RBGL_1.81.0                 Biostrings_2.73.2          </span></span>
+<span><span class="co">##  [75] RBGL_1.82.0                 Biostrings_2.74.0          </span></span>
 <span><span class="co">##  [77] miniUI_0.1.1.1              knitr_1.48                 </span></span>
-<span><span class="co">##  [79] bookdown_0.40               SummarizedExperiment_1.35.3</span></span>
-<span><span class="co">##  [81] snpStats_1.55.0             futile.logger_1.4.3        </span></span>
+<span><span class="co">##  [79] bookdown_0.41               SummarizedExperiment_1.36.0</span></span>
+<span><span class="co">##  [81] snpStats_1.56.0             futile.logger_1.4.3        </span></span>
 <span><span class="co">##  [83] xfun_0.48                   matrixStats_1.4.1          </span></span>
 <span><span class="co">##  [85] DT_0.33                     stringi_1.8.4              </span></span>
-<span><span class="co">##  [87] UCSC.utils_1.1.0            yaml_2.3.10                </span></span>
-<span><span class="co">##  [89] evaluate_1.0.0              codetools_0.2-20           </span></span>
-<span><span class="co">##  [91] tibble_3.2.1                AnVILBase_0.99.27          </span></span>
-<span><span class="co">##  [93] BiocManager_1.30.25         graph_1.83.0               </span></span>
-<span><span class="co">##  [95] cli_3.6.3                   AnVIL_1.17.15              </span></span>
+<span><span class="co">##  [87] UCSC.utils_1.2.0            yaml_2.3.10                </span></span>
+<span><span class="co">##  [89] evaluate_1.0.1              codetools_0.2-20           </span></span>
+<span><span class="co">##  [91] tibble_3.2.1                AnVILBase_1.0.0            </span></span>
+<span><span class="co">##  [93] BiocManager_1.30.25         graph_1.84.0               </span></span>
+<span><span class="co">##  [95] cli_3.6.3                   AnVIL_1.18.0               </span></span>
 <span><span class="co">##  [97] xtable_1.8-4                systemfonts_1.1.0          </span></span>
 <span><span class="co">##  [99] jquerylib_0.1.4             Rcpp_1.0.13                </span></span>
 <span><span class="co">## [101] dbplyr_2.5.0                png_0.1-8                  </span></span>
@@ -717,9 +749,9 @@ for the GRanges object.</p>
 <span><span class="co">## [105] parallel_4.4.1              pkgdown_2.1.1.9000         </span></span>
 <span><span class="co">## [107] readr_2.1.5                 blob_1.2.4                 </span></span>
 <span><span class="co">## [109] prettyunits_1.2.0           bitops_1.0-9               </span></span>
-<span><span class="co">## [111] txdbmaker_1.1.1             VariantAnnotation_1.51.1   </span></span>
+<span><span class="co">## [111] txdbmaker_1.2.0             VariantAnnotation_1.52.0   </span></span>
 <span><span class="co">## [113] purrr_1.0.2                 crayon_1.5.3               </span></span>
-<span><span class="co">## [115] rlang_1.1.4                 KEGGREST_1.45.1            </span></span>
+<span><span class="co">## [115] rlang_1.1.4                 KEGGREST_1.46.0            </span></span>
 <span><span class="co">## [117] formatR_1.14</span></span></code></pre>
 </div>
   </div>
