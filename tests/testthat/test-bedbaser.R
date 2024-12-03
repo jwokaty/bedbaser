@@ -8,7 +8,7 @@ test_that("setCache changes cache", {
 
 test_that("bb_example has bed_format of 'bed' given rec_type 'bed'", {
     ex_bed <- bb_example(BEDbase(), "bed")
-    expect_equal("narrowpeak", ex_bed$bed_format)
+    expect_equal("bed", ex_bed$bed_format)
 })
 
 test_that("bb_example has 'bed_ids' given rec_type 'bedset'", {
@@ -101,16 +101,16 @@ test_that("bb_to_granges returns a GRanges object given a 3+0 bed file", {
     expect_true(is((gro)[1], "GRanges"))
 })
 
-test_that("bb_to_granges returns a GRanges object given a bigBed file", {
+test_that("bb_to_granges returns a GRanges object given a bigbed file", {
     api <- BEDbase()
-    ex_bed <- bb_example(api, "bed")
+    id <- "ffc1e5ac45d923135500bdd825177356"
     if (.Platform$OS.type != "windows") {
-        gro <- bb_to_granges(api, ex_bed$id, "bigbed")
+        gro <- bb_to_granges(api, id, "bigbed")
         expect_true(is((gro)[1], "GRanges"))
     } else {
         expect_warning(
             rlang::warn("This feature does not work on Windows."),
-            bb_to_granges(api, ex_bed$id, "bigbed")
+            bb_to_granges(api, id, "bigbed")
         )
     }
 })
@@ -154,10 +154,12 @@ test_that("bb_to_granges allows passing extra_cols", {
     md <- bb_metadata(api, id, TRUE)
     expect_equal("bed3+9", md$bed_type)
     gro <- bb_to_granges(api, id,
-        extra_cols = c("t1" = "character", "t2" = "character",
+        extra_cols = c(
+            "t1" = "character", "t2" = "character",
             "t3" = "character", "t4" = "character", "t5" = "character",
             "t6" = "character", "t7" = "character", "t8" = "character",
-            "t9" = "character")
+            "t9" = "character"
+        )
     )
     expect_in(c(
         "seqnames", "start", "end", "t1", "t2", "t3", "t4", "t5", "t6", "t7",
@@ -181,6 +183,7 @@ test_that("bb_save saves bed files to a path", {
     expect_true(file.exists(file.path(path, paste0(bed$id, ".bed.gz"))))
     bedset <- bb_metadata(api, "lola_hg38_ucsc_features")
     bb_save(api, bedset$id, path, quietly = TRUE)
-    for (id in bedset$bed_ids)
+    for (id in bedset$bed_ids) {
         expect_true(file.exists(file.path(path, paste0(id, ".bed.gz"))))
+    }
 })

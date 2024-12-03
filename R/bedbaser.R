@@ -44,8 +44,9 @@
 #'
 #' @export
 BEDbase <- function(cache_path) {
-    if (missing(cache_path))
+    if (missing(cache_path)) {
         cache_path <- tools::R_user_dir("bedbaser", which = "cache")
+    }
     suppressWarnings(
         .BEDbase(
             cache = BiocFileCache::BiocFileCache(cache_path),
@@ -85,9 +86,10 @@ setGeneric("getCache", function(x, quietly = TRUE) standardGeneric("getCache"))
 setMethod(
     "getCache", "BEDbase",
     function(x, quietly = TRUE) {
-        if (quietly)
+        if (quietly) {
             BiocFileCache::bfcinfo(x@cache)
-         x@cache
+        }
+        x@cache
     }
 )
 
@@ -98,7 +100,8 @@ setMethod(
 #' @param quietly (default TRUE) display messages
 #'
 #' @export
-setGeneric("setCache",
+setGeneric(
+    "setCache",
     function(x, cache_path, quietly = TRUE) standardGeneric("setCache")
 )
 
@@ -119,8 +122,9 @@ setMethod(
     "setCache", "BEDbase",
     function(x, cache_path, quietly = TRUE) {
         x@cache <- BiocFileCache::BiocFileCache(cache_path)
-        if (quietly)
+        if (quietly) {
             BiocFileCache::bfcinfo(x@cache)
+        }
         x
     }
 )
@@ -232,9 +236,8 @@ bb_metadata <- function(api, id, full = FALSE) {
 #' bb_list_beds(api)
 #'
 #' @export
-bb_list_beds <- function(
-        api, genome = NULL, bed_type = NULL, limit = 1000,
-        offset = 0) {
+bb_list_beds <- function(api, genome = NULL, bed_type = NULL, limit = 1000,
+    offset = 0) {
     rsp <- api$list_beds_v1_bed_list_get(
         genome = genome, bed_type = bed_type,
         limit = limit, offset = offset
@@ -242,8 +245,12 @@ bb_list_beds <- function(
     recs <- httr::content(rsp)
     results <- tibble::tibble()
     if (recs$count) {
-      results <- do.call(dplyr::bind_rows,
-                         lapply(recs$results, function(x) {unlist(x)}))
+        results <- do.call(
+            dplyr::bind_rows,
+            lapply(recs$results, function(x) {
+                unlist(x)
+            })
+        )
     }
     results
 }
@@ -301,8 +308,12 @@ bb_beds_in_bedset <- function(api, bedset_id) {
     recs <- httr::content(rsp)
     results <- tibble::tibble()
     if (recs$count) {
-      results <- do.call(dplyr::bind_rows,
-          lapply(recs$results, function(x) {unlist(x)}))
+        results <- do.call(
+            dplyr::bind_rows,
+            lapply(recs$results, function(x) {
+                unlist(x)
+            })
+        )
     }
     results
 }
@@ -362,12 +373,11 @@ bb_bed_text_search <- function(api, query, limit = 10, offset = 0) {
 #' bb_to_granges(api, ex_bed$id)
 #'
 #' @export
-bb_to_granges <- function(
-        api, bed_id, file_type = "bed", extra_cols = NULL,
-        quietly = TRUE) {
+bb_to_granges <- function(api, bed_id, file_type = "bed", extra_cols = NULL,
+    quietly = TRUE) {
     stopifnot(file_type %in% c("bed", "bigbed"))
     metadata <- bb_metadata(api, bed_id, TRUE)
-    file_path <- .get_file(metadata, file_type, "http", getCache(api), quietly)
+    file_path <- .get_file(metadata, getCache(api), file_type, "http", quietly)
 
     if (file_type == "bed") {
         .bed_file_to_granges(file_path, metadata, extra_cols, quietly)
@@ -375,11 +385,23 @@ bb_to_granges <- function(
         if (.Platform$OS.type == "windows") {
             rlang::warn("This feature does not work on Windows.")
         } else {
-            if (quietly) {
-                suppressMessages(rtracklayer::import.bb(file_path, format = "bigBed"))
-            } else {
-                rtracklayer::import.bb(file_path, format = "bigBed")
-            }
+            args <- list(
+                con = file_path,
+                genome = metadata$genome_alias,
+                format = "bigBed"
+            )
+            tryCatch(
+                do.call(rtracklayer::import, args),
+                error = function(e) {
+                    if (!quietly) {
+                        rlang::inform(paste(
+                            "Error passing genome. Attempting to create",
+                            "GRanges object without genome."
+                        ))
+                    }
+                    do.call(rtracklayer::import, within(args, rm("genome")))
+                }
+            )
         }
     }
 }
@@ -423,16 +445,15 @@ bb_to_grangeslist <- function(api, bedset_id, quietly = TRUE) {
 #'
 #' @examples
 #' api <- BEDbase()
-#' ex <- bb_example(api, "bed") 
+#' ex <- bb_example(api, "bed")
 #' bb_save(api, ex$id, tempdir())
 #'
 #' @export
-bb_save <- function(
-        api, bed_or_bedset_id, path, file_type = "bed", access_type = "http",
-        quietly = TRUE)
-{
-    if (!dir.exists(path))
+bb_save <- function(api, bed_or_bedset_id, path, file_type = "bed", access_type = "http",
+    quietly = TRUE) {
+    if (!dir.exists(path)) {
         rlang::abort(paste(path, "doesn't exist.", sep = " "))
+    }
     metadata <- bb_metadata(api, bed_or_bedset_id, TRUE)
     if ("bedsets" %in% names(metadata)) {
         ids <- list(metadata$id)
@@ -441,6 +462,6 @@ bb_save <- function(
     }
     for (id in ids) {
         metadata <- bb_metadata(api, id, TRUE)
-        .get_file(metadata, file_type, access_type, path, quietly)
+        .get_file(metadata, path, file_type, access_type, quietly)
     }
 }

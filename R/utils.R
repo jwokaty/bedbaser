@@ -22,9 +22,9 @@
 #' Will create directories that do not exist when saving
 #'
 #' @param metadata list() full metadata
+#' @param cache_or_path BiocFileCache or character() cache or save path
 #' @param file_type character() bed or bigbed
 #' @param access_type character() s3 or http
-#' @param cache_or_path BiocFileCache or character() cache or save path
 #' @param quietly logical() (default TRUE) display messages
 #'
 #' @return character() file path
@@ -33,12 +33,11 @@
 #' api <- BEDbase()
 #' ex_bed <- bb_example(api, "bed")
 #' md <- bb_metadata(api, ex_bed$id, TRUE)
-#' .get_file(md, "bed", "http", tempdir())
+#' .get_file(md, tempdir(), "bed", "http")
 #'
 #' @noRd
-.get_file <- function(
-        metadata, file_type = c("bed", "bigbed"),
-        access_type = c("s3", "http"), cache_or_path, quietly = TRUE) {
+.get_file <- function(metadata, cache_or_path, file_type = c("bed", "bigbed"),
+    access_type = c("s3", "http"), quietly = TRUE) {
     file_details <- .format_metadata_files(metadata$files) |>
         dplyr::filter(
             name == paste(file_type, "file", sep = "_"),
@@ -53,10 +52,11 @@
             }
         )
     } else {
-        if (!dir.exists(cache_or_path))
+        if (!dir.exists(cache_or_path)) {
             dir.create(cache_or_path, recursive = TRUE)
+        }
         url_parts <- unlist(strsplit(file_details$url, "/"))
-        bedbase_file <- file.path(cache_or_path, url_parts[length(url_parts)]) 
+        bedbase_file <- file.path(cache_or_path, url_parts[length(url_parts)])
         utils::download.file(file_details$url, bedbase_file, quiet = quietly)
     }
     bedbase_file
@@ -74,10 +74,7 @@
 #' id <- "608827efc82fcaa4b0bfc65f590ffef8"
 #' api <- BEDbase()
 #' md <- bb_metadata(api, id, TRUE)
-#' file_path <- .get_file_path(
-#'     md$files$bed_file$access_methods[[1]]$access_url$url,
-#'     "bed"
-#' )
+#' file_path <- .get_file(md, getCache(api), "bed", "http")
 #' .get_extra_cols(file_path, 3, 9)
 #'
 #' @noRd
@@ -117,14 +114,14 @@
 #' api <- BEDbase()
 #' ex_bed <- bb_example(api, "bed")
 #' md <- bb_metadata(api, ex_bed$id, TRUE)
-#' file_path <- .get_file(md, "bed", "http")
+#' file_path <- .get_file(md, getCache(api), "bed", "http")
 #' .bed_file_to_granges(file_path, md)
 #'
 #' @noRd
-.bed_file_to_granges <- function(
-        file_path, metadata, extra_cols = NULL,
-        quietly = TRUE) {
-    bed_format <- gsub("peak", "Peak", metadata$bed_format)
+.bed_file_to_granges <- function(file_path, metadata, extra_cols = NULL,
+    quietly = TRUE) {
+    args <- list(con = file_path)
+    args["format"] <- gsub("peak", "Peak", metadata$bed_format)
     nums <- stringr::str_replace(metadata$bed_type, "bed", "") |>
         stringr::str_split_1("\\+") |>
         as.double()
@@ -133,41 +130,29 @@
         rlang::abort("`extra_cols` length must match the Y value in `bed_type`.")
     }
 
-    if (!grepl("Peak", bed_format) && nums[2] != 0) {
-        if (is.null(extra_cols)) {
-            if (!quietly) {
-                rlang::inform("Assigning column names and types.")
-            }
-            extra_cols <- .get_extra_cols(file_path, nums[1], nums[2])
+    if (!grepl("Peak", args["format"]) && nums[2] != 0 && is.null(extra_cols)) {
+        if (!quietly) {
+            rlang::inform("Assigning column names and types.")
         }
-        if (quietly) {
-            suppressMessages(
-                rtracklayer::import(file_path,
-                    format = "bed",
-                    extraCols = extra_cols,
-                    genome = metadata$genome_alias
-                )
-            )
-        } else {
-            rtracklayer::import(file_path,
-                format = "bed",
-                extraCols = extra_cols,
-                genome = metadata$genome_alias
-            )
-        }
-    } else {
-        if (quietly) {
-            suppressMessages(
-                rtracklayer::import(file_path,
-                    format = bed_format,
-                    genome = metadata$genome_alias
-                )
-            )
-        } else {
-            rtracklayer::import(file_path,
-                format = bed_format,
-                genome = metadata$genome_alias
-            )
-        }
+        extra_cols <- .get_extra_cols(file_path, nums[1], nums[2])
     }
+
+    if (!is.null(extra_cols)) {
+        args[["extraCols"]] <- extra_cols
+    }
+
+    args["genome"] <- metadata$genome_alias
+
+    tryCatch(
+        do.call(rtracklayer::import, args),
+        error = function(e) {
+            if (!quietly) {
+                rlang::inform(paste(
+                    "Error passing genome. Attempting to create",
+                    "GRanges object without genome."
+                ))
+            }
+            do.call(rtracklayer::import, within(args, rm("genome")))
+        }
+    )
 }
