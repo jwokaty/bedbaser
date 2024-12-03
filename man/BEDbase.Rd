@@ -45,6 +45,6 @@ The convenience functions are as follows
 }
 }
 \examples{
-BEDbase()
+BEDbase(cache_path = tempdir())
 
 }

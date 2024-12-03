@@ -40,14 +40,14 @@
 #' @return BEDbase object
 #'
 #' @examples
-#' BEDbase()
+#' BEDbase(cache_path = tempdir())
 #'
 #' @export
 BEDbase <- function(cache_path) {
     if (missing(cache_path)) {
         cache_path <- tools::R_user_dir("bedbaser", which = "cache")
     }
-    suppressWarnings(
+    api <- suppressWarnings(
         .BEDbase(
             cache = BiocFileCache::BiocFileCache(cache_path),
             AnVIL::Service(
@@ -61,6 +61,9 @@ BEDbase <- function(cache_path) {
             )
         )
     )
+    info <- httr::content(api$list_beds_v1_bed_list_get(limit = 0, offset = 0))
+    message(paste(info$count, "BED files available."))
+    api
 }
 
 #' @rdname BEDbase
