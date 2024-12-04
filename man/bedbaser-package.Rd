@@ -12,7 +12,7 @@ A client for BEDbase. bedbaser provides access to the API at api.bedbase.org. It
 Useful links:
 \itemize{
   \item \url{https://github.com/waldronlab/bedbaser}
-  \item Report bugs at \url{https://github.com/jwokaty/bedbaser/issues}
+  \item Report bugs at \url{https://github.com/waldronlab/bedbaser/issues}
 }
 
 }

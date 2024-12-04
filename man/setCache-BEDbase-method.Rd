@@ -19,6 +19,9 @@ BiocFileCache cache of BED files
 \description{
 Set cache path
 }
+\details{
+bedbaser can use the same cache as bbclient
+}
 \examples{
 api <- BEDbase(tempdir())
 api <- setCache(api, "/tmp")

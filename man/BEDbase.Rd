@@ -28,6 +28,9 @@ functions for common tasks, such as to import a BED file by id into a
 \code{GRanges} object and a BEDset by its id into a \code{GRangesList}.
 }
 \details{
+bedbaser can use the same cache as the geniml bbclient. Set the
+cache_path to the geniml cache when creating the instance.
+
 The convenience functions are as follows
 \itemize{
 \item \code{bedbaser::BEDbase()}: API service constructor
