@@ -46,8 +46,16 @@ api <- BEDbase()
 
 ## (Optional) Set the cache
 
-Set the cache path with the argument `cache_path`; otherwise, bedbaser will
-choose the default cache location.
+Set the cache path with the argument `cache_path`. If `cache_path` is not set,
+bedbaser will choose the default location. bedbaser can use the same cache as
+`bbclient` available through the genomic interval machine learning toolkit
+`geniml` by setting the `cache_path` to the same location.
+
+```{r set_cache, eval = FALSE}
+library(bedbaser)
+
+api <- BEDbase(cache_path = "/path/to/cache")
+```
 
 # Convenience Functions
 

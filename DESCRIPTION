@@ -1,6 +1,6 @@
 Package: bedbaser
 Title: A BEDbase client
-Version: 0.99.12
+Version: 0.99.13
 Authors@R: c(
     person(
         given = "Jen",
@@ -20,7 +20,7 @@ Description: A client for BEDbase. bedbaser provides access to the API at
     api.bedbase.org. It also includes convenience functions to import BED files
     into GRanges objects and BEDsets into GRangesLists.
 URL: https://github.com/waldronlab/bedbaser
-BugReports: https://github.com/jwokaty/bedbaser/issues
+BugReports: https://github.com/waldronlab/bedbaser/issues
 biocViews: Software, DataImport, ThirdPartyClient
 License: Artistic License 2.0
 Imports:

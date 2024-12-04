@@ -19,7 +19,8 @@
 #' functions for common tasks, such as to import a BED file by id into a
 #' `GRanges` object and a BEDset by its id into a `GRangesList`.
 #'
-#' @details
+#' @details bedbaser can use the same cache as the geniml bbclient. Set the
+#' cache_path to the geniml cache when creating the instance.
 #'
 #' The convenience functions are as follows
 #' * `bedbaser::BEDbase()`: API service constructor
@@ -109,6 +110,8 @@ setGeneric(
 )
 
 #' Set cache path
+#'
+#' @details bedbaser can use the same cache as bbclient
 #'
 #' @param x BEDbase object
 #' @param cache_path character()
