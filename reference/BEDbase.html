@@ -19,7 +19,7 @@ GRanges object and a BEDset by its id into a GRangesList."><!-- mathjax --><scri
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bedbaser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.12</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.13</span>
       </span>
     </div>
 
@@ -34,7 +34,7 @@ GRanges object and a BEDset by its id into a GRangesList."><!-- mathjax --><scri
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/jwokaty/bedbaser/" class="external-link">
+  <a href="https://github.com/waldronlab/bedbaser/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
 
   </a>
@@ -49,7 +49,7 @@ GRanges object and a BEDset by its id into a GRangesList."><!-- mathjax --><scri
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>An R client for BEDbase</h1>
-    <small class="dont-index">Source: <a href="https://github.com/jwokaty/bedbaser/blob/devel/R/bedbaser.R" class="external-link"><code>R/bedbaser.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/waldronlab/bedbaser/blob/devel/R/bedbaser.R" class="external-link"><code>R/bedbaser.R</code></a></small>
     <div class="hidden name"><code>BEDbase.Rd</code></div>
     </div>
 
@@ -89,7 +89,9 @@ functions for common tasks, such as to import a BED file by id into a
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p>The convenience functions are as follows</p><ul><li><p><code>bedbaser::BEDbase()</code>: API service constructor</p></li>
+    <p>bedbaser can use the same cache as the geniml bbclient. Set the
+cache_path to the geniml cache when creating the instance.</p>
+<p>The convenience functions are as follows</p><ul><li><p><code>bedbaser::BEDbase()</code>: API service constructor</p></li>
 <li><p><code>bedbaser::getCache()</code>: Retrieve cache</p></li>
 <li><p><code>bedbaser::setCache()</code>: Set path to cache</p></li>
 <li><p><code><a href="bb_example.html">bedbaser::bb_example()</a></code>: Retrieve an example BED file or BEDset</p></li>
