@@ -64,7 +64,7 @@ BEDbase <- function(cache_path, quietly = FALSE) {
     )
     info <- httr::content(api$list_beds_v1_bed_list_get(limit = 0, offset = 0))
     if (!quietly) {
-        message(info$count, "BED files available.")
+        message(info$count, " BED files available.")
     }
     api
 }
@@ -154,6 +154,48 @@ setMethod(
     "operations", "BEDbase",
     function(x, ..., .deprecated = FALSE) {
         methods::callNextMethod(x, ..., .deprecated = .deprecated)
+    }
+)
+
+#' Display schemas 
+#'
+#' @param x BEDbase(1) object
+#'
+#' @importFrom AnVIL schemas 
+#'
+#' @return list(1) API end points
+#'
+#' @examples
+#' api <- BEDbase()
+#' schemas(api)
+#'
+#' @export
+setMethod(
+    "schemas", "BEDbase",
+    function(x) {
+        methods::callNextMethod(x)
+    }
+)
+
+#' Display tags 
+#'
+#' @param x BEDbase(1) object
+#' @param .tags character() tags for filtering operations 
+#' @param .deprecated (default \code{FALSE}) if deprecated
+#'
+#' @importFrom AnVIL tags
+#'
+#' @return list(1) API end points
+#'
+#' @examples
+#' api <- BEDbase()
+#' tags(api)
+#'
+#' @export
+setMethod(
+    "tags", "BEDbase",
+    function(x, .tags, .deprecated = FALSE) {
+        methods::callNextMethod(x, .tags, .deprecated = .deprecated)
     }
 )
 
