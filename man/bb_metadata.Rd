@@ -7,15 +7,15 @@
 bb_metadata(api, id, full = FALSE)
 }
 \arguments{
-\item{api}{API object of BEDbase created from BEDbase()}
+\item{api}{API object created from \code{BEDbase()}}
 
-\item{id}{integer() record or object identifier}
+\item{id}{integer1() record or object identifier}
 
-\item{full}{logical() (default FALSE) include full record with stats, files,
-and metadata}
+\item{full}{logical(1) (default \code{FALSE}) include full record with
+stats, files, and metadata}
 }
 \value{
-list() metadata
+list(1) metadata
 }
 \description{
 Get metadata for a BED file or BEDset. Abort

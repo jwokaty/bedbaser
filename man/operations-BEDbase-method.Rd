@@ -7,14 +7,14 @@
 \S4method{operations}{BEDbase}(x, ..., .deprecated = FALSE)
 }
 \arguments{
-\item{x}{BEDbase object}
+\item{x}{BEDbase(1) object}
 
 \item{...}{other options}
 
-\item{.deprecated}{(default FALSE) if deprecated}
+\item{.deprecated}{(default \code{FALSE}) if deprecated}
 }
 \value{
-list() API end points
+list(1) API end points
 }
 \description{
 Display API

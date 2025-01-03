@@ -9,10 +9,10 @@ bb_beds_in_bedset(api, bedset_id)
 \arguments{
 \item{api}{API object of BEDbase created from BEDbase()}
 
-\item{bedset_id}{integer() BEDset record identifier}
+\item{bedset_id}{integer(1) BEDset record identifier}
 }
 \value{
-tibble() information of BED files in BEDset
+tibble(1) information of BED files in BEDset
 }
 \description{
 Get BEDs associated with BEDset

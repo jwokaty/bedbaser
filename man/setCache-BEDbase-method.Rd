@@ -7,20 +7,17 @@
 \S4method{setCache}{BEDbase}(x, cache_path, quietly = TRUE)
 }
 \arguments{
-\item{x}{BEDbase object}
+\item{x}{BEDbase(1) object}
 
-\item{cache_path}{character()}
+\item{cache_path}{character(1)}
 
-\item{quietly}{(default TRUE) display messages}
+\item{quietly}{logical(1) (default \code{TRUE}) display messages}
 }
 \value{
-BiocFileCache cache of BED files
+BiocFileCache(1) object of BED files
 }
 \description{
 Set cache path
-}
-\details{
-bedbaser can use the same cache as bbclient
 }
 \examples{
 api <- BEDbase(tempdir())

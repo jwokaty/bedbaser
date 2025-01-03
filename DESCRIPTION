@@ -1,6 +1,6 @@
 Package: bedbaser
 Title: A BEDbase client
-Version: 0.99.13
+Version: 0.99.14
 Authors@R: c(
     person(
         given = "Jen",
@@ -27,6 +27,7 @@ Imports:
     AnVIL (>= 1.16.0),
     BiocFileCache,
     dplyr,
+    GenomeInfoDb,
     GenomicRanges,
     httr,
     methods,

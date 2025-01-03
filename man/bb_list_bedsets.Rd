@@ -9,14 +9,14 @@ bb_list_bedsets(api, query = NULL, limit = 1000, offset = 0)
 \arguments{
 \item{api}{API object of BEDbase created from BEDbase()}
 
-\item{query}{character() (default NULL) keyword}
+\item{query}{character() (default \code{NULL}) keyword}
 
-\item{limit}{integer() (default 1000) maximum records of bedsets}
+\item{limit}{integer(1) (default \code{1000}) maximum records}
 
-\item{offset}{integer() (default 0) page token of records}
+\item{offset}{integer(1) (default \code{0}) page token of records}
 }
 \value{
-tibble() of BEDset records
+tibble(1) of BEDset records
 }
 \description{
 List BEDsets

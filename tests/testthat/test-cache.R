@@ -1,6 +1,6 @@
 test_that("default cache location is used", {
     path <- tools::R_user_dir("bedbaser", which = "cache")
-    api <- BEDbase()
+    api <- BEDbase(quietly = TRUE)
     id <- "bbad85f21962bb8d972444f7f9a3a932"
     gro <- bb_to_granges(api, id, "bed")
     bfc <- BiocFileCache::BiocFileCache(path)
@@ -12,7 +12,7 @@ test_that("default cache location is used", {
 
 test_that("path is used if set when calling constructor", {
     path <- tempdir()
-    api <- BEDbase(path)
+    api <- BEDbase(path, TRUE)
     bfc <- getCache(api)
     id <- "bbad85f21962bb8d972444f7f9a3a932"
     gro <- bb_to_granges(api, id, "bed")

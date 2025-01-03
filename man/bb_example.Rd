@@ -9,10 +9,10 @@ bb_example(api, rec_type = c("bed", "bedset"))
 \arguments{
 \item{api}{API object of BEDbase created from BEDbase()}
 
-\item{rec_type}{character() bed or bedset}
+\item{rec_type}{character(1) bed or bedset}
 }
 \value{
-list() bed or bedset
+list(1) bed files or bedsets
 }
 \description{
 Get the example BED file or BEDset with metadata

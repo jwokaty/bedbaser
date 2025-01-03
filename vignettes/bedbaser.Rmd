@@ -107,7 +107,7 @@ bb_bed_text_search(api, "cancer", limit = 10)
 Create a GRanges object with a BED id with `bb_to_granges`, which
 downloads and imports a BED file using `r Biocpkg("rtracklayer")`.
 
-```{r bb_to_granges, message=FALSE}
+```{r bb_to_granges}
 ex_bed <- bb_example(api, "bed")
 head(ex_bed)
 # Allow bedbaser to assign column names and types

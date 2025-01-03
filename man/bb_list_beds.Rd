@@ -7,18 +7,18 @@
 bb_list_beds(api, genome = NULL, bed_type = NULL, limit = 1000, offset = 0)
 }
 \arguments{
-\item{api}{API object of BEDbase created from BEDbase()}
+\item{api}{API object created from \code{BEDbase()}}
 
-\item{genome}{character() (default NULL) genome keyword}
+\item{genome}{character(1) (default \code{NULL}) genome keyword}
 
-\item{bed_type}{character() (default NULL) bed file type}
+\item{bed_type}{character(1) (default \code{NULL}) bed file type}
 
-\item{limit}{integer() (default 1000) maximum records}
+\item{limit}{integer(1) (default \code{1000}) maximum records}
 
-\item{offset}{integer() (default 0) page token of records}
+\item{offset}{integer(1) (default \code{0}) page token of records}
 }
 \value{
-tibble() of BED records
+tibble(1) of BED records
 }
 \description{
 List BEDs

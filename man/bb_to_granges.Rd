@@ -13,19 +13,19 @@ bb_to_granges(
 )
 }
 \arguments{
-\item{api}{API object of BEDbase created from BEDbase()}
+\item{api}{API object of BEDbase created from \code{BEDbase()}}
 
-\item{bed_id}{integer() BED record identifier}
+\item{bed_id}{integer(1) BED record identifier}
 
-\item{file_type}{character() bed or bigbed}
+\item{file_type}{character(1) bed or bigbed}
 
-\item{extra_cols}{character() (default NULL) extra column names to
+\item{extra_cols}{character() (default \code{NULL}) extra column names to
 construct GRanges objects}
 
-\item{quietly}{logical() (default TRUE) display messages}
+\item{quietly}{logical(1) (default \code{TRUE}) display messages}
 }
 \value{
-GRanges() object
+GRanges(1) object
 }
 \description{
 Generates the column and types for broad and narrow peak files.

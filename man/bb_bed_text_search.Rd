@@ -7,16 +7,16 @@
 bb_bed_text_search(api, query, limit = 10, offset = 0)
 }
 \arguments{
-\item{api}{API object of BEDbase created from BEDbase()}
+\item{api}{API object of BEDbase created from \code{BEDbase()}}
 
-\item{query}{character() keywords to search}
+\item{query}{character(1) keywords to search}
 
-\item{limit}{integer() (default 10) maximum number of results}
+\item{limit}{integer(1) (default \code{10}) maximum number of results}
 
-\item{offset}{integer() (default 0) page offset of results}
+\item{offset}{integer(1) (default \code{0}) page offset of results}
 }
 \value{
-tibble()
+tibble(1) of results
 }
 \description{
 Returns all available results scored.

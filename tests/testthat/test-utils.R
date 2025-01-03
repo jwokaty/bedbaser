@@ -1,5 +1,5 @@
 test_that(".format_metadata_files returns a tibble with a url column", {
-    api <- BEDbase()
+    api <- BEDbase(quietly = TRUE)
     ex_bed <- bb_example(api, "bed")
     ex_md <- bb_metadata(api, ex_bed$id, TRUE)
     mdf <- .format_metadata_files(ex_md$files)
@@ -8,7 +8,7 @@ test_that(".format_metadata_files returns a tibble with a url column", {
 })
 
 test_that(".get_file returns a valid file path", {
-    api <- BEDbase()
+    api <- BEDbase(quietly = TRUE)
     ex_bed <- bb_example(api, "bed")
     md <- bb_metadata(api, ex_bed$id, TRUE)
     temp_path <- tempdir()
@@ -19,7 +19,7 @@ test_that(".get_file returns a valid file path", {
 })
 
 test_that(".get_extra_cols returns a named vector", {
-    api <- BEDbase()
+    api <- BEDbase(quietly = TRUE)
     id <- "608827efc82fcaa4b0bfc65f590ffef8"
     md <- bb_metadata(api, id, TRUE)
     file_path <- .get_file(md, getCache(api), "bed", "http")

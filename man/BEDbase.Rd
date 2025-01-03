@@ -6,30 +6,26 @@
 \alias{setCache}
 \title{An R client for BEDbase}
 \usage{
-BEDbase(cache_path)
+BEDbase(cache_path, quietly = FALSE)
 
 getCache(x, quietly = TRUE)
 
 setCache(x, cache_path, quietly = TRUE)
 }
 \arguments{
-\item{cache_path}{character()}
+\item{cache_path}{character(1)}
 
-\item{x}{BEDbase object}
+\item{quietly}{logical(1) (default \code{TRUE}) display messages}
 
-\item{quietly}{(default TRUE) display messages}
+\item{x}{BEDbase(1) object}
 }
 \value{
 BEDbase object
 }
 \description{
 bedbaser exposes the BEDbase API and includes convenience
-functions for common tasks, such as to import a BED file by id into a
-\code{GRanges} object and a BEDset by its id into a \code{GRangesList}.
-}
-\details{
-bedbaser can use the same cache as the geniml bbclient. Set the
-cache_path to the geniml cache when creating the instance.
+functions for common tasks, such as to import a BED file by \code{id} into a
+\code{GRanges} object and a BEDset by its \code{id} into a \code{GRangesList}.
 
 The convenience functions are as follows
 \itemize{
@@ -48,6 +44,8 @@ The convenience functions are as follows
 }
 }
 \examples{
-BEDbase(cache_path = tempdir())
+api <- BEDbase(cache_path = tempdir())
+ex_bed <- bb_example(api, "bed")
+ex_bed_md <- bb_metadata(api, "bed")
 
 }

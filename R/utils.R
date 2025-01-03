@@ -1,8 +1,8 @@
 #' Format BED file metadata
 #'
-#' @param records list() metadata
+#' @param records list(1) metadata
 #'
-#' @return tibble() file metadata
+#' @return tibble(1) file metadata
 #'
 #' @examples
 #' api <- BEDbase()
@@ -21,13 +21,13 @@
 #'
 #' Will create directories that do not exist when saving
 #'
-#' @param metadata list() full metadata
-#' @param cache_or_path BiocFileCache or character() cache or save path
-#' @param file_type character() bed or bigbed
-#' @param access_type character() s3 or http
-#' @param quietly logical() (default TRUE) display messages
+#' @param metadata list(1) full metadata
+#' @param cache_or_path BiocFileCache(1) or character(1) cache or save path
+#' @param file_type character(1) bed or bigbed
+#' @param access_type character(1) s3 or http
+#' @param quietly logical(1) (default \code{TRUE}) display messages
 #'
-#' @return character() file path
+#' @return character(1) file path
 #'
 #' @examples
 #' api <- BEDbase()
@@ -36,15 +36,19 @@
 #' .get_file(md, tempdir(), "bed", "http")
 #'
 #' @noRd
-.get_file <- function(metadata, cache_or_path, file_type = c("bed", "bigbed"),
-    access_type = c("s3", "http"), quietly = TRUE) {
+.get_file <- function(
+        metadata, cache_or_path, file_type = c("bed", "bigbed"),
+        access_type = c("s3", "http"), quietly = TRUE) {
     file_details <- .format_metadata_files(metadata$files) |>
         dplyr::filter(
             name == paste(file_type, "file", sep = "_"),
             access_id == access_type
         )
-    if (class(cache_or_path) == "BiocFileCache") {
-        cached_file <- .download_to_cache(file_details$url, cache_or_path, quietly)
+    if (is(cache_or_path, "BiocFileCache")) {
+        cached_file <- .download_to_cache(
+            metadata$id, file_details$url,
+            cache_or_path, quietly
+        )
         bedbase_file <- tryCatch(
             R.utils::gunzip(cached_file, remove = FALSE),
             error = function(e) {
@@ -64,11 +68,11 @@
 
 #' Get extra_cols
 #'
-#' @param file_path character() path to BED
-#' @param x double() the x in BEDX+Y
-#' @param y double() the y in BEDX+Y
+#' @param file_path character(1) path to BED
+#' @param x double(1) the x in BEDX+Y
+#' @param y double(1) the y in BEDX+Y
 #'
-#' @return vector representing extraCols for rtracklayer
+#' @return vector(1) representing extraCols for rtracklayer
 #'
 #' @examples
 #' id <- "608827efc82fcaa4b0bfc65f590ffef8"
@@ -94,21 +98,52 @@
     stats::setNames(extra_cols, names(t[t_seq]))
 }
 
+#' Import with genome
+#'
+#' @param args list(1) arguments to create a GRanges object
+#'
+#' @return GRanges(1) object representing BED
+#'
+#' @examples
+#' api <- BEDbase()
+#' ex_bed <- bb_example(api, "bed")
+#' md <- bb_metadata(api, ex_bed$id, TRUE)
+#' file_path <- .get_file(md, getCache(api), "bed", "http")
+#' args <- list(
+#'     con = file_path,
+#'     format = gsub("peak", "Peak", metadata$bed_format),
+#'     genome = md$genome_alias
+#' )
+#' .import_with_genome(args)
+#'
+#' @noRd
+.import_with_genome <- function(args) {
+    tryCatch(
+        do.call(rtracklayer::import, args),
+        error = function(e) {
+            genome <- args["genome"]
+            gro <- do.call(rtracklayer::import, within(args, rm("genome")))
+            GenomeInfoDb::genome(gro) <- genome
+            gro
+        }
+    )
+}
+
 #' Create GRanges object from a BED file
 #'
 #' If the BED format is known, `extra_cols` may be used to set the column name
-#' and type. For example, `extra_cols = c(signalValue = "numeric",
-#' pValue = "numeric", qValue = "numeric")`.
+#' and type. For example, \code{extra_cols = c(signalValue = "numeric",
+#' pValue = "numeric", qValue = "numeric")}.
 #'
 #' Aborts if the length of `extra_cols` is not equal to Y in BEDX+Y.
 #'
-#' @param file_path character() path to BED file
-#' @param metadata list() full metadata
-#' @param extra_cols character() (default NULL) extra column names to construct
-#'     GRanges objects
-#' @param quietly boolean() (default TRUE) Display information messages
+#' @param file_path character(1) path to BED file
+#' @param metadata list(1) full metadata
+#' @param extra_cols character(1) (default \code{NULL}) extra column names to
+#' construct  GRanges objects
+#' @param quietly boolean(1) (default \code{TRUE}) Display information messages
 #'
-#' @return GRanges() object representing BED
+#' @return GRanges(1) object representing BED
 #'
 #' @examples
 #' api <- BEDbase()
@@ -118,8 +153,9 @@
 #' .bed_file_to_granges(file_path, md)
 #'
 #' @noRd
-.bed_file_to_granges <- function(file_path, metadata, extra_cols = NULL,
-    quietly = TRUE) {
+.bed_file_to_granges <- function(
+        file_path, metadata, extra_cols = NULL,
+        quietly = TRUE) {
     args <- list(con = file_path)
     args["format"] <- gsub("peak", "Peak", metadata$bed_format)
     nums <- stringr::str_replace(metadata$bed_type, "bed", "") |>
@@ -143,16 +179,5 @@
 
     args["genome"] <- metadata$genome_alias
 
-    tryCatch(
-        do.call(rtracklayer::import, args),
-        error = function(e) {
-            if (!quietly) {
-                rlang::inform(paste(
-                    "Error passing genome. Attempting to create",
-                    "GRanges object without genome."
-                ))
-            }
-            do.call(rtracklayer::import, within(args, rm("genome")))
-        }
-    )
+    .import_with_genome(args)
 }

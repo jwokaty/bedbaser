@@ -7,14 +7,14 @@
 bb_to_grangeslist(api, bedset_id, quietly = TRUE)
 }
 \arguments{
-\item{api}{API object of BEDbase created from BEDbase()}
+\item{api}{API object of BEDbase created from \code{BEDbase()}}
 
-\item{bedset_id}{integer() BEDset record identifier}
+\item{bedset_id}{integer(1) BEDset record identifier}
 
-\item{quietly}{logical() (default TRUE) display messages}
+\item{quietly}{logical(1) (default \code{TRUE}) display messages}
 }
 \value{
-GRangesList() object
+GRangesList(1) object
 }
 \description{
 Create a GRangesList object given a BEDset id

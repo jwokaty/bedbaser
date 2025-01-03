@@ -16,15 +16,18 @@ bb_save(
 \arguments{
 \item{api}{API object of BEDbase created from BEDbase()}
 
-\item{bed_or_bedset_id}{integer() BED or BEDset record identifier}
+\item{bed_or_bedset_id}{integer(1) BED or BEDset record identifier}
 
-\item{path}{character() directory to save file}
+\item{path}{character(1) directory to save file}
 
-\item{file_type}{character() (default bed) bed, bigbed, etc.}
+\item{file_type}{character(1) (default \code{"bed"}) bed, bigbed, etc.}
 
-\item{access_type}{character() (default http)  s3 or http}
+\item{access_type}{character(1) (default \code{"http"})  s3 or http}
 
-\item{quietly}{logical() (default TRUE) display messages}
+\item{quietly}{logical(1) (default \code{TRUE}) display messages}
+}
+\value{
+An invisible \code{NULL}
 }
 \description{
 Save a BED or BEDset files to a path given an id
