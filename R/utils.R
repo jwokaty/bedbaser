@@ -5,9 +5,9 @@
 #' @return tibble(1) file metadata
 #'
 #' @examples
-#' api <- BEDbase()
-#' ex_bed <- bb_example(api, "bed")
-#' ex_metadata <- bb_metadata(api, ex_bed$id, TRUE)
+#' bedbase <- BEDbase()
+#' ex_bed <- bb_example(bedbase, "bed")
+#' ex_metadata <- bb_metadata(bedbase, ex_bed$id, TRUE)
 #' .format_metadata_files(ex_bed$files)
 #'
 #' @noRd
@@ -30,9 +30,9 @@
 #' @return character(1) file path
 #'
 #' @examples
-#' api <- BEDbase()
-#' ex_bed <- bb_example(api, "bed")
-#' md <- bb_metadata(api, ex_bed$id, TRUE)
+#' bedbase <- BEDbase()
+#' ex_bed <- bb_example(bedbase, "bed")
+#' md <- bb_metadata(bedbase, ex_bed$id, TRUE)
 #' .get_file(md, tempdir(), "bed", "http")
 #'
 #' @noRd
@@ -75,9 +75,9 @@
 #'
 #' @examples
 #' id <- "608827efc82fcaa4b0bfc65f590ffef8"
-#' api <- BEDbase()
-#' md <- bb_metadata(api, id, TRUE)
-#' file_path <- .get_file(md, getCache(api), "bed", "http")
+#' bedbase <- BEDbase()
+#' md <- bb_metadata(bedbase, id, TRUE)
+#' file_path <- .get_file(md, getCache(bedbase), "bed", "http")
 #' .get_extra_cols(file_path, 3, 9)
 #'
 #' @noRd
@@ -104,10 +104,10 @@
 #' @return GRanges(1) object representing BED
 #'
 #' @examples
-#' api <- BEDbase()
-#' ex_bed <- bb_example(api, "bed")
-#' md <- bb_metadata(api, ex_bed$id, TRUE)
-#' file_path <- .get_file(md, getCache(api), "bed", "http")
+#' bedbase <- BEDbase()
+#' ex_bed <- bb_example(bedbase, "bed")
+#' md <- bb_metadata(bedbase, ex_bed$id, TRUE)
+#' file_path <- .get_file(md, getCache(bedbase), "bed", "http")
 #' args <- list(
 #'     con = file_path,
 #'     format = gsub("peak", "Peak", metadata$bed_format),
@@ -145,10 +145,10 @@
 #' @return GRanges(1) object representing BED
 #'
 #' @examples
-#' api <- BEDbase()
-#' ex_bed <- bb_example(api, "bed")
-#' md <- bb_metadata(api, ex_bed$id, TRUE)
-#' file_path <- .get_file(md, getCache(api), "bed", "http")
+#' bedbase <- BEDbase()
+#' ex_bed <- bb_example(bedbase, "bed")
+#' md <- bb_metadata(bedbase, ex_bed$id, TRUE)
+#' file_path <- .get_file(md, getCache(bedbase), "bed", "http")
 #' .bed_file_to_granges(file_path, md)
 #'
 #' @noRd

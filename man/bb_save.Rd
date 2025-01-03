@@ -5,7 +5,7 @@
 \title{Save a BED or BEDset files to a path given an id}
 \usage{
 bb_save(
-  api,
+  bedbase,
   bed_or_bedset_id,
   path,
   file_type = "bed",
@@ -14,7 +14,7 @@ bb_save(
 )
 }
 \arguments{
-\item{api}{API object of BEDbase created from BEDbase()}
+\item{bedbase}{API object of BEDbase created from BEDbase()}
 
 \item{bed_or_bedset_id}{integer(1) BED or BEDset record identifier}
 
@@ -33,8 +33,8 @@ An invisible \code{NULL}
 Save a BED or BEDset files to a path given an id
 }
 \examples{
-api <- BEDbase()
-ex_bed <- bb_example(api, "bed")
-bb_save(api, ex_bed$id, tempdir())
+bedbase <- BEDbase()
+ex_bed <- bb_example(bedbase, "bed")
+bb_save(bedbase, ex_bed$id, tempdir())
 
 }

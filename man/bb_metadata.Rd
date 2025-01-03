@@ -4,10 +4,10 @@
 \alias{bb_metadata}
 \title{Get metadata for a BED file or BEDset}
 \usage{
-bb_metadata(api, id, full = FALSE)
+bb_metadata(bedbase, id, full = FALSE)
 }
 \arguments{
-\item{api}{API object created from \code{BEDbase()}}
+\item{bedbase}{API object created from \code{BEDbase()}}
 
 \item{id}{integer1() record or object identifier}
 
@@ -22,12 +22,12 @@ Get metadata for a BED file or BEDset. Abort
 if not found or id is not not 32 characters
 }
 \examples{
-api <- BEDbase()
+bedbase <- BEDbase()
 
-ex_bed <- bb_example(api, "bed")
-bb_metadata(api, ex_bed$id)
+ex_bed <- bb_example(bedbase, "bed")
+bb_metadata(bedbase, ex_bed$id)
 
-ex_bedset <- bb_example(api, "bedset")
-bb_metadata(api, ex_bedset$id)
+ex_bedset <- bb_example(bedbase, "bedset")
+bb_metadata(bedbase, ex_bedset$id)
 
 }

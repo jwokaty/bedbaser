@@ -5,7 +5,7 @@
 \title{Create a GRanges object given a BED id}
 \usage{
 bb_to_granges(
-  api,
+  bedbase,
   bed_id,
   file_type = "bed",
   extra_cols = NULL,
@@ -13,7 +13,7 @@ bb_to_granges(
 )
 }
 \arguments{
-\item{api}{API object of BEDbase created from \code{BEDbase()}}
+\item{bedbase}{API object of BEDbase created from \code{BEDbase()}}
 
 \item{bed_id}{integer(1) BED record identifier}
 
@@ -31,8 +31,8 @@ GRanges(1) object
 Generates the column and types for broad and narrow peak files.
 }
 \examples{
-api <- BEDbase()
-ex_bed <- bb_example(api, "bed")
-bb_to_granges(api, ex_bed$id)
+bedbase <- BEDbase()
+ex_bed <- bb_example(bedbase, "bed")
+bb_to_granges(bedbase, ex_bed$id)
 
 }

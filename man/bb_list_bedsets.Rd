@@ -4,10 +4,10 @@
 \alias{bb_list_bedsets}
 \title{List BEDsets}
 \usage{
-bb_list_bedsets(api, query = NULL, limit = 1000, offset = 0)
+bb_list_bedsets(bedbase, query = NULL, limit = 1000, offset = 0)
 }
 \arguments{
-\item{api}{API object of BEDbase created from BEDbase()}
+\item{bedbase}{API object of BEDbase created from BEDbase()}
 
 \item{query}{character() (default \code{NULL}) keyword}
 
@@ -22,7 +22,7 @@ tibble(1) of BEDset records
 List BEDsets
 }
 \examples{
-api <- BEDbase()
-bb_list_bedsets(api)
+bedbase <- BEDbase()
+bb_list_bedsets(bedbase)
 
 }

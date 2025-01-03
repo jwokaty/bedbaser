@@ -1,9 +1,9 @@
 test_that("setCache changes cache", {
-    api <- BEDbase(quietly = TRUE)
+    bedbase <- BEDbase(quietly = TRUE)
     path <- tempdir()
-    expect_true(BiocFileCache::bfccache(getCache(api)) != path)
-    api <- setCache(api, path)
-    expect_true(BiocFileCache::bfccache(getCache(api)) == path)
+    expect_true(BiocFileCache::bfccache(getCache(bedbase)) != path)
+    bedbase <- setCache(bedbase, path)
+    expect_true(BiocFileCache::bfccache(getCache(bedbase)) == path)
 })
 
 test_that("bb_example has bed_format of 'bed' given rec_type 'bed'", {
@@ -17,71 +17,71 @@ test_that("bb_example has 'bed_ids' given rec_type 'bedset'", {
 })
 
 test_that("bb_metadata returns metadata for BEDs", {
-    api <- BEDbase(quietly = TRUE)
-    ex_bed <- bb_example(api, "bed")
-    ex_metadata <- httr::content(api$get_bed_metadata_v1_bed__bed_id__metadata_get(ex_bed$id, TRUE))
-    bed_metadata <- bb_metadata(api, ex_bed$id, TRUE)
+    bedbase <- BEDbase(quietly = TRUE)
+    ex_bed <- bb_example(bedbase, "bed")
+    ex_metadata <- httr::content(bedbase$get_bed_metadata_v1_bed__bed_id__metadata_get(ex_bed$id, TRUE))
+    bed_metadata <- bb_metadata(bedbase, ex_bed$id, TRUE)
     expect_identical(ex_metadata, bed_metadata)
 })
 
 test_that("bb_metadata returns metadata for BEDsets", {
-    api <- BEDbase(quietly = TRUE)
-    ex_bedset <- bb_example(api, "bedset")
-    ex_bedset_metadata <- httr::content(api$get_bedset_metadata_v1_bedset__bedset_id__metadata_get(ex_bedset$id, TRUE))
-    bedset_metadata <- bb_metadata(api, ex_bedset$id, TRUE)
+    bedbase <- BEDbase(quietly = TRUE)
+    ex_bedset <- bb_example(bedbase, "bedset")
+    ex_bedset_metadata <- httr::content(bedbase$get_bedset_metadata_v1_bedset__bedset_id__metadata_get(ex_bedset$id, TRUE))
+    bedset_metadata <- bb_metadata(bedbase, ex_bedset$id, TRUE)
     expect_identical(ex_bedset_metadata, bedset_metadata)
 })
 
 test_that("bb_metadata errors on invalid input", {
-    api <- BEDbase(quietly = TRUE)
-    expect_error(bb_metadata(api, "invalid_invalid_invalid_invalid_", "bed"))
+    bedbase <- BEDbase(quietly = TRUE)
+    expect_error(bb_metadata(bedbase, "invalid_invalid_invalid_invalid_", "bed"))
 })
 
 test_that("bb_list_beds returns same number of results for the hg19 genome", {
-    api <- BEDbase(quietly = TRUE)
-    hg19_beds_raw <- httr::content(api$list_beds_v1_bed_list_get(genome = "hg19"))
+    bedbase <- BEDbase(quietly = TRUE)
+    hg19_beds_raw <- httr::content(bedbase$list_beds_v1_bed_list_get(genome = "hg19"))
     hg19_bed_names <- unlist(lapply(hg19_beds_raw$results, `[`, c("name")),
         use.names = FALSE
     )
-    hg19_beds <- bb_list_beds(api, genome = "hg19")
+    hg19_beds <- bb_list_beds(bedbase, genome = "hg19")
     expect_equal(hg19_bed_names, hg19_beds$name)
     expect_true(all(hg19_beds$genome_alias == "hg19"))
 })
 
 test_that("bb_list_bedsets returns same number for query hg19", {
-    api <- BEDbase(quietly = TRUE)
-    bedsets_raw <- httr::content(api$list_bedsets_v1_bedset_list_get(query = "hg19"))
+    bedbase <- BEDbase(quietly = TRUE)
+    bedsets_raw <- httr::content(bedbase$list_bedsets_v1_bedset_list_get(query = "hg19"))
     bedsets_names_bed_ids_list <- lapply(bedsets_raw$results, `[`, c("id", "bed_ids"))
     bedsets_names_bed_ids <- dplyr::bind_rows(bedsets_names_bed_ids_list) |>
         tidyr::unnest(cols = c(bed_ids))
-    bedsets <- bb_list_bedsets(api, query = "hg19")
+    bedsets <- bb_list_bedsets(bedbase, query = "hg19")
     expect_equal(bedsets_names_bed_ids$bed_ids, bedsets$bed_ids)
 })
 
 test_that("bb_list_bedsets returns number of bed ids", {
-    api <- BEDbase(quietly = TRUE)
-    bedsets_raw <- httr::content(api$list_bedsets_v1_bedset_list_get(limit = 1))
+    bedbase <- BEDbase(quietly = TRUE)
+    bedsets_raw <- httr::content(bedbase$list_bedsets_v1_bedset_list_get(limit = 1))
     bedsets_names_bed_ids_list <- lapply(bedsets_raw$results, `[`, c("id", "bed_ids"))
     bedsets_names_bed_ids <- dplyr::bind_rows(bedsets_names_bed_ids_list) |>
         tidyr::unnest(cols = c(bed_ids))
-    bedsets <- bb_list_bedsets(api, limit = 1)
+    bedsets <- bb_list_bedsets(bedbase, limit = 1)
     expect_equal(bedsets$bed_ids, bedsets_names_bed_ids$bed_ids)
 })
 
 test_that("bb_beds_in_bedset returns expected bed_ids", {
-    api <- BEDbase(quietly = TRUE)
-    ex_bedset <- httr::content(api$get_example_bedset_record_v1_bedset_example_get())
-    ex_bedset_raw <- httr::content(api$get_bedfiles_in_bedset_v1_bedset__bedset_id__bedfiles_get(ex_bedset$id))
+    bedbase <- BEDbase(quietly = TRUE)
+    ex_bedset <- httr::content(bedbase$get_example_bedset_record_v1_bedset_example_get())
+    ex_bedset_raw <- httr::content(bedbase$get_bedfiles_in_bedset_v1_bedset__bedset_id__bedfiles_get(ex_bedset$id))
     ex_bed_ids_list <- lapply(ex_bedset_raw$results, `[`, c("id"))
     ex_bed_ids <- unlist(ex_bed_ids_list, use.names = FALSE)
-    bed_ids <- bb_beds_in_bedset(api, ex_bedset$id)$id
+    bed_ids <- bb_beds_in_bedset(bedbase, ex_bedset$id)$id
     expect_equal(ex_bed_ids, bed_ids)
 })
 
 test_that("bb_bed_text_search returns results scored against the query", {
-    api <- BEDbase(quietly = TRUE)
-    beds <- bb_bed_text_search(api, "hg38")
-    ex_beds <- httr::content(api$text_to_bed_search_v1_bed_search_text_post(
+    bedbase <- BEDbase(quietly = TRUE)
+    beds <- bb_bed_text_search(bedbase, "hg38")
+    ex_beds <- httr::content(bedbase$text_to_bed_search_v1_bed_search_text_post(
         query = "hg38",
         limit = 10,
         offset = 0
@@ -93,34 +93,34 @@ test_that("bb_bed_text_search returns results scored against the query", {
 })
 
 test_that("bb_to_granges returns a GRanges object given a 3+0 bed file", {
-    api <- BEDbase(quietly = TRUE)
+    bedbase <- BEDbase(quietly = TRUE)
     id <- "95a593b8337074a334b425aba5e77d4c"
-    md <- bb_metadata(api, id, TRUE)
+    md <- bb_metadata(bedbase, id, TRUE)
     expect_equal("bed3+0", md$bed_type)
-    gro <- bb_to_granges(api, id)
+    gro <- bb_to_granges(bedbase, id)
     expect_true(methods::is((gro)[1], "GRanges"))
 })
 
 test_that("bb_to_granges returns a GRanges object given a bigbed file", {
-    api <- BEDbase(quietly = TRUE)
+    bedbase <- BEDbase(quietly = TRUE)
     id <- "ffc1e5ac45d923135500bdd825177356"
     if (.Platform$OS.type != "windows") {
-        gro <- bb_to_granges(api, id, "bigbed")
+        gro <- bb_to_granges(bedbase, id, "bigbed")
         expect_true(methods::is((gro)[1], "GRanges"))
     } else {
         expect_warning(
             rlang::warn("This feature does not work on Windows."),
-            bb_to_granges(api, id, "bigbed")
+            bb_to_granges(bedbase, id, "bigbed")
         )
     }
 })
 
 test_that("bb_to_granges returns a GRanges object given narrowpeak (6+4) file", {
-    api <- BEDbase(quietly = TRUE)
+    bedbase <- BEDbase(quietly = TRUE)
     id <- "bbad85f21962bb8d972444f7f9a3a932"
-    md <- bb_metadata(api, id, TRUE)
+    md <- bb_metadata(bedbase, id, TRUE)
     expect_equal("bed6+4", md$bed_type)
-    gro <- bb_to_granges(api, id)
+    gro <- bb_to_granges(bedbase, id)
     expect_true(methods::is((gro)[1], "GRanges"))
     df <- as.data.frame(gro)
     expect_contains(
@@ -133,11 +133,11 @@ test_that("bb_to_granges returns a GRanges object given narrowpeak (6+4) file", 
 })
 
 test_that("bb_to_granges returns GRanges object given bed3+9 with genome", {
-    api <- BEDbase(quietly = TRUE)
+    bedbase <- BEDbase(quietly = TRUE)
     id <- "608827efc82fcaa4b0bfc65f590ffef8"
-    md <- bb_metadata(api, id, TRUE)
+    md <- bb_metadata(bedbase, id, TRUE)
     expect_equal("bed3+9", md$bed_type)
-    gro <- bb_to_granges(api, id)
+    gro <- bb_to_granges(bedbase, id)
     df <- as.data.frame(gro)
     expect_contains(
         c(
@@ -149,11 +149,11 @@ test_that("bb_to_granges returns GRanges object given bed3+9 with genome", {
 })
 
 test_that("bb_to_granges allows passing extra_cols", {
-    api <- BEDbase(quietly = TRUE)
+    bedbase <- BEDbase(quietly = TRUE)
     id <- "608827efc82fcaa4b0bfc65f590ffef8"
-    md <- bb_metadata(api, id, TRUE)
+    md <- bb_metadata(bedbase, id, TRUE)
     expect_equal("bed3+9", md$bed_type)
-    gro <- bb_to_granges(api, id,
+    gro <- bb_to_granges(bedbase, id,
         extra_cols = c(
             "t1" = "character", "t2" = "character",
             "t3" = "character", "t4" = "character", "t5" = "character",
@@ -168,23 +168,23 @@ test_that("bb_to_granges allows passing extra_cols", {
 })
 
 test_that("bb_to_grangeslist creates a GRangesList", {
-    api <- BEDbase(quietly = TRUE)
-    grl <- bb_to_grangeslist(api, "lola_hg38_ucsc_features")
+    bedbase <- BEDbase(quietly = TRUE)
+    grl <- bb_to_grangeslist(bedbase, "lola_hg38_ucsc_features")
     expect_true(methods::is((grl)[1], "CompressedGRangesList"))
     expect_equal(11, length(grl))
 })
 
 test_that("bb_save saves bed files to a path", {
-    api <- BEDbase(quietly = TRUE)
+    bedbase <- BEDbase(quietly = TRUE)
     path <- tempdir()
     if (!dir.exists(path)) {
         dir.create(path)
     }
-    bed <- bb_example(api, "bed")
-    bb_save(api, bed$id, path, quietly = TRUE)
+    bed <- bb_example(bedbase, "bed")
+    bb_save(bedbase, bed$id, path, quietly = TRUE)
     expect_true(file.exists(file.path(path, paste0(bed$id, ".bed.gz"))))
-    bedset <- bb_metadata(api, "lola_hg38_ucsc_features")
-    bb_save(api, bedset$id, path, quietly = TRUE)
+    bedset <- bb_metadata(bedbase, "lola_hg38_ucsc_features")
+    bb_save(bedbase, bedset$id, path, quietly = TRUE)
     for (id in bedset$bed_ids) {
         expect_true(file.exists(file.path(path, paste0(id, ".bed.gz"))))
     }

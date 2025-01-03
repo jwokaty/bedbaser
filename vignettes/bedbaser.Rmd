@@ -41,7 +41,7 @@ Load the package and create a BEDbase instance.
 ```{r bedbase}
 library(bedbaser)
 
-api <- BEDbase()
+bedbase <- BEDbase()
 ```
 
 ## (Optional) Set the cache
@@ -54,7 +54,7 @@ bedbaser will choose the default location. bedbaser can use the same cache as
 ```{r set_cache, eval = FALSE}
 library(bedbaser)
 
-api <- BEDbase(cache_path = "/path/to/cache")
+bedbase <- BEDbase(cache_path = "/path/to/cache")
 ```
 
 # Convenience Functions
@@ -70,9 +70,9 @@ BEDbase. Both functions display the id and names of BED files and BEDsets. An
 id can be used to access a specific resource.
 
 ```{r bb_list_beds}
-bb_list_beds(api)
+bb_list_beds(bedbase)
 
-bb_list_bedsets(api)
+bb_list_bedsets(bedbase)
 ```
 
 ## Examine metadata
@@ -80,8 +80,8 @@ bb_list_bedsets(api)
 Use `bb_metadata()` to learn more about a BED or BEDset associated with an id.
 
 ```{r bb_metadata}
-ex_bed <- bb_example(api, "bed")
-md <- bb_metadata(api, ex_bed$id)
+ex_bed <- bb_example(bedbase, "bed")
+md <- bb_metadata(bedbase, ex_bed$id)
 head(md)
 ```
 
@@ -90,7 +90,7 @@ head(md)
 Use `bb_beds_in_bedset()` to display the id of BEDs in a BEDset.
 
 ```{r bb_beds_in_bedset}
-bb_beds_in_bedset(api, "excluderanges")
+bb_beds_in_bedset(bedbase, "excluderanges")
 ```
 
 ## Search for a BED file by keyword
@@ -99,7 +99,7 @@ Search for BED files by keywords. `bb_bed_text_search()` returns all BED files
 scored against a keyword query.
 
 ```{r bb_search}
-bb_bed_text_search(api, "cancer", limit = 10)
+bb_bed_text_search(bedbase, "cancer", limit = 10)
 ```
 
 ## Import a BED into a GRanges object
@@ -108,10 +108,10 @@ Create a GRanges object with a BED id with `bb_to_granges`, which
 downloads and imports a BED file using `r Biocpkg("rtracklayer")`.
 
 ```{r bb_to_granges}
-ex_bed <- bb_example(api, "bed")
+ex_bed <- bb_example(bedbase, "bed")
 head(ex_bed)
 # Allow bedbaser to assign column names and types
-bb_to_granges(api, ex_bed$id, quietly = FALSE)
+bb_to_granges(bedbase, ex_bed$id, quietly = FALSE)
 ```
 
 For BEDX+Y formats, a named list with column types may be passed through
@@ -120,7 +120,7 @@ guesses the column types and assigns column names.
 
 ```{r bb_to_granges_manual, eval=FALSE}
 # Manually assign column name and type using `extra_cols`
-bb_to_granges(api, ex_bed$id, extra_cols = c("column_name" = "character"))
+bb_to_granges(bedbase, ex_bed$id, extra_cols = c("column_name" = "character"))
 ```
 
 `bb_to_granges` automatically assigns the column names and types for broad peak
@@ -128,16 +128,16 @@ and narrow peak files.
 
 ```{r bb_to_granges_narrowpeak, message=FALSE}
 bed_id <- "bbad85f21962bb8d972444f7f9a3a932"
-md <- bb_metadata(api, bed_id)
+md <- bb_metadata(bedbase, bed_id)
 head(md)
-bb_to_granges(api, bed_id)
+bb_to_granges(bedbase, bed_id)
 ```
 
 `bb_to_granges` can also import big BED files.
 
 ```{r bb_to_granges_big_bed}
 bed_id <- "ffc1e5ac45d923135500bdd825177356"
-bb_to_granges(api, bed_id, "bigbed", quietly = FALSE)
+bb_to_granges(bedbase, bed_id, "bigbed", quietly = FALSE)
 ```
 
 ## Import a BEDset into a GRangesList
@@ -146,7 +146,7 @@ Create a GRangesList given a BEDset id with `bb_to_grangeslist`.
 
 ```{r bb_to_grangeslist, message=FALSE}
 bedset_id <- "lola_hg38_ucsc_features"
-bb_to_grangeslist(api, bedset_id)
+bb_to_grangeslist(bedbase, bedset_id)
 ```
 
 # Accessing BEDbase API endpoints
@@ -155,7 +155,7 @@ Because bedbaser uses the `r Biocpkg("AnVIL")` Service class, it's possible to
 access any endpoint of the [BEDbase API](https://api.bedbase.org/v1/docs).
 
 ```{r operations}
-show(api)
+show(bedbase)
 ```
 
 For example, to access a BED file's stats, access the endpoint with `$` and use
@@ -164,9 +164,9 @@ endpoint.
 
 ```{r service_class_example}
 library(httr)
-show(api$get_bed_stats_v1_bed__bed_id__metadata_stats_get)
+show(bedbase$get_bed_stats_v1_bed__bed_id__metadata_stats_get)
 id <- "bbad85f21962bb8d972444f7f9a3a932"
-rsp <- api$get_bed_stats_v1_bed__bed_id__metadata_stats_get(id)
+rsp <- bedbase$get_bed_stats_v1_bed__bed_id__metadata_stats_get(id)
 content(rsp)
 ```
 
@@ -195,8 +195,8 @@ object from the BEDbase `id`.
 
 ```{r convertCoordinates_createGRangesObject, message=FALSE}
 id <- "7816f807ffe1022f438e1f5b094acf1a"
-api <- BEDbase()
-gro <- bb_to_granges(api, id)
+bedbase <- BEDbase()
+gro <- bb_to_granges(bedbase, id)
 gro
 ```
 

@@ -4,10 +4,10 @@
 \alias{bb_beds_in_bedset}
 \title{Get BEDs associated with BEDset}
 \usage{
-bb_beds_in_bedset(api, bedset_id)
+bb_beds_in_bedset(bedbase, bedset_id)
 }
 \arguments{
-\item{api}{API object of BEDbase created from BEDbase()}
+\item{bedbase}{API object of BEDbase created from BEDbase()}
 
 \item{bedset_id}{integer(1) BEDset record identifier}
 }
@@ -18,8 +18,8 @@ tibble(1) information of BED files in BEDset
 Get BEDs associated with BEDset
 }
 \examples{
-api <- BEDbase()
-ex_bedset <- bb_example(api, "bedset")
-bb_beds_in_bedset(api, ex_bedset$id)
+bedbase <- BEDbase()
+ex_bedset <- bb_example(bedbase, "bedset")
+bb_beds_in_bedset(bedbase, ex_bedset$id)
 
 }

@@ -39,16 +39,16 @@
 #' @return BEDbase object
 #'
 #' @examples
-#' api <- BEDbase(cache_path = tempdir())
-#' ex_bed <- bb_example(api, "bed")
-#' bb_metadata(api, ex_bed$id)
+#' bedbase <- BEDbase(cache_path = tempdir())
+#' ex_bed <- bb_example(bedbase, "bed")
+#' bb_metadata(bedbase, ex_bed$id)
 #'
 #' @export
 BEDbase <- function(cache_path, quietly = FALSE) {
     if (missing(cache_path)) {
         cache_path <- tools::R_user_dir("bedbaser", which = "cache")
     }
-    api <- suppressWarnings(
+    bedbase <- suppressWarnings(
         .BEDbase(
             cache = BiocFileCache::BiocFileCache(cache_path),
             AnVIL::Service(
@@ -62,11 +62,12 @@ BEDbase <- function(cache_path, quietly = FALSE) {
             )
         )
     )
-    info <- httr::content(api$list_beds_v1_bed_list_get(limit = 0, offset = 0))
+    info <- httr::content(
+        bedbase$list_beds_v1_bed_list_get(limit = 0, offset = 0))
     if (!quietly) {
         message(info$count, " BED files available.")
     }
-    api
+    bedbase
 }
 
 #' @rdname BEDbase
@@ -85,8 +86,8 @@ setGeneric("getCache", function(x, quietly = TRUE) standardGeneric("getCache"))
 #' @return BiocFileCache(1) object of BED files
 #'
 #' @examples
-#' api <- BEDbase(tempdir())
-#' getCache(api)
+#' bedbase <- BEDbase(tempdir())
+#' getCache(bedbase)
 #'
 #' @export
 setMethod(
@@ -120,8 +121,8 @@ setGeneric(
 #' @return BiocFileCache(1) object of BED files
 #'
 #' @examples
-#' api <- BEDbase(tempdir())
-#' api <- setCache(api, "/tmp")
+#' bedbase <- BEDbase(tempdir())
+#' bedbase <- setCache(bedbase, "/tmp")
 #'
 #' @export
 setMethod(
@@ -146,8 +147,8 @@ setMethod(
 #' @return list(1) API end points
 #'
 #' @examples
-#' api <- BEDbase()
-#' operations(api)
+#' bedbase <- BEDbase()
+#' operations(bedbase)
 #'
 #' @export
 setMethod(
@@ -157,17 +158,17 @@ setMethod(
     }
 )
 
-#' Display schemas 
+#' Display schemas
 #'
 #' @param x BEDbase(1) object
 #'
-#' @importFrom AnVIL schemas 
+#' @importFrom AnVIL schemas
 #'
 #' @return list(1) API end points
 #'
 #' @examples
-#' api <- BEDbase()
-#' schemas(api)
+#' bedbase <- BEDbase()
+#' schemas(bedbase)
 #'
 #' @export
 setMethod(
@@ -177,10 +178,10 @@ setMethod(
     }
 )
 
-#' Display tags 
+#' Display tags
 #'
 #' @param x BEDbase(1) object
-#' @param .tags character() tags for filtering operations 
+#' @param .tags character() tags for filtering operations
 #' @param .deprecated (default \code{FALSE}) if deprecated
 #'
 #' @importFrom AnVIL tags
@@ -188,8 +189,8 @@ setMethod(
 #' @return list(1) API end points
 #'
 #' @examples
-#' api <- BEDbase()
-#' tags(api)
+#' bedbase <- BEDbase()
+#' tags(bedbase)
 #'
 #' @export
 setMethod(
@@ -201,23 +202,23 @@ setMethod(
 
 #' Get the example BED file or BEDset with metadata
 #'
-#' @param api API object of BEDbase created from BEDbase()
+#' @param bedbase API object of BEDbase created from BEDbase()
 #' @param rec_type character(1) bed or bedset
 #'
 #' @return list(1) bed files or bedsets
 #'
 #' @examples
-#' api <- BEDbase()
-#' bb_example(api, "bed")
-#' bb_example(api, "bedset")
+#' bedbase <- BEDbase()
+#' bb_example(bedbase, "bed")
+#' bb_example(bedbase, "bedset")
 #'
 #' @export
-bb_example <- function(api, rec_type = c("bed", "bedset")) {
+bb_example <- function(bedbase, rec_type = c("bed", "bedset")) {
     rec_type <- match.arg(rec_type)
     if (rec_type == "bed") {
-        rsp <- api$get_example_bed_record_v1_bed_example_get()
+        rsp <- bedbase$get_example_bed_record_v1_bed_example_get()
     } else {
-        rsp <- api$get_example_bedset_record_v1_bedset_example_get()
+        rsp <- bedbase$get_example_bedset_record_v1_bedset_example_get()
     }
     httr::content(rsp)
 }
@@ -229,7 +230,7 @@ bb_example <- function(api, rec_type = c("bed", "bedset")) {
 #'
 #' @rdname bb_metadata
 #'
-#' @param api API object created from \code{BEDbase()}
+#' @param bedbase API object created from \code{BEDbase()}
 #' @param id integer1() record or object identifier
 #' @param full logical(1) (default \code{FALSE}) include full record with
 #' stats, files, and metadata
@@ -237,22 +238,22 @@ bb_example <- function(api, rec_type = c("bed", "bedset")) {
 #' @return list(1) metadata
 #'
 #' @examples
-#' api <- BEDbase()
+#' bedbase <- BEDbase()
 #'
-#' ex_bed <- bb_example(api, "bed")
-#' bb_metadata(api, ex_bed$id)
+#' ex_bed <- bb_example(bedbase, "bed")
+#' bb_metadata(bedbase, ex_bed$id)
 #'
-#' ex_bedset <- bb_example(api, "bedset")
-#' bb_metadata(api, ex_bedset$id)
+#' ex_bedset <- bb_example(bedbase, "bedset")
+#' bb_metadata(bedbase, ex_bedset$id)
 #'
 #' @export
-bb_metadata <- function(api, id, full = FALSE) {
-    rsp <- api$get_bed_metadata_v1_bed__bed_id__metadata_get(
+bb_metadata <- function(bedbase, id, full = FALSE) {
+    rsp <- bedbase$get_bed_metadata_v1_bed__bed_id__metadata_get(
         bed_id = id,
         full = full
     )
     if (rsp$status_code != 200) {
-        rsp <- api$get_bedset_metadata_v1_bedset__bedset_id__metadata_get(
+        rsp <- bedbase$get_bedset_metadata_v1_bedset__bedset_id__metadata_get(
             bedset_id = id,
             full = full
         )
@@ -271,7 +272,7 @@ bb_metadata <- function(api, id, full = FALSE) {
 #'
 #' @rdname bb_list_beds
 #'
-#' @param api API object created from \code{BEDbase()}
+#' @param bedbase API object created from \code{BEDbase()}
 #' @param genome character(1) (default \code{NULL}) genome keyword
 #' @param bed_type character(1) (default \code{NULL}) bed file type
 #' @param limit integer(1) (default \code{1000}) maximum records
@@ -280,14 +281,13 @@ bb_metadata <- function(api, id, full = FALSE) {
 #' @return tibble(1) of BED records
 #'
 #' @examples
-#' api <- BEDbase()
-#' bb_list_beds(api)
+#' bedbase <- BEDbase()
+#' bb_list_beds(bedbase)
 #'
 #' @export
-bb_list_beds <- function(
-        api, genome = NULL, bed_type = NULL, limit = 1000,
-        offset = 0) {
-    rsp <- api$list_beds_v1_bed_list_get(
+bb_list_beds <- function(bedbase, genome = NULL, bed_type = NULL, limit = 1000,
+    offset = 0) {
+    rsp <- bedbase$list_beds_v1_bed_list_get(
         genome = genome, bed_type = bed_type,
         limit = limit, offset = offset
     )
@@ -308,7 +308,7 @@ bb_list_beds <- function(
 #'
 #' @rdname bb_list_bedsets
 #'
-#' @param api API object of BEDbase created from BEDbase()
+#' @param bedbase API object of BEDbase created from BEDbase()
 #' @param query character() (default \code{NULL}) keyword
 #' @param limit integer(1) (default \code{1000}) maximum records
 #' @param offset integer(1) (default \code{0}) page token of records
@@ -316,12 +316,12 @@ bb_list_beds <- function(
 #' @return tibble(1) of BEDset records
 #'
 #' @examples
-#' api <- BEDbase()
-#' bb_list_bedsets(api)
+#' bedbase <- BEDbase()
+#' bb_list_bedsets(bedbase)
 #'
 #' @export
-bb_list_bedsets <- function(api, query = NULL, limit = 1000, offset = 0) {
-    rsp <- api$list_bedsets_v1_bedset_list_get(
+bb_list_bedsets <- function(bedbase, query = NULL, limit = 1000, offset = 0) {
+    rsp <- bedbase$list_bedsets_v1_bedset_list_get(
         query = query,
         limit = limit,
         offset = offset
@@ -339,19 +339,19 @@ bb_list_bedsets <- function(api, query = NULL, limit = 1000, offset = 0) {
 #'
 #' @rdname bb_beds_in_bedset
 #'
-#' @param api API object of BEDbase created from BEDbase()
+#' @param bedbase API object of BEDbase created from BEDbase()
 #' @param bedset_id integer(1) BEDset record identifier
 #'
 #' @return tibble(1) information of BED files in BEDset
 #'
 #' @examples
-#' api <- BEDbase()
-#' ex_bedset <- bb_example(api, "bedset")
-#' bb_beds_in_bedset(api, ex_bedset$id)
+#' bedbase <- BEDbase()
+#' ex_bedset <- bb_example(bedbase, "bedset")
+#' bb_beds_in_bedset(bedbase, ex_bedset$id)
 #'
 #' @export
-bb_beds_in_bedset <- function(api, bedset_id) {
-    rsp <- api$get_bedfiles_in_bedset_v1_bedset__bedset_id__bedfiles_get(
+bb_beds_in_bedset <- function(bedbase, bedset_id) {
+    rsp <- bedbase$get_bedfiles_in_bedset_v1_bedset__bedset_id__bedfiles_get(
         bedset_id = bedset_id
     )
     recs <- httr::content(rsp)
@@ -373,7 +373,7 @@ bb_beds_in_bedset <- function(api, bedset_id) {
 #'
 #' @rdname bb_bed_text_search
 #'
-#' @param api API object of BEDbase created from \code{BEDbase()}
+#' @param bedbase API object of BEDbase created from \code{BEDbase()}
 #' @param query character(1) keywords to search
 #' @param limit integer(1) (default \code{10}) maximum number of results
 #' @param offset integer(1) (default \code{0}) page offset of results
@@ -381,13 +381,13 @@ bb_beds_in_bedset <- function(api, bedset_id) {
 #' @return tibble(1) of results
 #'
 #' @examples
-#' api <- BEDbase()
-#' bb_bed_text_search(api, "hg38")
+#' bedbase <- BEDbase()
+#' bb_bed_text_search(bedbase, "hg38")
 #'
 #' @export
-bb_bed_text_search <- function(api, query, limit = 10, offset = 0) {
+bb_bed_text_search <- function(bedbase, query, limit = 10, offset = 0) {
     encoded_query <- utils::URLencode(query, reserved = TRUE)
-    rsp <- api$text_to_bed_search_v1_bed_search_text_post(
+    rsp <- bedbase$text_to_bed_search_v1_bed_search_text_post(
         query = encoded_query,
         limit = limit,
         offset = offset
@@ -407,7 +407,7 @@ bb_bed_text_search <- function(api, query, limit = 10, offset = 0) {
 #'
 #' @rdname bb_to_granges
 #'
-#' @param api API object of BEDbase created from \code{BEDbase()}
+#' @param bedbase API object of BEDbase created from \code{BEDbase()}
 #' @param bed_id integer(1) BED record identifier
 #' @param file_type character(1) bed or bigbed
 #' @param extra_cols character() (default \code{NULL}) extra column names to
@@ -417,17 +417,17 @@ bb_bed_text_search <- function(api, query, limit = 10, offset = 0) {
 #' @return GRanges(1) object
 #'
 #' @examples
-#' api <- BEDbase()
-#' ex_bed <- bb_example(api, "bed")
-#' bb_to_granges(api, ex_bed$id)
+#' bedbase <- BEDbase()
+#' ex_bed <- bb_example(bedbase, "bed")
+#' bb_to_granges(bedbase, ex_bed$id)
 #'
 #' @export
-bb_to_granges <- function(
-        api, bed_id, file_type = "bed", extra_cols = NULL,
-        quietly = TRUE) {
+bb_to_granges <- function(bedbase, bed_id, file_type = "bed", extra_cols = NULL,
+    quietly = TRUE) {
     stopifnot(file_type %in% c("bed", "bigbed"))
-    metadata <- bb_metadata(api, bed_id, TRUE)
-    file_path <- .get_file(metadata, getCache(api), file_type, "http", quietly)
+    metadata <- bb_metadata(bedbase, bed_id, TRUE)
+    file_path <- .get_file(metadata, getCache(bedbase), file_type, "http",
+        quietly)
 
     if (file_type == "bed") {
         .bed_file_to_granges(file_path, metadata, extra_cols, quietly)
@@ -449,22 +449,22 @@ bb_to_granges <- function(
 #'
 #' @rdname bb_to_grangeslist
 #'
-#' @param api API object of BEDbase created from \code{BEDbase()}
+#' @param bedbase API object of BEDbase created from \code{BEDbase()}
 #' @param bedset_id integer(1) BEDset record identifier
 #' @param quietly logical(1) (default \code{TRUE}) display messages
 #'
 #' @return GRangesList(1) object
 #'
 #' @examples
-#' api <- BEDbase()
-#' bb_to_grangeslist(api, "lola_hg38_ucsc_features")
+#' bedbase <- BEDbase()
+#' bb_to_grangeslist(bedbase, "lola_hg38_ucsc_features")
 #'
 #' @export
-bb_to_grangeslist <- function(api, bedset_id, quietly = TRUE) {
-    beds <- bb_beds_in_bedset(api, bedset_id)
+bb_to_grangeslist <- function(bedbase, bedset_id, quietly = TRUE) {
+    beds <- bb_beds_in_bedset(bedbase, bedset_id)
     gros <- list()
     for (bed_id in beds$id) {
-        gro <- bb_to_granges(api, bed_id, quietly = quietly)
+        gro <- bb_to_granges(bedbase, bed_id, quietly = quietly)
         gros[[length(gros) + 1]] <- gro
     }
     GenomicRanges::GRangesList(gros)
@@ -474,7 +474,7 @@ bb_to_grangeslist <- function(api, bedset_id, quietly = TRUE) {
 #'
 #' @rdname bb_save
 #'
-#' @param api API object of BEDbase created from BEDbase()
+#' @param bedbase API object of BEDbase created from BEDbase()
 #' @param bed_or_bedset_id integer(1) BED or BEDset record identifier
 #' @param path character(1) directory to save file
 #' @param file_type character(1) (default \code{"bed"}) bed, bigbed, etc.
@@ -484,25 +484,24 @@ bb_to_grangeslist <- function(api, bedset_id, quietly = TRUE) {
 #' @return An invisible \code{NULL}
 #'
 #' @examples
-#' api <- BEDbase()
-#' ex_bed <- bb_example(api, "bed")
-#' bb_save(api, ex_bed$id, tempdir())
+#' bedbase <- BEDbase()
+#' ex_bed <- bb_example(bedbase, "bed")
+#' bb_save(bedbase, ex_bed$id, tempdir())
 #'
 #' @export
-bb_save <- function(
-        api, bed_or_bedset_id, path, file_type = "bed",
-        access_type = "http", quietly = TRUE) {
+bb_save <- function(bedbase, bed_or_bedset_id, path, file_type = "bed",
+    access_type = "http", quietly = TRUE) {
     if (!dir.exists(path)) {
         rlang::abort(paste(path, "doesn't exist.", sep = " "))
     }
-    metadata <- bb_metadata(api, bed_or_bedset_id, TRUE)
+    metadata <- bb_metadata(bedbase, bed_or_bedset_id, TRUE)
     if ("bedsets" %in% names(metadata)) {
         ids <- list(metadata$id)
     } else {
         ids <- metadata$bed_ids
     }
     for (id in ids) {
-        metadata <- bb_metadata(api, id, TRUE)
+        metadata <- bb_metadata(bedbase, id, TRUE)
         .get_file(metadata, path, file_type, access_type, quietly)
     }
 }

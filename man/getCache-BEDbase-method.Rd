@@ -18,7 +18,7 @@ BiocFileCache(1) object of BED files
 Return cache path
 }
 \examples{
-api <- BEDbase(tempdir())
-getCache(api)
+bedbase <- BEDbase(tempdir())
+getCache(bedbase)
 
 }

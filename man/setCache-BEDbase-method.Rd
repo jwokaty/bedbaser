@@ -20,7 +20,7 @@ BiocFileCache(1) object of BED files
 Set cache path
 }
 \examples{
-api <- BEDbase(tempdir())
-api <- setCache(api, "/tmp")
+bedbase <- BEDbase(tempdir())
+bedbase <- setCache(bedbase, "/tmp")
 
 }

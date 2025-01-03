@@ -4,10 +4,10 @@
 \alias{bb_example}
 \title{Get the example BED file or BEDset with metadata}
 \usage{
-bb_example(api, rec_type = c("bed", "bedset"))
+bb_example(bedbase, rec_type = c("bed", "bedset"))
 }
 \arguments{
-\item{api}{API object of BEDbase created from BEDbase()}
+\item{bedbase}{API object of BEDbase created from BEDbase()}
 
 \item{rec_type}{character(1) bed or bedset}
 }
@@ -18,8 +18,8 @@ list(1) bed files or bedsets
 Get the example BED file or BEDset with metadata
 }
 \examples{
-api <- BEDbase()
-bb_example(api, "bed")
-bb_example(api, "bedset")
+bedbase <- BEDbase()
+bb_example(bedbase, "bed")
+bb_example(bedbase, "bedset")
 
 }

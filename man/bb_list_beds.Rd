@@ -4,10 +4,10 @@
 \alias{bb_list_beds}
 \title{List BEDs}
 \usage{
-bb_list_beds(api, genome = NULL, bed_type = NULL, limit = 1000, offset = 0)
+bb_list_beds(bedbase, genome = NULL, bed_type = NULL, limit = 1000, offset = 0)
 }
 \arguments{
-\item{api}{API object created from \code{BEDbase()}}
+\item{bedbase}{API object created from \code{BEDbase()}}
 
 \item{genome}{character(1) (default \code{NULL}) genome keyword}
 
@@ -24,7 +24,7 @@ tibble(1) of BED records
 List BEDs
 }
 \examples{
-api <- BEDbase()
-bb_list_beds(api)
+bedbase <- BEDbase()
+bb_list_beds(bedbase)
 
 }
