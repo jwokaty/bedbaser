@@ -18,7 +18,7 @@ if not found or id is not not 32 characters"><!-- mathjax --><script src="https:
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bedbaser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.13</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.17</span>
       </span>
     </div>
 
@@ -58,38 +58,38 @@ if not found or id is not not 32 characters</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bb_metadata</span><span class="op">(</span><span class="va">api</span>, <span class="va">id</span>, full <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bb_metadata</span><span class="op">(</span><span class="va">bedbase</span>, <span class="va">id</span>, full <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-api">api<a class="anchor" aria-label="anchor" href="#arg-api"></a></dt>
-<dd><p>API object of BEDbase created from BEDbase()</p></dd>
+<dl><dt id="arg-bedbase">bedbase<a class="anchor" aria-label="anchor" href="#arg-bedbase"></a></dt>
+<dd><p>API object created from <code><a href="BEDbase.html">BEDbase()</a></code></p></dd>
 
 
 <dt id="arg-id">id<a class="anchor" aria-label="anchor" href="#arg-id"></a></dt>
-<dd><p>integer() record or object identifier</p></dd>
+<dd><p>integer1() record or object identifier</p></dd>
 
 
 <dt id="arg-full">full<a class="anchor" aria-label="anchor" href="#arg-full"></a></dt>
-<dd><p>logical() (default FALSE) include full record with stats, files,
-and metadata</p></dd>
+<dd><p>logical(1) (default <code>FALSE</code>) include full record with
+stats, files, and metadata</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>list() metadata</p>
+    <p>list(1) metadata</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">api</span> <span class="op">&lt;-</span> <span class="fu"><a href="BEDbase.html">BEDbase</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 19974 BED files available.</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bedbase</span> <span class="op">&lt;-</span> <span class="fu"><a href="BEDbase.html">BEDbase</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 20331 BED files available.</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">ex_bed</span> <span class="op">&lt;-</span> <span class="fu"><a href="bb_example.html">bb_example</a></span><span class="op">(</span><span class="va">api</span>, <span class="st">"bed"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">bb_metadata</span><span class="op">(</span><span class="va">api</span>, <span class="va">ex_bed</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ex_bed</span> <span class="op">&lt;-</span> <span class="fu"><a href="bb_example.html">bb_example</a></span><span class="op">(</span><span class="va">bedbase</span>, <span class="st">"bed"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">bb_metadata</span><span class="op">(</span><span class="va">bedbase</span>, <span class="va">ex_bed</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $name</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "LNCaP_AR_NSD2KO"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -189,8 +189,8 @@ and metadata</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> list()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">ex_bedset</span> <span class="op">&lt;-</span> <span class="fu"><a href="bb_example.html">bb_example</a></span><span class="op">(</span><span class="va">api</span>, <span class="st">"bedset"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">bb_metadata</span><span class="op">(</span><span class="va">api</span>, <span class="va">ex_bedset</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ex_bedset</span> <span class="op">&lt;-</span> <span class="fu"><a href="bb_example.html">bb_example</a></span><span class="op">(</span><span class="va">bedbase</span>, <span class="st">"bedset"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">bb_metadata</span><span class="op">(</span><span class="va">bedbase</span>, <span class="va">ex_bedset</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $id</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "encode_batch_7"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

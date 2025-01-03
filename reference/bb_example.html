@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bedbaser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.13</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.17</span>
       </span>
     </div>
 
@@ -56,31 +56,31 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bb_example</span><span class="op">(</span><span class="va">api</span>, rec_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bed"</span>, <span class="st">"bedset"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bb_example</span><span class="op">(</span><span class="va">bedbase</span>, rec_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bed"</span>, <span class="st">"bedset"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-api">api<a class="anchor" aria-label="anchor" href="#arg-api"></a></dt>
+<dl><dt id="arg-bedbase">bedbase<a class="anchor" aria-label="anchor" href="#arg-bedbase"></a></dt>
 <dd><p>API object of BEDbase created from BEDbase()</p></dd>
 
 
 <dt id="arg-rec-type">rec_type<a class="anchor" aria-label="anchor" href="#arg-rec-type"></a></dt>
-<dd><p>character() bed or bedset</p></dd>
+<dd><p>character(1) bed or bedset</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>list() bed or bedset</p>
+    <p>list(1) bed files or bedsets</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">api</span> <span class="op">&lt;-</span> <span class="fu"><a href="BEDbase.html">BEDbase</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 19974 BED files available.</span>
-<span class="r-in"><span><span class="fu">bb_example</span><span class="op">(</span><span class="va">api</span>, <span class="st">"bed"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bedbase</span> <span class="op">&lt;-</span> <span class="fu"><a href="BEDbase.html">BEDbase</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 20331 BED files available.</span>
+<span class="r-in"><span><span class="fu">bb_example</span><span class="op">(</span><span class="va">bedbase</span>, <span class="st">"bed"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $name</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "LNCaP_AR_NSD2KO"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -179,7 +179,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> $bedsets</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu">bb_example</span><span class="op">(</span><span class="va">api</span>, <span class="st">"bedset"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">bb_example</span><span class="op">(</span><span class="va">bedbase</span>, <span class="st">"bedset"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $id</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "encode_batch_7"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

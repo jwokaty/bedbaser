@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bedbaser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.13</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.17</span>
       </span>
     </div>
 
@@ -56,32 +56,32 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bb_beds_in_bedset</span><span class="op">(</span><span class="va">api</span>, <span class="va">bedset_id</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bb_beds_in_bedset</span><span class="op">(</span><span class="va">bedbase</span>, <span class="va">bedset_id</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-api">api<a class="anchor" aria-label="anchor" href="#arg-api"></a></dt>
+<dl><dt id="arg-bedbase">bedbase<a class="anchor" aria-label="anchor" href="#arg-bedbase"></a></dt>
 <dd><p>API object of BEDbase created from BEDbase()</p></dd>
 
 
 <dt id="arg-bedset-id">bedset_id<a class="anchor" aria-label="anchor" href="#arg-bedset-id"></a></dt>
-<dd><p>integer() BEDset record identifier</p></dd>
+<dd><p>integer(1) BEDset record identifier</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>tibble() information of BED files in BEDset</p>
+    <p>tibble(1) information of BED files in BEDset</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">api</span> <span class="op">&lt;-</span> <span class="fu"><a href="BEDbase.html">BEDbase</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 19974 BED files available.</span>
-<span class="r-in"><span><span class="va">ex_bedset</span> <span class="op">&lt;-</span> <span class="fu"><a href="bb_example.html">bb_example</a></span><span class="op">(</span><span class="va">api</span>, <span class="st">"bedset"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">bb_beds_in_bedset</span><span class="op">(</span><span class="va">api</span>, <span class="va">ex_bedset</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bedbase</span> <span class="op">&lt;-</span> <span class="fu"><a href="BEDbase.html">BEDbase</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 20331 BED files available.</span>
+<span class="r-in"><span><span class="va">ex_bedset</span> <span class="op">&lt;-</span> <span class="fu"><a href="bb_example.html">bb_example</a></span><span class="op">(</span><span class="va">bedbase</span>, <span class="st">"bedset"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">bb_beds_in_bedset</span><span class="op">(</span><span class="va">bedbase</span>, <span class="va">ex_bedset</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,387 × 26</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    name         genome_alias genome_digest bed_type bed_format id    description</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>

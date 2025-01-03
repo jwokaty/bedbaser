@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bedbaser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.13</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.17</span>
       </span>
     </div>
 
@@ -56,40 +56,40 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bb_list_bedsets</span><span class="op">(</span><span class="va">api</span>, query <span class="op">=</span> <span class="cn">NULL</span>, limit <span class="op">=</span> <span class="fl">1000</span>, offset <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bb_list_bedsets</span><span class="op">(</span><span class="va">bedbase</span>, query <span class="op">=</span> <span class="cn">NULL</span>, limit <span class="op">=</span> <span class="fl">1000</span>, offset <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-api">api<a class="anchor" aria-label="anchor" href="#arg-api"></a></dt>
+<dl><dt id="arg-bedbase">bedbase<a class="anchor" aria-label="anchor" href="#arg-bedbase"></a></dt>
 <dd><p>API object of BEDbase created from BEDbase()</p></dd>
 
 
 <dt id="arg-query">query<a class="anchor" aria-label="anchor" href="#arg-query"></a></dt>
-<dd><p>character() (default NULL) keyword</p></dd>
+<dd><p>character() (default <code>NULL</code>) keyword</p></dd>
 
 
 <dt id="arg-limit">limit<a class="anchor" aria-label="anchor" href="#arg-limit"></a></dt>
-<dd><p>integer() (default 1000) maximum records of bedsets</p></dd>
+<dd><p>integer(1) (default <code>1000</code>) maximum records</p></dd>
 
 
 <dt id="arg-offset">offset<a class="anchor" aria-label="anchor" href="#arg-offset"></a></dt>
-<dd><p>integer() (default 0) page token of records</p></dd>
+<dd><p>integer(1) (default <code>0</code>) page token of records</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>tibble() of BEDset records</p>
+    <p>tibble(1) of BEDset records</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">api</span> <span class="op">&lt;-</span> <span class="fu"><a href="BEDbase.html">BEDbase</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 19974 BED files available.</span>
-<span class="r-in"><span><span class="fu">bb_list_bedsets</span><span class="op">(</span><span class="va">api</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 19,864 × 9</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bedbase</span> <span class="op">&lt;-</span> <span class="fu"><a href="BEDbase.html">BEDbase</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 20331 BED files available.</span>
+<span class="r-in"><span><span class="fu">bb_list_bedsets</span><span class="op">(</span><span class="va">bedbase</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 20,301 × 9</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    id          name  md5sum submission_date last_update_date description bed_ids</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> encode_bat… enco… 6dc4c… 2024-11-03T18:… 2024-11-03T18:2… <span style="color: #949494;">"</span>Encode pr… 000a10…</span>
@@ -102,7 +102,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> encode_bat… enco… 6dc4c… 2024-11-03T18:… 2024-11-03T18:2… <span style="color: #949494;">"</span>Encode pr… 00b0c9…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> encode_bat… enco… 6dc4c… 2024-11-03T18:… 2024-11-03T18:2… <span style="color: #949494;">"</span>Encode pr… 00c021…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> encode_bat… enco… 6dc4c… 2024-11-03T18:… 2024-11-03T18:2… <span style="color: #949494;">"</span>Encode pr… 00d062…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 19,854 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 20,291 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: author &lt;chr&gt;, source &lt;chr&gt;</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

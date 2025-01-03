@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bedbaser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.13</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.17</span>
       </span>
     </div>
 
@@ -56,39 +56,39 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bb_bed_text_search</span><span class="op">(</span><span class="va">api</span>, <span class="va">query</span>, limit <span class="op">=</span> <span class="fl">10</span>, offset <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">bb_bed_text_search</span><span class="op">(</span><span class="va">bedbase</span>, <span class="va">query</span>, limit <span class="op">=</span> <span class="fl">10</span>, offset <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-api">api<a class="anchor" aria-label="anchor" href="#arg-api"></a></dt>
-<dd><p>API object of BEDbase created from BEDbase()</p></dd>
+<dl><dt id="arg-bedbase">bedbase<a class="anchor" aria-label="anchor" href="#arg-bedbase"></a></dt>
+<dd><p>API object of BEDbase created from <code><a href="BEDbase.html">BEDbase()</a></code></p></dd>
 
 
 <dt id="arg-query">query<a class="anchor" aria-label="anchor" href="#arg-query"></a></dt>
-<dd><p>character() keywords to search</p></dd>
+<dd><p>character(1) keywords to search</p></dd>
 
 
 <dt id="arg-limit">limit<a class="anchor" aria-label="anchor" href="#arg-limit"></a></dt>
-<dd><p>integer() (default 10) maximum number of results</p></dd>
+<dd><p>integer(1) (default <code>10</code>) maximum number of results</p></dd>
 
 
 <dt id="arg-offset">offset<a class="anchor" aria-label="anchor" href="#arg-offset"></a></dt>
-<dd><p>integer() (default 0) page offset of results</p></dd>
+<dd><p>integer(1) (default <code>0</code>) page offset of results</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>tibble()</p>
+    <p>tibble(1) of results</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">api</span> <span class="op">&lt;-</span> <span class="fu"><a href="BEDbase.html">BEDbase</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 19974 BED files available.</span>
-<span class="r-in"><span><span class="fu">bb_bed_text_search</span><span class="op">(</span><span class="va">api</span>, <span class="st">"hg38"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bedbase</span> <span class="op">&lt;-</span> <span class="fu"><a href="BEDbase.html">BEDbase</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 20331 BED files available.</span>
+<span class="r-in"><span><span class="fu">bb_bed_text_search</span><span class="op">(</span><span class="va">bedbase</span>, <span class="st">"hg38"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 10 × 43</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    id                   payload.species_name payload.species_id payload.genotype</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span>

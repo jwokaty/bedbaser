@@ -1,6 +1,6 @@
-pandoc: '3.5'
+pandoc: 3.6.1
 pkgdown: 2.1.1.9000
-pkgdown_sha: dfa28bef27858bd442334b5cce8f645d555914be
+pkgdown_sha: 4519ca0ae415b415eb8c1c142a6d4d39d8a5b80d
 articles:
   bedbaser: bedbaser.html
-last_built: 2024-12-04T21:37Z
+last_built: 2025-01-03T23:57Z
