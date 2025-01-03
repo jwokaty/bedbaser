@@ -64,7 +64,7 @@ BEDbase <- function(cache_path, quietly = FALSE) {
     )
     info <- httr::content(api$list_beds_v1_bed_list_get(limit = 0, offset = 0))
     if (!quietly) {
-        message(paste(info$count, "BED files available."))
+        message(info$count, "BED files available.")
     }
     api
 }
@@ -217,9 +217,9 @@ bb_metadata <- function(api, id, full = FALSE) {
     }
     result <- httr::content(rsp)
     if (rsp$status_code == 404) {
-        rlang::abort(message = result$detail)
+        rlang::abort(result$detail)
     } else if (rsp$status != 200) {
-        rlang::abort(message = "{result$type}: input {result$input} {result$msg}")
+        rlang::abort("{result$type}: input {result$input} {result$msg}")
     } else {
         result
     }

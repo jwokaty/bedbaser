@@ -163,7 +163,7 @@
         as.double()
 
     if (!is.null(extra_cols) && (nums[2] != length(extra_cols))) {
-        rlang::abort("`extra_cols` length must match the Y value in `bed_type`.")
+        rlang::abort("`extra_cols` length must match Y value in `bed_type`.")
     }
 
     if (!grepl("Peak", args["format"]) && nums[2] != 0 && is.null(extra_cols)) {
