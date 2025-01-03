@@ -46,6 +46,6 @@ The convenience functions are as follows
 \examples{
 api <- BEDbase(cache_path = tempdir())
 ex_bed <- bb_example(api, "bed")
-ex_bed_md <- bb_metadata(api, "bed")
+bb_metadata(api, ex_bed$id)
 
 }

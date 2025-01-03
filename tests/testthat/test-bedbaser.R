@@ -98,7 +98,7 @@ test_that("bb_to_granges returns a GRanges object given a 3+0 bed file", {
     md <- bb_metadata(api, id, TRUE)
     expect_equal("bed3+0", md$bed_type)
     gro <- bb_to_granges(api, id)
-    expect_true(is((gro)[1], "GRanges"))
+    expect_true(methods::is((gro)[1], "GRanges"))
 })
 
 test_that("bb_to_granges returns a GRanges object given a bigbed file", {
@@ -106,7 +106,7 @@ test_that("bb_to_granges returns a GRanges object given a bigbed file", {
     id <- "ffc1e5ac45d923135500bdd825177356"
     if (.Platform$OS.type != "windows") {
         gro <- bb_to_granges(api, id, "bigbed")
-        expect_true(is((gro)[1], "GRanges"))
+        expect_true(methods::is((gro)[1], "GRanges"))
     } else {
         expect_warning(
             rlang::warn("This feature does not work on Windows."),
@@ -121,7 +121,7 @@ test_that("bb_to_granges returns a GRanges object given narrowpeak (6+4) file", 
     md <- bb_metadata(api, id, TRUE)
     expect_equal("bed6+4", md$bed_type)
     gro <- bb_to_granges(api, id)
-    expect_true(is((gro)[1], "GRanges"))
+    expect_true(methods::is((gro)[1], "GRanges"))
     df <- as.data.frame(gro)
     expect_contains(
         c(
@@ -170,7 +170,7 @@ test_that("bb_to_granges allows passing extra_cols", {
 test_that("bb_to_grangeslist creates a GRangesList", {
     api <- BEDbase(quietly = TRUE)
     grl <- bb_to_grangeslist(api, "lola_hg38_ucsc_features")
-    expect_true(is((grl)[1], "CompressedGRangesList"))
+    expect_true(methods::is((grl)[1], "CompressedGRangesList"))
     expect_equal(11, length(grl))
 })
 

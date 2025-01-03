@@ -36,15 +36,14 @@
 #' .get_file(md, tempdir(), "bed", "http")
 #'
 #' @noRd
-.get_file <- function(
-        metadata, cache_or_path, file_type = c("bed", "bigbed"),
-        access_type = c("s3", "http"), quietly = TRUE) {
+.get_file <- function(metadata, cache_or_path, file_type = c("bed", "bigbed"),
+    access_type = c("s3", "http"), quietly = TRUE) {
     file_details <- .format_metadata_files(metadata$files) |>
         dplyr::filter(
             name == paste(file_type, "file", sep = "_"),
             access_id == access_type
         )
-    if (is(cache_or_path, "BiocFileCache")) {
+    if (methods::is(cache_or_path, "BiocFileCache")) {
         cached_file <- .download_to_cache(
             metadata$id, file_details$url,
             cache_or_path, quietly
@@ -153,9 +152,8 @@
 #' .bed_file_to_granges(file_path, md)
 #'
 #' @noRd
-.bed_file_to_granges <- function(
-        file_path, metadata, extra_cols = NULL,
-        quietly = TRUE) {
+.bed_file_to_granges <- function(file_path, metadata, extra_cols = NULL,
+    quietly = TRUE) {
     args <- list(con = file_path)
     args["format"] <- gsub("peak", "Peak", metadata$bed_format)
     nums <- stringr::str_replace(metadata$bed_type, "bed", "") |>

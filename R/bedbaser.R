@@ -41,7 +41,7 @@
 #' @examples
 #' api <- BEDbase(cache_path = tempdir())
 #' ex_bed <- bb_example(api, "bed")
-#' ex_bed_md <- bb_metadata(api, "bed")
+#' bb_metadata(api, ex_bed$id)
 #'
 #' @export
 BEDbase <- function(cache_path, quietly = FALSE) {
@@ -415,8 +415,7 @@ bb_to_granges <- function(
 #'
 #' @examples
 #' api <- BEDbase()
-#' id <- "lola_hg38_ucsc_features"
-#' bb_to_grangeslist(api, id)
+#' bb_to_grangeslist(api, "lola_hg38_ucsc_features")
 #'
 #' @export
 bb_to_grangeslist <- function(api, bedset_id, quietly = TRUE) {
@@ -444,8 +443,8 @@ bb_to_grangeslist <- function(api, bedset_id, quietly = TRUE) {
 #'
 #' @examples
 #' api <- BEDbase()
-#' ex <- bb_example(api, "bed")
-#' bb_save(api, ex$id, tempdir())
+#' ex_bed <- bb_example(api, "bed")
+#' bb_save(api, ex_bed$id, tempdir())
 #'
 #' @export
 bb_save <- function(

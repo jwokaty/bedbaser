@@ -21,7 +21,6 @@ Create a GRangesList object given a BEDset id
 }
 \examples{
 api <- BEDbase()
-id <- "lola_hg38_ucsc_features"
-bb_to_grangeslist(api, id)
+bb_to_grangeslist(api, "lola_hg38_ucsc_features")
 
 }

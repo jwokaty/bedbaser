@@ -34,7 +34,7 @@ Save a BED or BEDset files to a path given an id
 }
 \examples{
 api <- BEDbase()
-ex <- bb_example(api, "bed")
-bb_save(api, ex$id, tempdir())
+ex_bed <- bb_example(api, "bed")
+bb_save(api, ex_bed$id, tempdir())
 
 }
