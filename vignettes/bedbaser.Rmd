@@ -36,25 +36,25 @@ if (!"BiocManager" %in% rownames(installed.packages())) {
 BiocManager::install("bedbaser")
 ```
 
-Load the package and create a BEDbase instance.
+Load the package and create a BEDbase instance, optionally setting the cache
+to `cache_path`. If `cache_path` is not set, bedbaser will choose the
+default location.
 
 ```{r bedbase}
 library(bedbaser)
 
 bedbase <- BEDbase()
 ```
+bedbaser can use the same cache as [geniml](https://docs.bedbase.org/geniml/)'s
+BBClient by setting the `cache_path` to the same location. It will create
+the following structure:
 
-## (Optional) Set the cache
-
-Set the cache path with the argument `cache_path`. If `cache_path` is not set,
-bedbaser will choose the default location. bedbaser can use the same cache as
-`bbclient` available through the genomic interval machine learning toolkit
-`geniml` by setting the `cache_path` to the same location.
-
-```{r set_cache, eval = FALSE}
-library(bedbaser)
-
-bedbase <- BEDbase(cache_path = "/path/to/cache")
+```
+cache_path
+  bedfiles
+    a/f/afile.bed.gz
+  bedsets
+    a/s/aset.txt
 ```
 
 # Convenience Functions
@@ -109,7 +109,6 @@ downloads and imports a BED file using `r Biocpkg("rtracklayer")`.
 
 ```{r bb_to_granges}
 ex_bed <- bb_example(bedbase, "bed")
-head(ex_bed)
 # Allow bedbaser to assign column names and types
 bb_to_granges(bedbase, ex_bed$id, quietly = FALSE)
 ```

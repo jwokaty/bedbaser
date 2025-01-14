@@ -1,9 +1,9 @@
 test_that("setCache changes cache", {
     bedbase <- BEDbase(quietly = TRUE)
     path <- tempdir()
-    expect_true(BiocFileCache::bfccache(getCache(bedbase)) != path)
+    expect_true(BiocFileCache::bfccache(getCache(bedbase, "bedfiles")) != file.path(path, "bedfiles"))
     bedbase <- setCache(bedbase, path)
-    expect_true(BiocFileCache::bfccache(getCache(bedbase)) == path)
+    expect_true(BiocFileCache::bfccache(getCache(bedbase, "bedfiles")) == file.path(path, "bedfiles"))
 })
 
 test_that("bb_example has bed_format of 'bed' given rec_type 'bed'", {

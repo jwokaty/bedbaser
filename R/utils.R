@@ -1,25 +1,53 @@
-#' Format BED file metadata
+#' Get file name from URL for a file
+#'
+#' @param a_url character(1) URL
+#'
+#' @return character(1) file name
+#'
+#' @examples
+#' url <- "https://this/is/an/example"
+#'
+#' @noRd
+.get_file_name <- function(a_url) {
+    url_parts <- unlist(strsplit(a_url, "/"))
+    url_parts[length(url_parts)]
+}
+
+#' Get BEDbase url for BED file
 #'
 #' @param records list(1) metadata
+#' @param file_type character(1) bed or bigbed
+#' @param access_type character(1) s3 or http
 #'
-#' @return tibble(1) file metadata
+#' @return url to BED file
 #'
 #' @examples
 #' bedbase <- BEDbase()
 #' ex_bed <- bb_example(bedbase, "bed")
 #' ex_metadata <- bb_metadata(bedbase, ex_bed$id, TRUE)
-#' .format_metadata_files(ex_bed$files)
+#' .get_url(ex_bed$files, "bed", "http")
 #'
 #' @noRd
-.format_metadata_files <- function(metadata) {
-    dplyr::bind_rows(metadata) |>
+.get_url <- function(
+        metadata, file_type = c("bed", "bigbed"),
+        access_type = c("s3", "http")) {
+    file_type <- match.arg(file_type)
+    access_type <- match.arg(access_type)
+    file_details <- dplyr::bind_rows(metadata$files) |>
         tidyr::unnest_wider(access_methods) |>
-        tidyr::unnest_wider(access_url)
+        tidyr::unnest_wider(access_url) |>
+        dplyr::filter(
+            name == paste(file_type, "file", sep = "_"),
+            access_id == access_type
+        )
+    file_details$url
 }
 
-#' Save a file from BEDbase to the cache or a path
+#' Get a BED file
 #'
-#' Will create directories that do not exist when saving
+#' @description Download or retrieve the file the cache. If not available, get
+#' the file from bedbase.org and save to the cache or a path. If a directory
+#' does not exist along specified path, it will raise an error message.
 #'
 #' @param metadata list(1) full metadata
 #' @param cache_or_path BiocFileCache(1) or character(1) cache or save path
@@ -36,33 +64,20 @@
 #' .get_file(md, tempdir(), "bed", "http")
 #'
 #' @noRd
-.get_file <- function(metadata, cache_or_path, file_type = c("bed", "bigbed"),
-    access_type = c("s3", "http"), quietly = TRUE) {
-    file_details <- .format_metadata_files(metadata$files) |>
-        dplyr::filter(
-            name == paste(file_type, "file", sep = "_"),
-            access_id == access_type
-        )
+.get_file <- function(
+        metadata, cache_or_path, file_type, access_type,
+        quietly = TRUE) {
+    file_url <- .get_url(metadata, file_type, access_type)
     if (methods::is(cache_or_path, "BiocFileCache")) {
-        cached_file <- .download_to_cache(
-            metadata$id, file_details$url,
+        bed_file <- .download_to_cache(
+            metadata$id, file_url,
             cache_or_path, quietly
         )
-        bedbase_file <- tryCatch(
-            R.utils::gunzip(cached_file, remove = FALSE),
-            error = function(e) {
-                gsub(".gz", "", cached_file)
-            }
-        )
     } else {
-        if (!dir.exists(cache_or_path)) {
-            dir.create(cache_or_path, recursive = TRUE)
-        }
-        url_parts <- unlist(strsplit(file_details$url, "/"))
-        bedbase_file <- file.path(cache_or_path, url_parts[length(url_parts)])
-        utils::download.file(file_details$url, bedbase_file, quiet = quietly)
+        bed_file <- file.path(cache_or_path, .get_file_name(file_url))
+        utils::download.file(file_url, bed_file, quiet = quietly)
     }
-    bedbase_file
+    bed_file
 }
 
 #' Get extra_cols
@@ -152,8 +167,9 @@
 #' .bed_file_to_granges(file_path, md)
 #'
 #' @noRd
-.bed_file_to_granges <- function(file_path, metadata, extra_cols = NULL,
-    quietly = TRUE) {
+.bed_file_to_granges <- function(
+        file_path, metadata, extra_cols = NULL,
+        quietly = TRUE) {
     args <- list(con = file_path)
     args["format"] <- gsub("peak", "Peak", metadata$bed_format)
     nums <- stringr::str_replace(metadata$bed_type, "bed", "") |>

@@ -4,12 +4,12 @@
 \alias{getCache,BEDbase-method}
 \title{Return cache path}
 \usage{
-\S4method{getCache}{BEDbase}(x, quietly = TRUE)
+\S4method{getCache}{BEDbase}(x, cache_type = c("bedfiles", "bedsets"))
 }
 \arguments{
 \item{x}{BEDbase(1) object}
 
-\item{quietly}{logical(1) (default \code{TRUE}) display messages}
+\item{cache_type}{character(1) bedfiles or bedsets}
 }
 \value{
 BiocFileCache(1) object of BED files
@@ -19,6 +19,6 @@ Return cache path
 }
 \examples{
 bedbase <- BEDbase(tempdir())
-getCache(bedbase)
+getCache(bedbase, "bedfiles")
 
 }

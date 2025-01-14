@@ -2,7 +2,7 @@
 % Please edit documentation in R/bedbaser.R
 \name{setCache,BEDbase-method}
 \alias{setCache,BEDbase-method}
-\title{Set cache path}
+\title{Set cache along path}
 \usage{
 \S4method{setCache}{BEDbase}(x, cache_path, quietly = TRUE)
 }
@@ -17,7 +17,7 @@
 BiocFileCache(1) object of BED files
 }
 \description{
-Set cache path
+Set cache along path
 }
 \examples{
 bedbase <- BEDbase(tempdir())
