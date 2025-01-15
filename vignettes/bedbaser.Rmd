@@ -43,7 +43,7 @@ default location.
 ```{r bedbase}
 library(bedbaser)
 
-bedbase <- BEDbase()
+bedbase <- BEDbase(tempdir())
 ```
 bedbaser can use the same cache as [geniml](https://docs.bedbase.org/geniml/)'s
 BBClient by setting the `cache_path` to the same location. It will create
@@ -51,10 +51,10 @@ the following structure:
 
 ```
 cache_path
-  bedfiles
-    a/f/afile.bed.gz
-  bedsets
-    a/s/aset.txt
+    bedfiles
+        a/f/afile.bed.gz
+    bedsets
+        a/s/aset.txt
 ```
 
 # Convenience Functions
@@ -146,6 +146,14 @@ Create a GRangesList given a BEDset id with `bb_to_grangeslist`.
 ```{r bb_to_grangeslist, message=FALSE}
 bedset_id <- "lola_hg38_ucsc_features"
 bb_to_grangeslist(bedbase, bedset_id)
+```
+
+## Save a BED file
+
+Save BED files or BEDsets with `bb_save`:
+
+```{r bb_save}
+bb_save(bedbase, ex_bed$id, tempdir())
 ```
 
 # Accessing BEDbase API endpoints

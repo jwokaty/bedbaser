@@ -6,7 +6,7 @@ test_that(".get_file_name returns file name", {
 })
 
 test_that(".get_url returns a url", {
-    bedbase <- BEDbase(quietly = TRUE)
+    bedbase <- BEDbase(tempdir(), quietly = TRUE)
     ex_bed <- bb_example(bedbase, "bed")
     ex_md <- bb_metadata(bedbase, ex_bed$id, TRUE)
     file_url <- .get_url(ex_md, "bed", "http")
@@ -14,18 +14,17 @@ test_that(".get_url returns a url", {
 })
 
 test_that(".get_file returns a valid file path", {
-    bedbase <- BEDbase(quietly = TRUE)
+    bedbase <- BEDbase(tempdir(), quietly = TRUE)
     ex_bed <- bb_example(bedbase, "bed")
     md <- bb_metadata(bedbase, ex_bed$id, TRUE)
-    temp_path <- tempdir()
-    file_path <- .get_file(md, temp_path, "bed", "http")
+    file_path <- .get_file(md, tempdir(), "bed", "http")
     expect_true(file.exists(file_path))
     file_path <- .get_file(md, getCache(bedbase, "bedfiles"), "bed", "http")
     expect_true(file.exists(file_path))
 })
 
 test_that(".get_extra_cols returns a named vector", {
-    bedbase <- BEDbase(quietly = TRUE)
+    bedbase <- BEDbase(tempdir(), quietly = TRUE)
     id <- "608827efc82fcaa4b0bfc65f590ffef8"
     md <- bb_metadata(bedbase, id, TRUE)
     file_path <- .get_file(md, getCache(bedbase, "bedfiles"), "bed", "http")

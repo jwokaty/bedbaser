@@ -64,12 +64,11 @@
 #' .get_file(md, tempdir(), "bed", "http")
 #'
 #' @noRd
-.get_file <- function(
-        metadata, cache_or_path, file_type, access_type,
-        quietly = TRUE) {
+.get_file <- function(metadata, cache_or_path, file_type, access_type,
+    quietly = TRUE) {
     file_url <- .get_url(metadata, file_type, access_type)
     if (methods::is(cache_or_path, "BiocFileCache")) {
-        bed_file <- .download_to_cache(
+        bed_file <- .cache_bedfile(
             metadata$id, file_url,
             cache_or_path, quietly
         )
@@ -80,7 +79,7 @@
     bed_file
 }
 
-#' Get extra_cols
+#' Attempt to guess extraCols for rtracklayer with dummy column names
 #'
 #' @param file_path character(1) path to BED
 #' @param x double(1) the x in BEDX+Y

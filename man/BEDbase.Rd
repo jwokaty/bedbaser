@@ -19,7 +19,7 @@ setCache(x, cache_path, quietly = TRUE)
 
 \item{x}{BEDbase(1) object}
 
-\item{type}{character(1) bedfiles or bedsets}
+\item{cache_type}{character(1) bedfiles or bedsets}
 }
 \value{
 BEDbase object
