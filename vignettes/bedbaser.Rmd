@@ -1,7 +1,7 @@
 ---
 title: bedbaser
 author:
-- name: J Wokaty
+- name: A Wokaty
   affiliation: CUNY School of Public Health
   email: jennifer.wokaty@sph.cuny.edu
 package: bedbaser
@@ -21,13 +21,13 @@ library(R.utils)
 library(liftOver)
 ```
 
-bedbaser is an R API client for [BEDbase](https://bedbase.org) that provides
-access to the [BEDbase API](https://api.bedbase.org) and includes convenience
-functions, such as to create GRanges and GRangesList objects.
+`r Biocpkg("bedbaser")` is an R API client for [BEDbase](https://bedbase.org)
+that provides access to the [BEDbase API](https://api.bedbase.org) and includes
+convenience functions, such as to create GRanges and GRangesList objects.
 
 # Install bedbaser and create a BEDbase instance
 
-Install bedbaser using `r CRANpkg("BiocManager")`.
+Install `r Biocpkg("bedbaser")` using `r CRANpkg("BiocManager")`.
 
 ```{r install, eval=FALSE}
 if (!"BiocManager" %in% rownames(installed.packages())) {
@@ -37,17 +37,17 @@ BiocManager::install("bedbaser")
 ```
 
 Load the package and create a BEDbase instance, optionally setting the cache
-to `cache_path`. If `cache_path` is not set, bedbaser will choose the
-default location.
+to `cache_path`. If `cache_path` is not set, `r Biocpkg("bedbaser")` will
+choose the default location.
 
 ```{r bedbase}
 library(bedbaser)
 
 bedbase <- BEDbase(tempdir())
 ```
-bedbaser can use the same cache as [geniml](https://docs.bedbase.org/geniml/)'s
-BBClient by setting the `cache_path` to the same location. It will create
-the following structure:
+`r Biocpkg("bedbaser")` can use the same cache as
+[geniml](https://docs.bedbase.org/geniml/)'s BBClient by setting the
+`cache_path` to the same location. It will create the following structure:
 
 ```
 cache_path
@@ -59,9 +59,9 @@ cache_path
 
 # Convenience Functions
 
-bedbaser includes convenience functions prefixed with *bb_* to facilitate
-finding BED files, exploring their metadata, downloading files, and creating
-`GRanges` objects.
+`r Biocpkg("bedbaser")` includes convenience functions prefixed with *bb_* to
+facilitate finding BED files, exploring their metadata, downloading files, and
+creating `GRanges` objects.
 
 ## Find a BED file or BEDset
 
@@ -158,8 +158,9 @@ bb_save(bedbase, ex_bed$id, tempdir())
 
 # Accessing BEDbase API endpoints
 
-Because bedbaser uses the `r Biocpkg("AnVIL")` Service class, it's possible to
-access any endpoint of the [BEDbase API](https://api.bedbase.org/v1/docs).
+Because `r Biocpkg("bedbaser")` uses the `r Biocpkg("AnVIL")` Service class,
+it's possible to access any endpoint of the
+[BEDbase API](https://api.bedbase.org/v1/docs).
 
 ```{r operations}
 show(bedbase)

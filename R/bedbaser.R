@@ -497,6 +497,9 @@ bb_to_granges <- function(
 bb_to_grangeslist <- function(bedbase, bedset_id, quietly = TRUE) {
     beds <- bb_beds_in_bedset(bedbase, bedset_id)
     gros <- list()
+    if (!quietly) {
+        rlang::inform(paste(length(beds$id), "BED files in", bedset_id))
+    }
     .cache_bedset_txt(bedset_id, beds$id, getCache(bedbase, "bedsets"))
     for (bed_id in beds$id) {
         gro <- bb_to_granges(bedbase, bed_id, quietly = quietly)

@@ -90,9 +90,6 @@
     rid <- BiocFileCache::bfcquery(cache, id, "rname")$rid
     if (!length(rid)) {
         rpath <- .create_nested_path(bedbase_url, cache)
-        if (!quietly) {
-            rlang::inform(paste("Downloading", bedbase_url, "..."))
-        }
         utils::download.file(bedbase_url, rpath, quiet = quietly)
         rid <- names(BiocFileCache::bfcadd(cache,
             rname = id, fpath = rpath,
