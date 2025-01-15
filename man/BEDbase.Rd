@@ -8,7 +8,7 @@
 \usage{
 BEDbase(cache_path, quietly = FALSE)
 
-getCache(x, quietly = TRUE)
+getCache(x, cache_type = c("bedfiles", "bedsets"))
 
 setCache(x, cache_path, quietly = TRUE)
 }
@@ -18,14 +18,25 @@ setCache(x, cache_path, quietly = TRUE)
 \item{quietly}{logical(1) (default \code{TRUE}) display messages}
 
 \item{x}{BEDbase(1) object}
+
+\item{cache_type}{character(1) bedfiles or bedsets}
 }
 \value{
 BEDbase object
 }
 \description{
-bedbaser exposes the BEDbase API and includes convenience
-functions for common tasks, such as to import a BED file by \code{id} into a
-\code{GRanges} object and a BEDset by its \code{id} into a \code{GRangesList}.
+bedbaser exposes the \href{https://api.bedbase.org}{BEDbase API}
+and includes convenience functions for common tasks, such as to import a
+BED file by \code{id} into a \code{GRanges} object and a BEDset by its \code{id} into a
+\code{GRangesList}.
+
+\code{BEDbase()} creates a cache similar to that of the
+\href{https://docs.bedbase.org/geniml}{Geniml BBClient's cache}:
+cache_path
+bedfiles
+a/f/afile.bed.gz
+bedsets
+a/s/aset.txt
 
 The convenience functions are as follows
 \itemize{

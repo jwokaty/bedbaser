@@ -5,7 +5,7 @@
 #' @return BEDbase class instance
 .BEDbase <- setClass(
     "BEDbase",
-    slots = c("cache"),
+    slots = c("bedfiles", "bedsets"),
     contains = "Service"
 )
 
@@ -15,9 +15,18 @@
 #'
 #' @title An R client for BEDbase
 #'
-#' @description bedbaser exposes the BEDbase API and includes convenience
-#' functions for common tasks, such as to import a BED file by `id` into a
-#' `GRanges` object and a BEDset by its `id` into a `GRangesList`.
+#' @description bedbaser exposes the [BEDbase API](https://api.bedbase.org)
+#' and includes convenience functions for common tasks, such as to import a
+#' BED file by `id` into a `GRanges` object and a BEDset by its `id` into a
+#' `GRangesList`.
+#'
+#' \code{BEDbase()} creates a cache similar to that of the
+#' [Geniml BBClient's cache](https://docs.bedbase.org/geniml):
+#'     cache_path
+#'       bedfiles
+#'         a/f/afile.bed.gz
+#'       bedsets
+#'         a/s/aset.txt
 #'
 #' The convenience functions are as follows
 #' * `bedbaser::BEDbase()`: API service constructor
@@ -48,9 +57,12 @@ BEDbase <- function(cache_path, quietly = FALSE) {
     if (missing(cache_path)) {
         cache_path <- tools::R_user_dir("bedbaser", which = "cache")
     }
+    bedfiles_path <- file.path(cache_path, "bedfiles")
+    bedsets_path <- file.path(cache_path, "bedsets")
     bedbase <- suppressWarnings(
         .BEDbase(
-            cache = BiocFileCache::BiocFileCache(cache_path),
+            bedfiles = BiocFileCache::BiocFileCache(bedfiles_path, ask = FALSE),
+            bedsets = BiocFileCache::BiocFileCache(bedsets_path, ask = FALSE),
             AnVIL::Service(
                 service = "bedbase",
                 host = "api.bedbase.org",
@@ -63,7 +75,8 @@ BEDbase <- function(cache_path, quietly = FALSE) {
         )
     )
     info <- httr::content(
-        bedbase$list_beds_v1_bed_list_get(limit = 0, offset = 0))
+        bedbase$list_beds_v1_bed_list_get(limit = 0, offset = 0)
+    )
     if (!quietly) {
         message(info$count, " BED files available.")
     }
@@ -73,30 +86,36 @@ BEDbase <- function(cache_path, quietly = FALSE) {
 #' @rdname BEDbase
 #'
 #' @param x BEDbase(1) object
-#' @param quietly logical(1) (default \code{TRUE}) display messages
+#' @param cache_type character(1) bedfiles or bedsets
 #'
 #' @export
-setGeneric("getCache", function(x, quietly = TRUE) standardGeneric("getCache"))
+setGeneric(
+    "getCache",
+    function(x, cache_type = c("bedfiles", "bedsets"))
+        standardGeneric("getCache")
+)
 
 #' Return cache path
 #'
 #' @param x BEDbase(1) object
-#' @param quietly logical(1) (default \code{TRUE}) display messages
+#' @param cache_type character(1) bedfiles or bedsets
 #'
 #' @return BiocFileCache(1) object of BED files
 #'
 #' @examples
 #' bedbase <- BEDbase(tempdir())
-#' getCache(bedbase)
+#' getCache(bedbase, "bedfiles")
 #'
 #' @export
 setMethod(
     "getCache", "BEDbase",
-    function(x, quietly = TRUE) {
-        if (quietly) {
-            BiocFileCache::bfcinfo(x@cache)
+    function(x, cache_type = c("bedfiles", "bedsets")) {
+        cache_type <- match.arg(cache_type)
+        if (cache_type == "bedsets") {
+            x@bedsets
+        } else {
+            x@bedfiles
         }
-        x@cache
     }
 )
 
@@ -112,7 +131,7 @@ setGeneric(
     function(x, cache_path, quietly = TRUE) standardGeneric("setCache")
 )
 
-#' Set cache path
+#' Set cache along path
 #'
 #' @param x BEDbase(1) object
 #' @param cache_path character(1)
@@ -128,10 +147,14 @@ setGeneric(
 setMethod(
     "setCache", "BEDbase",
     function(x, cache_path, quietly = TRUE) {
-        x@cache <- BiocFileCache::BiocFileCache(cache_path)
-        if (quietly) {
-            BiocFileCache::bfcinfo(x@cache)
-        }
+        x@bedfiles <- BiocFileCache::BiocFileCache(
+            file.path(cache_path, "bedfiles"),
+            !quietly
+        )
+        x@bedsets <- BiocFileCache::BiocFileCache(
+            file.path(cache_path, "bedsets"),
+            !quietly
+        )
         x
     }
 )
@@ -285,8 +308,9 @@ bb_metadata <- function(bedbase, id, full = FALSE) {
 #' bb_list_beds(bedbase)
 #'
 #' @export
-bb_list_beds <- function(bedbase, genome = NULL, bed_type = NULL, limit = 1000,
-    offset = 0) {
+bb_list_beds <- function(
+        bedbase, genome = NULL, bed_type = NULL, limit = 1000,
+        offset = 0) {
     rsp <- bedbase$list_beds_v1_bed_list_get(
         genome = genome, bed_type = bed_type,
         limit = limit, offset = offset
@@ -422,12 +446,22 @@ bb_bed_text_search <- function(bedbase, query, limit = 10, offset = 0) {
 #' bb_to_granges(bedbase, ex_bed$id)
 #'
 #' @export
-bb_to_granges <- function(bedbase, bed_id, file_type = "bed", extra_cols = NULL,
-    quietly = TRUE) {
+bb_to_granges <- function(
+        bedbase, bed_id, file_type = "bed", extra_cols = NULL,
+        quietly = TRUE) {
     stopifnot(file_type %in% c("bed", "bigbed"))
     metadata <- bb_metadata(bedbase, bed_id, TRUE)
-    file_path <- .get_file(metadata, getCache(bedbase), file_type, "http",
-        quietly)
+    file_path <- .get_file(
+        metadata, getCache(bedbase, "bedfiles"), file_type,
+        "http", quietly
+    )
+
+    bed_file <- tryCatch(
+        R.utils::gunzip(file_path, remove = FALSE),
+        error = function(e) {
+            gsub(".gz", "", file_path)
+        }
+    )
 
     if (file_type == "bed") {
         .bed_file_to_granges(file_path, metadata, extra_cols, quietly)
@@ -463,6 +497,7 @@ bb_to_granges <- function(bedbase, bed_id, file_type = "bed", extra_cols = NULL,
 bb_to_grangeslist <- function(bedbase, bedset_id, quietly = TRUE) {
     beds <- bb_beds_in_bedset(bedbase, bedset_id)
     gros <- list()
+    .cache_bedset_txt(bedset_id, beds$id, getCache(bedbase, "bedsets"))
     for (bed_id in beds$id) {
         gro <- bb_to_granges(bedbase, bed_id, quietly = quietly)
         gros[[length(gros) + 1]] <- gro
@@ -470,7 +505,7 @@ bb_to_grangeslist <- function(bedbase, bedset_id, quietly = TRUE) {
     GenomicRanges::GRangesList(gros)
 }
 
-#' Save a BED or BEDset files to a path given an id
+#' Save a BED file or BEDset to a path given an id
 #'
 #' @rdname bb_save
 #'
@@ -489,8 +524,9 @@ bb_to_grangeslist <- function(bedbase, bedset_id, quietly = TRUE) {
 #' bb_save(bedbase, ex_bed$id, tempdir())
 #'
 #' @export
-bb_save <- function(bedbase, bed_or_bedset_id, path, file_type = "bed",
-    access_type = "http", quietly = TRUE) {
+bb_save <- function(
+        bedbase, bed_or_bedset_id, path, file_type = "bed",
+        access_type = "http", quietly = TRUE) {
     if (!dir.exists(path)) {
         rlang::abort(paste(path, "doesn't exist.", sep = " "))
     }
@@ -499,6 +535,10 @@ bb_save <- function(bedbase, bed_or_bedset_id, path, file_type = "bed",
         ids <- list(metadata$id)
     } else {
         ids <- metadata$bed_ids
+        .cache_bedset_txt(
+            bed_or_bedset_id, unlist(metadata$bed_ids),
+            getCache(bedbase, "bedsets")
+        )
     }
     for (id in ids) {
         metadata <- bb_metadata(bedbase, id, TRUE)

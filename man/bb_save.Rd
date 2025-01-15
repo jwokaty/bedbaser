@@ -2,7 +2,7 @@
 % Please edit documentation in R/bedbaser.R
 \name{bb_save}
 \alias{bb_save}
-\title{Save a BED or BEDset files to a path given an id}
+\title{Save a BED file or BEDset to a path given an id}
 \usage{
 bb_save(
   bedbase,
@@ -30,7 +30,7 @@ bb_save(
 An invisible \code{NULL}
 }
 \description{
-Save a BED or BEDset files to a path given an id
+Save a BED file or BEDset to a path given an id
 }
 \examples{
 bedbase <- BEDbase()

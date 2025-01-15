@@ -1,9 +1,9 @@
 test_that("setCache changes cache", {
     bedbase <- BEDbase(quietly = TRUE)
     path <- tempdir()
-    expect_true(BiocFileCache::bfccache(getCache(bedbase)) != path)
+    expect_true(BiocFileCache::bfccache(getCache(bedbase, "bedfiles")) != file.path(path, "bedfiles"))
     bedbase <- setCache(bedbase, path)
-    expect_true(BiocFileCache::bfccache(getCache(bedbase)) == path)
+    expect_true(BiocFileCache::bfccache(getCache(bedbase, "bedfiles")) == file.path(path, "bedfiles"))
 })
 
 test_that("bb_example has bed_format of 'bed' given rec_type 'bed'", {
@@ -93,7 +93,7 @@ test_that("bb_bed_text_search returns results scored against the query", {
 })
 
 test_that("bb_to_granges returns a GRanges object given a 3+0 bed file", {
-    bedbase <- BEDbase(quietly = TRUE)
+    bedbase <- BEDbase(tempdir(), quietly = TRUE)
     id <- "95a593b8337074a334b425aba5e77d4c"
     md <- bb_metadata(bedbase, id, TRUE)
     expect_equal("bed3+0", md$bed_type)
@@ -102,7 +102,7 @@ test_that("bb_to_granges returns a GRanges object given a 3+0 bed file", {
 })
 
 test_that("bb_to_granges returns a GRanges object given a bigbed file", {
-    bedbase <- BEDbase(quietly = TRUE)
+    bedbase <- BEDbase(tempdir(), quietly = TRUE)
     id <- "ffc1e5ac45d923135500bdd825177356"
     if (.Platform$OS.type != "windows") {
         gro <- bb_to_granges(bedbase, id, "bigbed")
@@ -116,7 +116,7 @@ test_that("bb_to_granges returns a GRanges object given a bigbed file", {
 })
 
 test_that("bb_to_granges returns a GRanges object given narrowpeak (6+4) file", {
-    bedbase <- BEDbase(quietly = TRUE)
+    bedbase <- BEDbase(tempdir(), quietly = TRUE)
     id <- "bbad85f21962bb8d972444f7f9a3a932"
     md <- bb_metadata(bedbase, id, TRUE)
     expect_equal("bed6+4", md$bed_type)
@@ -133,7 +133,7 @@ test_that("bb_to_granges returns a GRanges object given narrowpeak (6+4) file", 
 })
 
 test_that("bb_to_granges returns GRanges object given bed3+9 with genome", {
-    bedbase <- BEDbase(quietly = TRUE)
+    bedbase <- BEDbase(tempdir(), quietly = TRUE)
     id <- "608827efc82fcaa4b0bfc65f590ffef8"
     md <- bb_metadata(bedbase, id, TRUE)
     expect_equal("bed3+9", md$bed_type)
@@ -149,7 +149,7 @@ test_that("bb_to_granges returns GRanges object given bed3+9 with genome", {
 })
 
 test_that("bb_to_granges allows passing extra_cols", {
-    bedbase <- BEDbase(quietly = TRUE)
+    bedbase <- BEDbase(tempdir(), quietly = TRUE)
     id <- "608827efc82fcaa4b0bfc65f590ffef8"
     md <- bb_metadata(bedbase, id, TRUE)
     expect_equal("bed3+9", md$bed_type)
@@ -168,14 +168,14 @@ test_that("bb_to_granges allows passing extra_cols", {
 })
 
 test_that("bb_to_grangeslist creates a GRangesList", {
-    bedbase <- BEDbase(quietly = TRUE)
+    bedbase <- BEDbase(tempdir(), quietly = TRUE)
     grl <- bb_to_grangeslist(bedbase, "lola_hg38_ucsc_features")
     expect_true(methods::is((grl)[1], "CompressedGRangesList"))
     expect_equal(11, length(grl))
 })
 
 test_that("bb_save saves bed files to a path", {
-    bedbase <- BEDbase(quietly = TRUE)
+    bedbase <- BEDbase(tempdir(), quietly = TRUE)
     path <- tempdir()
     if (!dir.exists(path)) {
         dir.create(path)
