@@ -7,7 +7,7 @@
 bb_list_bedsets(bedbase, query = NULL, limit = 1000, offset = 0)
 }
 \arguments{
-\item{bedbase}{BEDbase() API object of BEDbase created from BEDbase()}
+\item{bedbase}{BEDbase() object}
 
 \item{query}{character() (default \code{NULL}) keyword}
 
@@ -16,7 +16,7 @@ bb_list_bedsets(bedbase, query = NULL, limit = 1000, offset = 0)
 \item{offset}{integer(1) (default \code{0}) page token of records}
 }
 \value{
-tibble() of BEDset records
+\link[tibble:tibble]{tibble} of BEDset records
 }
 \description{
 List BEDsets available through bedhost. By default uses the

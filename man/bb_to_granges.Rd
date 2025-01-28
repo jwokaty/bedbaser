@@ -13,7 +13,7 @@ bb_to_granges(
 )
 }
 \arguments{
-\item{bedbase}{BEDbase() API object of BEDbase created from \code{BEDbase()}}
+\item{bedbase}{BEDbase() object}
 
 \item{bed_id}{integer(1) BED record identifier}
 
@@ -25,7 +25,7 @@ construct GRanges objects}
 \item{quietly}{logical(1) (default \code{TRUE}) display messages}
 }
 \value{
-GRanges() object
+\link[GenomicRanges:GRanges-class]{GRanges}
 }
 \description{
 Create a GRanges object given a BED id. Columns and types

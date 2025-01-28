@@ -7,7 +7,7 @@
 bb_metadata(bedbase, id, full = FALSE)
 }
 \arguments{
-\item{bedbase}{BEDbase() API object created from \code{BEDbase()}}
+\item{bedbase}{BEDbase() object}
 
 \item{id}{integer(1) record or object identifier}
 

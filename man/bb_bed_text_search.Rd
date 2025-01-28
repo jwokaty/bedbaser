@@ -7,7 +7,7 @@
 bb_bed_text_search(bedbase, query, limit = 10, offset = 0)
 }
 \arguments{
-\item{bedbase}{BEDbase() API object of BEDbase created from \code{BEDbase()}}
+\item{bedbase}{BEDbase() object}
 
 \item{query}{character() keywords to search}
 
@@ -16,11 +16,11 @@ bb_bed_text_search(bedbase, query, limit = 10, offset = 0)
 \item{offset}{integer(1) (default \code{0}) page offset of results}
 }
 \value{
-tibble() of results
+\link[tibble:tibble]{tibble} of results
 }
 \description{
 Return all available BED file ranked by relevance to the
-keywords. By default uses the bedhost default of 10 records and an initial
+keywords. Uses the bedhost default of 10 records and an initial
 offset of 0.
 }
 \examples{

@@ -14,7 +14,7 @@ bb_save(
 )
 }
 \arguments{
-\item{bedbase}{BEDbase() API object of BEDbase created from BEDbase()}
+\item{bedbase}{BEDbase() object}
 
 \item{bed_or_bedset_id}{integer(1) BED or BEDset record identifier}
 

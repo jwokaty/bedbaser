@@ -22,12 +22,13 @@
 #'
 #' @details \code{BEDbase()} creates a cache similar to that of the
 #' [Geniml BBClient's cache](https://docs.bedbase.org/geniml):
+#' \code{
 #'     cache_path
 #'       bedfiles
 #'         a/f/afile.bed.gz
 #'       bedsets
 #'         a/s/aset.txt
-#'
+#' }
 #' The convenience functions are as follows
 #' * `bedbaser::BEDbase()`: API service constructor
 #' * `bedbaser::getCache()`: Retrieve cache
@@ -145,7 +146,8 @@ setGeneric(
 #' @param cache_path character(1)
 #' @param quietly logical(1) (default \code{TRUE}) display messages
 #'
-#' @return BiocFileCache() object of BED files
+#' @return [BiocFileCache()][BiocFileCache::BiocFileCache-class] object of BED
+#' files
 #'
 #' @examples
 #' bedbase <- BEDbase(tempdir())
@@ -244,7 +246,7 @@ setMethod(
 #' Useful for an initial exploration of bedbaser with an example BED file and
 #' BEDset in BEDbase.
 #'
-#' @param bedbase BEDbase() API object of BEDbase created from BEDbase()
+#' @param bedbase BEDbase() object
 #' @param rec_type character(1) bed or bedset
 #'
 #' @return list() bed files or bedsets
@@ -273,7 +275,7 @@ bb_example <- function(bedbase, rec_type = c("bed", "bedset")) {
 #'
 #' @rdname bb_metadata
 #'
-#' @param bedbase BEDbase() API object created from \code{BEDbase()}
+#' @param bedbase BEDbase() object
 #' @param id integer(1) record or object identifier
 #' @param full logical(1) (default \code{FALSE}) include full record with
 #' stats, files, and metadata
@@ -318,13 +320,13 @@ bb_metadata <- function(bedbase, id, full = FALSE) {
 #'
 #' @rdname bb_list_beds
 #'
-#' @param bedbase BEDbase() API object created from \code{BEDbase()}
+#' @param bedbase BEDbase() object
 #' @param genome character(1) (default \code{NULL}) genome keyword
 #' @param bed_type character(1) (default \code{NULL}) bed file type
 #' @param limit integer(1) (default \code{1000}) maximum records
 #' @param offset integer(1) (default \code{0}) page token of records
 #'
-#' @return tibble() of BED records
+#' @return [tibble][tibble::tibble] of BED records
 #'
 #' @examples
 #' bedbase <- BEDbase()
@@ -358,12 +360,12 @@ bb_list_beds <- function(
 #'
 #' @rdname bb_list_bedsets
 #'
-#' @param bedbase BEDbase() API object of BEDbase created from BEDbase()
+#' @param bedbase BEDbase() object
 #' @param query character() (default \code{NULL}) keyword
 #' @param limit integer(1) (default \code{1000}) maximum records
 #' @param offset integer(1) (default \code{0}) page token of records
 #'
-#' @return tibble() of BEDset records
+#' @return [tibble][tibble::tibble] of BEDset records
 #'
 #' @examples
 #' bedbase <- BEDbase()
@@ -391,10 +393,10 @@ bb_list_bedsets <- function(bedbase, query = NULL, limit = 1000, offset = 0) {
 #'
 #' @rdname bb_beds_in_bedset
 #'
-#' @param bedbase BEDbase() API object of BEDbase created from BEDbase()
+#' @param bedbase BEDbase() object
 #' @param bedset_id integer(1) BEDset record identifier
 #'
-#' @return tibble() information of BED files in BEDset
+#' @return [tibble][tibble::tibble] of BED files in BEDset
 #'
 #' @examples
 #' bedbase <- BEDbase()
@@ -422,17 +424,17 @@ bb_beds_in_bedset <- function(bedbase, bedset_id) {
 #' Search BED files by text
 #'
 #' @description Return all available BED file ranked by relevance to the
-#' keywords. By default uses the bedhost default of 10 records and an initial
+#' keywords. Uses the bedhost default of 10 records and an initial
 #' offset of 0.
 #'
 #' @rdname bb_bed_text_search
 #'
-#' @param bedbase BEDbase() API object of BEDbase created from \code{BEDbase()}
+#' @param bedbase BEDbase() object
 #' @param query character() keywords to search
 #' @param limit integer(1) (default \code{10}) maximum number of results
 #' @param offset integer(1) (default \code{0}) page offset of results
 #'
-#' @return tibble() of results
+#' @return [tibble][tibble::tibble] of results
 #'
 #' @examples
 #' bedbase <- BEDbase()
@@ -465,14 +467,14 @@ bb_bed_text_search <- function(bedbase, query, limit = 10, offset = 0) {
 #'
 #' @rdname bb_to_granges
 #'
-#' @param bedbase BEDbase() API object of BEDbase created from \code{BEDbase()}
+#' @param bedbase BEDbase() object
 #' @param bed_id integer(1) BED record identifier
 #' @param file_type character(1) bed or bigbed
 #' @param extra_cols character() (default \code{NULL}) extra column names to
 #' construct GRanges objects
 #' @param quietly logical(1) (default \code{TRUE}) display messages
 #'
-#' @return GRanges() object
+#' @return [GRanges][GenomicRanges::GRanges-class]
 #'
 #' @examples
 #' bedbase <- BEDbase()
@@ -517,11 +519,11 @@ bb_to_granges <- function(
 #'
 #' @rdname bb_to_grangeslist
 #'
-#' @param bedbase BEDbase() API object of BEDbase created from \code{BEDbase()}
+#' @param bedbase BEDbase() object
 #' @param bedset_id integer(1) BEDset record identifier
 #' @param quietly logical(1) (default \code{TRUE}) display messages
 #'
-#' @return GRangesList() object
+#' @return [GRangesList][GenomicRanges::GRangesList-class]
 #'
 #' @examples
 #' bedbase <- BEDbase()
@@ -534,7 +536,7 @@ bb_to_grangeslist <- function(bedbase, bedset_id, quietly = TRUE) {
     if (!quietly) {
         rlang::inform(paste(length(beds$id), "BED files in", bedset_id))
     }
-    .cache_bedset_txt(bedset_id, beds$id, getCache(bedbase, "bedsets"))
+    .cache_bedset_txt(bedset_id, beds$id, getCache(bedbase, "bedsets"), quietly)
     for (bed_id in beds$id) {
         gro <- bb_to_granges(bedbase, bed_id, quietly = quietly)
         gros[[length(gros) + 1]] <- gro
@@ -549,7 +551,7 @@ bb_to_grangeslist <- function(bedbase, bedset_id, quietly = TRUE) {
 #'
 #' @rdname bb_save
 #'
-#' @param bedbase BEDbase() API object of BEDbase created from BEDbase()
+#' @param bedbase BEDbase() object
 #' @param bed_or_bedset_id integer(1) BED or BEDset record identifier
 #' @param path character(1) directory to save file
 #' @param file_type character(1) (default \code{"bed"}) bed, bigbed, etc.

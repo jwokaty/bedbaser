@@ -7,12 +7,12 @@
 bb_beds_in_bedset(bedbase, bedset_id)
 }
 \arguments{
-\item{bedbase}{BEDbase() API object of BEDbase created from BEDbase()}
+\item{bedbase}{BEDbase() object}
 
 \item{bedset_id}{integer(1) BEDset record identifier}
 }
 \value{
-tibble() information of BED files in BEDset
+\link[tibble:tibble]{tibble} of BED files in BEDset
 }
 \description{
 Return a tibble of BED files in BEDset given its id.

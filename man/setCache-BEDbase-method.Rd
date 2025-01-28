@@ -14,7 +14,8 @@
 \item{quietly}{logical(1) (default \code{TRUE}) display messages}
 }
 \value{
-BiocFileCache() object of BED files
+\link[BiocFileCache:BiocFileCache-class]{BiocFileCache()} object of BED
+files
 }
 \description{
 Create a cache for BED files and BEDsets like

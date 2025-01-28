@@ -5,7 +5,8 @@
 #' If the path is for a bedset, the path is given ".txt" as an extension.
 #'
 #' @param bedbase_path character(1) BED file url or bedset id
-#' @param cache BiocFileCache() object
+#' @param cache [BiocFileCache][BiocFileCache::BiocFileCache-class] bedbaser
+#' cache
 #'
 #' @return character(1) file path
 #'
@@ -45,7 +46,9 @@
 #'
 #' @param id character(1) BEDset id
 #' @param bedfiles list() BED ids
-#' @param cache BiocFileCache() bedbaser cache
+#' @param cache [BiocFileCache][BiocFileCache::BiocFileCache-class] bedbaser
+#' cache
+#' @param quietly logical(1) (default \code{TRUE}) display message
 #'
 #' @return character(1) local file path
 #'
@@ -57,7 +60,7 @@
 #' .cache_bedset_txt(id, beds$id, cache)
 #'
 #' @noRd
-.cache_bedset_txt <- function(id, bedfiles, cache) {
+.cache_bedset_txt <- function(id, bedfiles, cache, quietly = TRUE) {
     rpath <- .create_nested_path(id, cache)
     writeLines(bedfiles, rpath)
     rid <- names(BiocFileCache::bfcadd(cache,

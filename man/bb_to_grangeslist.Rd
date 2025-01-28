@@ -7,14 +7,14 @@
 bb_to_grangeslist(bedbase, bedset_id, quietly = TRUE)
 }
 \arguments{
-\item{bedbase}{BEDbase() API object of BEDbase created from \code{BEDbase()}}
+\item{bedbase}{BEDbase() object}
 
 \item{bedset_id}{integer(1) BEDset record identifier}
 
 \item{quietly}{logical(1) (default \code{TRUE}) display messages}
 }
 \value{
-GRangesList() object
+\link[GenomicRanges:GRangesList-class]{GRangesList}
 }
 \description{
 Create a GRangesList object given a BEDset id

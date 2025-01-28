@@ -7,7 +7,7 @@
 bb_example(bedbase, rec_type = c("bed", "bedset"))
 }
 \arguments{
-\item{bedbase}{BEDbase() API object of BEDbase created from BEDbase()}
+\item{bedbase}{BEDbase() object}
 
 \item{rec_type}{character(1) bed or bedset}
 }

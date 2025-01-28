@@ -50,7 +50,8 @@
 #' does not exist along specified path, it will raise an error message.
 #'
 #' @param metadata list() full metadata
-#' @param cache_or_path BiocFileCache() or character(1) cache or save path
+#' @param cache_or_path [BiocFileCache][BiocFileCache::BiocFileCache-class] or
+#' character(1) cache or save path
 #' @param file_type character(1) bed or bigbed
 #' @param access_type character(1) s3 or http
 #' @param quietly logical(1) (default \code{TRUE}) display messages
@@ -90,7 +91,8 @@
 #' @param x double(1) the x in BEDX+Y
 #' @param y double(1) the y in BEDX+Y
 #'
-#' @return vector(1) representing extraCols for rtracklayer
+#' @return character(1) representing `extraCols` for
+#' [rtracklayer][rtracklayer::BEDFile-class]
 #'
 #' @examples
 #' id <- "608827efc82fcaa4b0bfc65f590ffef8"
@@ -118,13 +120,14 @@
 
 #' Import with genome
 #'
-#' @description Attempt to import a BED file into a GRanges object given a
-#' genome. If it fails to import with the genome, it is removed to create the
-#' GRanges object then the genome is added.
+#' @description Attempt to import a BED file into a
+#' [GRanges][GenomicRanges::GRanges-class] object given a genome. If it fails
+#' to import with the genome, it is removed to create the GRanges object then
+#' the genome is added.
 #'
 #' @param args list() arguments to create a GRanges object
 #'
-#' @return GRanges() object representing a BED file
+#' @return GRanges() representing a BED file
 #'
 #' @examples
 #' bedbase <- BEDbase()
@@ -153,9 +156,10 @@
 
 #' Create GRanges object from a BED file
 #'
-#' @description Create a GRanges object from a BED file. If the BED format is
-#' known, `extra_cols` may be used to set the column name and type. For
-#' example, \code{extra_cols = c(signalValue = "numeric", pValue = "numeric",
+#' @description Create a [GRanges][GenomicRanges::GRanges-class] object from a
+#' BED file. If the BED format is known, `extra_cols` may be used to set the
+#' column name and type. For example,
+#' \code{extra_cols = c(signalValue = "numeric", pValue = "numeric",
 #' qValue = "numeric")}. Aborts if the length of `extra_cols` is not equal to Y
 #' in BEDX+Y.
 #'

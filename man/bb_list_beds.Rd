@@ -7,7 +7,7 @@
 bb_list_beds(bedbase, genome = NULL, bed_type = NULL, limit = 1000, offset = 0)
 }
 \arguments{
-\item{bedbase}{BEDbase() API object created from \code{BEDbase()}}
+\item{bedbase}{BEDbase() object}
 
 \item{genome}{character(1) (default \code{NULL}) genome keyword}
 
@@ -18,7 +18,7 @@ bb_list_beds(bedbase, genome = NULL, bed_type = NULL, limit = 1000, offset = 0)
 \item{offset}{integer(1) (default \code{0}) page token of records}
 }
 \value{
-tibble() of BED records
+\link[tibble:tibble]{tibble} of BED records
 }
 \description{
 List BED files available through bedhost. By default uses the

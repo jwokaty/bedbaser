@@ -33,12 +33,13 @@ GRangesList.
 \details{
 \code{BEDbase()} creates a cache similar to that of the
 \href{https://docs.bedbase.org/geniml}{Geniml BBClient's cache}:
-cache_path
-bedfiles
-a/f/afile.bed.gz
-bedsets
-a/s/aset.txt
-
+\code{
+    cache_path
+      bedfiles
+        a/f/afile.bed.gz
+      bedsets
+        a/s/aset.txt
+}
 The convenience functions are as follows
 \itemize{
 \item \code{bedbaser::BEDbase()}: API service constructor
