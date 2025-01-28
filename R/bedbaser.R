@@ -546,8 +546,8 @@ bb_to_grangeslist <- function(bedbase, bedset_id, quietly = TRUE) {
 
 #' Save a BED file or BEDset to a path given an id
 #'
-#' @description Save a BED file or a BEDset to a path. If the path does not
-#' exist, `bb_save()` will abort.
+#' @description Save a BED file or a BEDset to a local path. If the path does
+#' not exist, `bb_save()` will abort.
 #'
 #' @rdname bb_save
 #'
@@ -555,7 +555,6 @@ bb_to_grangeslist <- function(bedbase, bedset_id, quietly = TRUE) {
 #' @param bed_or_bedset_id integer(1) BED or BEDset record identifier
 #' @param path character(1) directory to save file
 #' @param file_type character(1) (default \code{"bed"}) bed, bigbed, etc.
-#' @param access_type character(1) (default \code{"http"})  s3 or http
 #' @param quietly logical(1) (default \code{TRUE}) display messages
 #'
 #' @return An invisible \code{NULL}
@@ -568,7 +567,7 @@ bb_to_grangeslist <- function(bedbase, bedset_id, quietly = TRUE) {
 #' @export
 bb_save <- function(
         bedbase, bed_or_bedset_id, path, file_type = "bed",
-        access_type = "http", quietly = TRUE) {
+        quietly = TRUE) {
     if (!dir.exists(path)) {
         rlang::abort(paste(path, "doesn't exist.", sep = " "))
     }
@@ -584,6 +583,6 @@ bb_save <- function(
     }
     for (id in ids) {
         metadata <- bb_metadata(bedbase, id, TRUE)
-        .get_file(metadata, path, file_type, access_type, quietly)
+        .get_file(metadata, path, file_type, "http", quietly)
     }
 }

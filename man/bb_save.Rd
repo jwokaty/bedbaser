@@ -4,14 +4,7 @@
 \alias{bb_save}
 \title{Save a BED file or BEDset to a path given an id}
 \usage{
-bb_save(
-  bedbase,
-  bed_or_bedset_id,
-  path,
-  file_type = "bed",
-  access_type = "http",
-  quietly = TRUE
-)
+bb_save(bedbase, bed_or_bedset_id, path, file_type = "bed", quietly = TRUE)
 }
 \arguments{
 \item{bedbase}{BEDbase() object}
@@ -22,16 +15,14 @@ bb_save(
 
 \item{file_type}{character(1) (default \code{"bed"}) bed, bigbed, etc.}
 
-\item{access_type}{character(1) (default \code{"http"})  s3 or http}
-
 \item{quietly}{logical(1) (default \code{TRUE}) display messages}
 }
 \value{
 An invisible \code{NULL}
 }
 \description{
-Save a BED file or a BEDset to a path. If the path does not
-exist, \code{bb_save()} will abort.
+Save a BED file or a BEDset to a local path. If the path does
+not exist, \code{bb_save()} will abort.
 }
 \examples{
 bedbase <- BEDbase()
