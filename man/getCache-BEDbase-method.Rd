@@ -7,12 +7,12 @@
 \S4method{getCache}{BEDbase}(x, cache_type = c("bedfiles", "bedsets"))
 }
 \arguments{
-\item{x}{BEDbase(1) object}
+\item{x}{BEDbase() object}
 
 \item{cache_type}{character(1) bedfiles or bedsets}
 }
 \value{
-BiocFileCache(1) object of BED files
+BiocFileCache() object of BED files
 }
 \description{
 Return cache path

@@ -2,25 +2,27 @@
 % Please edit documentation in R/bedbaser.R
 \name{tags,BEDbase-method}
 \alias{tags,BEDbase-method}
-\title{Display tags}
+\title{Display functions for a tag}
 \usage{
 \S4method{tags}{BEDbase}(x, .tags, .deprecated = FALSE)
 }
 \arguments{
-\item{x}{BEDbase(1) object}
+\item{x}{BEDbase() object}
 
 \item{.tags}{character() tags for filtering operations}
 
 \item{.deprecated}{(default \code{FALSE}) if deprecated}
 }
 \value{
-list(1) API end points
+list() API endpoints
 }
 \description{
-Display tags
+Display functions available through the API associated with a
+tag keyword in bedhost.
 }
 \examples{
 bedbase <- BEDbase()
-tags(bedbase)
+unique(tags(bedbase)$tag)
+tags(bedbase, "bedset")
 
 }

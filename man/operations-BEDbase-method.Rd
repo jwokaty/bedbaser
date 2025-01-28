@@ -2,22 +2,23 @@
 % Please edit documentation in R/bedbaser.R
 \name{operations,BEDbase-method}
 \alias{operations,BEDbase-method}
-\title{Display API}
+\title{Display API functions}
 \usage{
 \S4method{operations}{BEDbase}(x, ..., .deprecated = FALSE)
 }
 \arguments{
-\item{x}{BEDbase(1) object}
+\item{x}{BEDbase() object}
 
 \item{...}{other options}
 
 \item{.deprecated}{(default \code{FALSE}) if deprecated}
 }
 \value{
-list(1) API end points
+list() API endpoints
 }
 \description{
-Display API
+Display functions defined through the bedhost API and their
+corresponding parameters.
 }
 \examples{
 bedbase <- BEDbase()

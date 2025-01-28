@@ -7,19 +7,22 @@
 bb_example(bedbase, rec_type = c("bed", "bedset"))
 }
 \arguments{
-\item{bedbase}{API object of BEDbase created from BEDbase()}
+\item{bedbase}{BEDbase() API object of BEDbase created from BEDbase()}
 
 \item{rec_type}{character(1) bed or bedset}
 }
 \value{
-list(1) bed files or bedsets
+list() bed files or bedsets
 }
 \description{
-Get the example BED file or BEDset with metadata
+Get the example BED file or BEDset available through bedhost.
+Useful for an initial exploration of bedbaser with an example BED file and
+BEDset in BEDbase.
 }
 \examples{
 bedbase <- BEDbase()
-bb_example(bedbase, "bed")
-bb_example(bedbase, "bedset")
-
+ex_bed <- bb_example(bedbase, "bed")
+str(ex_bed)
+ex_bedset <- bb_example(bedbase, "bedset")
+str(ex_bedset)
 }

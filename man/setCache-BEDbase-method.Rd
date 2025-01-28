@@ -7,17 +7,23 @@
 \S4method{setCache}{BEDbase}(x, cache_path, quietly = TRUE)
 }
 \arguments{
-\item{x}{BEDbase(1) object}
+\item{x}{BEDbase() object}
 
 \item{cache_path}{character(1)}
 
 \item{quietly}{logical(1) (default \code{TRUE}) display messages}
 }
 \value{
-BiocFileCache(1) object of BED files
+BiocFileCache() object of BED files
 }
 \description{
-Set cache along path
+Create a cache for BED files and BEDsets like
+\href{https://docs.bedbase.org/geniml}{Geniml BBClient's cache}:
+cache_path
+bedfiles
+a/f/afile.bed.gz
+bedsets
+a/s/aset.txt
 }
 \examples{
 bedbase <- BEDbase(tempdir())

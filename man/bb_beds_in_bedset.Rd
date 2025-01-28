@@ -7,15 +7,15 @@
 bb_beds_in_bedset(bedbase, bedset_id)
 }
 \arguments{
-\item{bedbase}{API object of BEDbase created from BEDbase()}
+\item{bedbase}{BEDbase() API object of BEDbase created from BEDbase()}
 
 \item{bedset_id}{integer(1) BEDset record identifier}
 }
 \value{
-tibble(1) information of BED files in BEDset
+tibble() information of BED files in BEDset
 }
 \description{
-Get BEDs associated with BEDset
+Return a tibble of BED files in BEDset given its id.
 }
 \examples{
 bedbase <- BEDbase()

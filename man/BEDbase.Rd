@@ -17,7 +17,7 @@ setCache(x, cache_path, quietly = TRUE)
 
 \item{quietly}{logical(1) (default \code{TRUE}) display messages}
 
-\item{x}{BEDbase(1) object}
+\item{x}{BEDbase() object}
 
 \item{cache_type}{character(1) bedfiles or bedsets}
 }
@@ -25,11 +25,12 @@ setCache(x, cache_path, quietly = TRUE)
 BEDbase object
 }
 \description{
-bedbaser exposes the \href{https://api.bedbase.org}{BEDbase API}
+bedbaser exposes the \href{https://api.bedbase.org}{bedhost API}
 and includes convenience functions for common tasks, such as to import a
-BED file by \code{id} into a \code{GRanges} object and a BEDset by its \code{id} into a
-\code{GRangesList}.
-
+BED file by \code{id} into a GRanges object and a BEDset by its \code{id} into a
+GRangesList.
+}
+\details{
 \code{BEDbase()} creates a cache similar to that of the
 \href{https://docs.bedbase.org/geniml}{Geniml BBClient's cache}:
 cache_path
@@ -49,8 +50,8 @@ The convenience functions are as follows
 \item \code{bedbaser::bb_list_bedsets()}: List all BEDsets
 \item \code{bedbaser::bb_beds_in_bedset()}: List BED files in BEDset
 \item \code{bedbaser::bb_bed_text_search()}: Search BED files by text
-\item \code{bedbaser::bb_to_granges()}: Create a \code{GRanges} object from a BED id
-\item \code{bedbaser::bb_to_grangeslist()}: Create a \code{GrangesList} from a BEDset id
+\item \code{bedbaser::bb_to_granges()}: Create a GRanges object from a BED id
+\item \code{bedbaser::bb_to_grangeslist()}: Create a GRangesList from a BEDset id
 \item \code{bedbaser::bb_save()}: Save a BED file to a path.
 }
 }

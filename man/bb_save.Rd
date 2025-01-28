@@ -14,7 +14,7 @@ bb_save(
 )
 }
 \arguments{
-\item{bedbase}{API object of BEDbase created from BEDbase()}
+\item{bedbase}{BEDbase() API object of BEDbase created from BEDbase()}
 
 \item{bed_or_bedset_id}{integer(1) BED or BEDset record identifier}
 
@@ -30,7 +30,8 @@ bb_save(
 An invisible \code{NULL}
 }
 \description{
-Save a BED file or BEDset to a path given an id
+Save a BED file or a BEDset to a path. If the path does not
+exist, \code{bb_save()} will abort.
 }
 \examples{
 bedbase <- BEDbase()

@@ -7,19 +7,21 @@
 bb_bed_text_search(bedbase, query, limit = 10, offset = 0)
 }
 \arguments{
-\item{bedbase}{API object of BEDbase created from \code{BEDbase()}}
+\item{bedbase}{BEDbase() API object of BEDbase created from \code{BEDbase()}}
 
-\item{query}{character(1) keywords to search}
+\item{query}{character() keywords to search}
 
 \item{limit}{integer(1) (default \code{10}) maximum number of results}
 
 \item{offset}{integer(1) (default \code{0}) page offset of results}
 }
 \value{
-tibble(1) of results
+tibble() of results
 }
 \description{
-Returns all available results scored.
+Return all available BED file ranked by relevance to the
+keywords. By default uses the bedhost default of 10 records and an initial
+offset of 0.
 }
 \examples{
 bedbase <- BEDbase()

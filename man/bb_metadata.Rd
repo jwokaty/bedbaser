@@ -7,19 +7,19 @@
 bb_metadata(bedbase, id, full = FALSE)
 }
 \arguments{
-\item{bedbase}{API object created from \code{BEDbase()}}
+\item{bedbase}{BEDbase() API object created from \code{BEDbase()}}
 
-\item{id}{integer1() record or object identifier}
+\item{id}{integer(1) record or object identifier}
 
 \item{full}{logical(1) (default \code{FALSE}) include full record with
 stats, files, and metadata}
 }
 \value{
-list(1) metadata
+list() metadata
 }
 \description{
-Get metadata for a BED file or BEDset. Abort
-if not found or id is not not 32 characters
+Get metadata for a BED file or BEDset given its id. Abort if
+not found or id is not not 32 characters.
 }
 \examples{
 bedbase <- BEDbase()

@@ -22,7 +22,7 @@ library(liftOver)
 ```
 
 `r Biocpkg("bedbaser")` is an R API client for [BEDbase](https://bedbase.org)
-that provides access to the [BEDbase API](https://api.bedbase.org) and includes
+that provides access to the [bedhost API](https://api.bedbase.org) and includes
 convenience functions, such as to create GRanges and GRangesList objects.
 
 # Install bedbaser and create a BEDbase instance

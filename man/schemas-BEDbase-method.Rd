@@ -2,18 +2,18 @@
 % Please edit documentation in R/bedbaser.R
 \name{schemas,BEDbase-method}
 \alias{schemas,BEDbase-method}
-\title{Display schemas}
+\title{Display bedhost API schemas}
 \usage{
 \S4method{schemas}{BEDbase}(x)
 }
 \arguments{
-\item{x}{BEDbase(1) object}
+\item{x}{BEDbase() object}
 }
 \value{
-list(1) API end points
+list() API endpoints
 }
 \description{
-Display schemas
+Display bedhost API schemas
 }
 \examples{
 bedbase <- BEDbase()

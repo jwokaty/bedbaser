@@ -15,12 +15,12 @@
 #'
 #' @title An R client for BEDbase
 #'
-#' @description bedbaser exposes the [BEDbase API](https://api.bedbase.org)
+#' @description bedbaser exposes the [bedhost API](https://api.bedbase.org)
 #' and includes convenience functions for common tasks, such as to import a
-#' BED file by `id` into a `GRanges` object and a BEDset by its `id` into a
-#' `GRangesList`.
+#' BED file by `id` into a GRanges object and a BEDset by its `id` into a
+#' GRangesList.
 #'
-#' \code{BEDbase()} creates a cache similar to that of the
+#' @details \code{BEDbase()} creates a cache similar to that of the
 #' [Geniml BBClient's cache](https://docs.bedbase.org/geniml):
 #'     cache_path
 #'       bedfiles
@@ -38,11 +38,11 @@
 #' * `bedbaser::bb_list_bedsets()`: List all BEDsets
 #' * `bedbaser::bb_beds_in_bedset()`: List BED files in BEDset
 #' * `bedbaser::bb_bed_text_search()`: Search BED files by text
-#' * `bedbaser::bb_to_granges()`: Create a `GRanges` object from a BED id
-#' * `bedbaser::bb_to_grangeslist()`: Create a `GrangesList` from a BEDset id
+#' * `bedbaser::bb_to_granges()`: Create a GRanges object from a BED id
+#' * `bedbaser::bb_to_grangeslist()`: Create a GRangesList from a BEDset id
 #' * `bedbaser::bb_save()`: Save a BED file to a path.
 #'
-#' @param cache_path string(1) cache
+#' @param cache_path character(1) cache
 #' @param quietly logical(1) (default \code{FALSE}) display messages
 #'
 #' @return BEDbase object
@@ -85,7 +85,7 @@ BEDbase <- function(cache_path, quietly = FALSE) {
 
 #' @rdname BEDbase
 #'
-#' @param x BEDbase(1) object
+#' @param x BEDbase() object
 #' @param cache_type character(1) bedfiles or bedsets
 #'
 #' @export
@@ -97,10 +97,10 @@ setGeneric(
 
 #' Return cache path
 #'
-#' @param x BEDbase(1) object
+#' @param x BEDbase() object
 #' @param cache_type character(1) bedfiles or bedsets
 #'
-#' @return BiocFileCache(1) object of BED files
+#' @return BiocFileCache() object of BED files
 #'
 #' @examples
 #' bedbase <- BEDbase(tempdir())
@@ -121,7 +121,7 @@ setMethod(
 
 #' @rdname BEDbase
 #'
-#' @param x BEDbase(1) object
+#' @param x BEDbase() object
 #' @param cache_path character(1)
 #' @param quietly logical(1) (default \code{TRUE}) display messages
 #'
@@ -133,11 +133,19 @@ setGeneric(
 
 #' Set cache along path
 #'
-#' @param x BEDbase(1) object
+#' @description Create a cache for BED files and BEDsets like
+#' [Geniml BBClient's cache](https://docs.bedbase.org/geniml):
+#'     cache_path
+#'       bedfiles
+#'         a/f/afile.bed.gz
+#'       bedsets
+#'         a/s/aset.txt
+#'
+#' @param x BEDbase() object
 #' @param cache_path character(1)
 #' @param quietly logical(1) (default \code{TRUE}) display messages
 #'
-#' @return BiocFileCache(1) object of BED files
+#' @return BiocFileCache() object of BED files
 #'
 #' @examples
 #' bedbase <- BEDbase(tempdir())
@@ -159,15 +167,18 @@ setMethod(
     }
 )
 
-#' Display API
+#' Display API functions
 #'
-#' @param x BEDbase(1) object
+#' @description Display functions defined through the bedhost API and their
+#' corresponding parameters.
+#'
+#' @param x BEDbase() object
 #' @param ... other options
 #' @param .deprecated (default \code{FALSE}) if deprecated
 #'
 #' @importFrom AnVIL operations
 #'
-#' @return list(1) API end points
+#' @return list() API endpoints
 #'
 #' @examples
 #' bedbase <- BEDbase()
@@ -181,13 +192,13 @@ setMethod(
     }
 )
 
-#' Display schemas
+#' Display bedhost API schemas
 #'
-#' @param x BEDbase(1) object
+#' @param x BEDbase() object
 #'
 #' @importFrom AnVIL schemas
 #'
-#' @return list(1) API end points
+#' @return list() API endpoints
 #'
 #' @examples
 #' bedbase <- BEDbase()
@@ -201,19 +212,23 @@ setMethod(
     }
 )
 
-#' Display tags
+#' Display functions for a tag
 #'
-#' @param x BEDbase(1) object
+#' @description Display functions available through the API associated with a
+#' tag keyword in bedhost.
+#'
+#' @param x BEDbase() object
 #' @param .tags character() tags for filtering operations
 #' @param .deprecated (default \code{FALSE}) if deprecated
 #'
 #' @importFrom AnVIL tags
 #'
-#' @return list(1) API end points
+#' @return list() API endpoints
 #'
 #' @examples
 #' bedbase <- BEDbase()
-#' tags(bedbase)
+#' unique(tags(bedbase)$tag)
+#' tags(bedbase, "bedset")
 #'
 #' @export
 setMethod(
@@ -225,16 +240,21 @@ setMethod(
 
 #' Get the example BED file or BEDset with metadata
 #'
-#' @param bedbase API object of BEDbase created from BEDbase()
+#' @description Get the example BED file or BEDset available through bedhost.
+#' Useful for an initial exploration of bedbaser with an example BED file and
+#' BEDset in BEDbase.
+#'
+#' @param bedbase BEDbase() API object of BEDbase created from BEDbase()
 #' @param rec_type character(1) bed or bedset
 #'
-#' @return list(1) bed files or bedsets
+#' @return list() bed files or bedsets
 #'
 #' @examples
 #' bedbase <- BEDbase()
-#' bb_example(bedbase, "bed")
-#' bb_example(bedbase, "bedset")
-#'
+#' ex_bed <- bb_example(bedbase, "bed")
+#' str(ex_bed)
+#' ex_bedset <- bb_example(bedbase, "bedset")
+#' str(ex_bedset)
 #' @export
 bb_example <- function(bedbase, rec_type = c("bed", "bedset")) {
     rec_type <- match.arg(rec_type)
@@ -248,17 +268,17 @@ bb_example <- function(bedbase, rec_type = c("bed", "bedset")) {
 
 #' Get metadata for a BED file or BEDset
 #'
-#' @description Get metadata for a BED file or BEDset. Abort
-#' if not found or id is not not 32 characters
+#' @description Get metadata for a BED file or BEDset given its id. Abort if
+#' not found or id is not not 32 characters.
 #'
 #' @rdname bb_metadata
 #'
-#' @param bedbase API object created from \code{BEDbase()}
-#' @param id integer1() record or object identifier
+#' @param bedbase BEDbase() API object created from \code{BEDbase()}
+#' @param id integer(1) record or object identifier
 #' @param full logical(1) (default \code{FALSE}) include full record with
 #' stats, files, and metadata
 #'
-#' @return list(1) metadata
+#' @return list() metadata
 #'
 #' @examples
 #' bedbase <- BEDbase()
@@ -293,15 +313,18 @@ bb_metadata <- function(bedbase, id, full = FALSE) {
 
 #' List BEDs
 #'
+#' @description List BED files available through bedhost. By default uses the
+#' bedhost default of 1000 records and an initial offset of 0.
+#'
 #' @rdname bb_list_beds
 #'
-#' @param bedbase API object created from \code{BEDbase()}
+#' @param bedbase BEDbase() API object created from \code{BEDbase()}
 #' @param genome character(1) (default \code{NULL}) genome keyword
 #' @param bed_type character(1) (default \code{NULL}) bed file type
 #' @param limit integer(1) (default \code{1000}) maximum records
 #' @param offset integer(1) (default \code{0}) page token of records
 #'
-#' @return tibble(1) of BED records
+#' @return tibble() of BED records
 #'
 #' @examples
 #' bedbase <- BEDbase()
@@ -330,14 +353,17 @@ bb_list_beds <- function(
 
 #' List BEDsets
 #'
+#' @description List BEDsets available through bedhost. By default uses the
+#' bedhost default of 1000 records and an initial offset of 0.
+#'
 #' @rdname bb_list_bedsets
 #'
-#' @param bedbase API object of BEDbase created from BEDbase()
+#' @param bedbase BEDbase() API object of BEDbase created from BEDbase()
 #' @param query character() (default \code{NULL}) keyword
 #' @param limit integer(1) (default \code{1000}) maximum records
 #' @param offset integer(1) (default \code{0}) page token of records
 #'
-#' @return tibble(1) of BEDset records
+#' @return tibble() of BEDset records
 #'
 #' @examples
 #' bedbase <- BEDbase()
@@ -361,12 +387,14 @@ bb_list_bedsets <- function(bedbase, query = NULL, limit = 1000, offset = 0) {
 
 #' Get BEDs associated with BEDset
 #'
+#' @description Return a tibble of BED files in BEDset given its id.
+#'
 #' @rdname bb_beds_in_bedset
 #'
-#' @param bedbase API object of BEDbase created from BEDbase()
+#' @param bedbase BEDbase() API object of BEDbase created from BEDbase()
 #' @param bedset_id integer(1) BEDset record identifier
 #'
-#' @return tibble(1) information of BED files in BEDset
+#' @return tibble() information of BED files in BEDset
 #'
 #' @examples
 #' bedbase <- BEDbase()
@@ -393,16 +421,18 @@ bb_beds_in_bedset <- function(bedbase, bedset_id) {
 
 #' Search BED files by text
 #'
-#' Returns all available results scored.
+#' @description Return all available BED file ranked by relevance to the
+#' keywords. By default uses the bedhost default of 10 records and an initial
+#' offset of 0.
 #'
 #' @rdname bb_bed_text_search
 #'
-#' @param bedbase API object of BEDbase created from \code{BEDbase()}
-#' @param query character(1) keywords to search
+#' @param bedbase BEDbase() API object of BEDbase created from \code{BEDbase()}
+#' @param query character() keywords to search
 #' @param limit integer(1) (default \code{10}) maximum number of results
 #' @param offset integer(1) (default \code{0}) page offset of results
 #'
-#' @return tibble(1) of results
+#' @return tibble() of results
 #'
 #' @examples
 #' bedbase <- BEDbase()
@@ -427,18 +457,22 @@ bb_bed_text_search <- function(bedbase, query, limit = 10, offset = 0) {
 
 #' Create a GRanges object given a BED id
 #'
-#' Generates the column and types for broad and narrow peak files.
+#' @description Create a GRanges object given a BED id. Columns and types
+#' are generated for broad and narrow peak files. Known columns and types can
+#' be passed as a named vector through `extra_cols`. Otherwise,
+#' `bb_to_granges()` attempts to determine the column type and substitute dummy
+#' column names.
 #'
 #' @rdname bb_to_granges
 #'
-#' @param bedbase API object of BEDbase created from \code{BEDbase()}
+#' @param bedbase BEDbase() API object of BEDbase created from \code{BEDbase()}
 #' @param bed_id integer(1) BED record identifier
 #' @param file_type character(1) bed or bigbed
 #' @param extra_cols character() (default \code{NULL}) extra column names to
 #' construct GRanges objects
 #' @param quietly logical(1) (default \code{TRUE}) display messages
 #'
-#' @return GRanges(1) object
+#' @return GRanges() object
 #'
 #' @examples
 #' bedbase <- BEDbase()
@@ -483,11 +517,11 @@ bb_to_granges <- function(
 #'
 #' @rdname bb_to_grangeslist
 #'
-#' @param bedbase API object of BEDbase created from \code{BEDbase()}
+#' @param bedbase BEDbase() API object of BEDbase created from \code{BEDbase()}
 #' @param bedset_id integer(1) BEDset record identifier
 #' @param quietly logical(1) (default \code{TRUE}) display messages
 #'
-#' @return GRangesList(1) object
+#' @return GRangesList() object
 #'
 #' @examples
 #' bedbase <- BEDbase()
@@ -510,9 +544,12 @@ bb_to_grangeslist <- function(bedbase, bedset_id, quietly = TRUE) {
 
 #' Save a BED file or BEDset to a path given an id
 #'
+#' @description Save a BED file or a BEDset to a path. If the path does not
+#' exist, `bb_save()` will abort.
+#'
 #' @rdname bb_save
 #'
-#' @param bedbase API object of BEDbase created from BEDbase()
+#' @param bedbase BEDbase() API object of BEDbase created from BEDbase()
 #' @param bed_or_bedset_id integer(1) BED or BEDset record identifier
 #' @param path character(1) directory to save file
 #' @param file_type character(1) (default \code{"bed"}) bed, bigbed, etc.

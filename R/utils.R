@@ -15,11 +15,11 @@
 
 #' Get BEDbase url for BED file
 #'
-#' @param records list(1) metadata
+#' @param records list() metadata
 #' @param file_type character(1) bed or bigbed
 #' @param access_type character(1) s3 or http
 #'
-#' @return url to BED file
+#' @return character(1) url to BED file
 #'
 #' @examples
 #' bedbase <- BEDbase()
@@ -49,8 +49,8 @@
 #' the file from bedbase.org and save to the cache or a path. If a directory
 #' does not exist along specified path, it will raise an error message.
 #'
-#' @param metadata list(1) full metadata
-#' @param cache_or_path BiocFileCache(1) or character(1) cache or save path
+#' @param metadata list() full metadata
+#' @param cache_or_path BiocFileCache() or character(1) cache or save path
 #' @param file_type character(1) bed or bigbed
 #' @param access_type character(1) s3 or http
 #' @param quietly logical(1) (default \code{TRUE}) display messages
@@ -79,7 +79,12 @@
     bed_file
 }
 
-#' Attempt to guess extraCols for rtracklayer with dummy column names
+#' Create a named vector based on the given file
+#'
+#' @description Create a named vector to pass as `extraCols` to
+#' [rtracklayer][rtracklayer::BEDFile-class] based on the file at `file_path`.
+#' Subsitute dummy column column names and attempt to match the content of
+#' a column to a type.
 #'
 #' @param file_path character(1) path to BED
 #' @param x double(1) the x in BEDX+Y
@@ -113,9 +118,13 @@
 
 #' Import with genome
 #'
-#' @param args list(1) arguments to create a GRanges object
+#' @description Attempt to import a BED file into a GRanges object given a
+#' genome. If it fails to import with the genome, it is removed to create the
+#' GRanges object then the genome is added.
 #'
-#' @return GRanges(1) object representing BED
+#' @param args list() arguments to create a GRanges object
+#'
+#' @return GRanges() object representing a BED file
 #'
 #' @examples
 #' bedbase <- BEDbase()
@@ -144,19 +153,19 @@
 
 #' Create GRanges object from a BED file
 #'
-#' If the BED format is known, `extra_cols` may be used to set the column name
-#' and type. For example, \code{extra_cols = c(signalValue = "numeric",
-#' pValue = "numeric", qValue = "numeric")}.
-#'
-#' Aborts if the length of `extra_cols` is not equal to Y in BEDX+Y.
+#' @description Create a GRanges object from a BED file. If the BED format is
+#' known, `extra_cols` may be used to set the column name and type. For
+#' example, \code{extra_cols = c(signalValue = "numeric", pValue = "numeric",
+#' qValue = "numeric")}. Aborts if the length of `extra_cols` is not equal to Y
+#' in BEDX+Y.
 #'
 #' @param file_path character(1) path to BED file
-#' @param metadata list(1) full metadata
-#' @param extra_cols character(1) (default \code{NULL}) extra column names to
-#' construct  GRanges objects
-#' @param quietly boolean(1) (default \code{TRUE}) Display information messages
+#' @param metadata list() full metadata
+#' @param extra_cols character() (default \code{NULL}) extra column names to
+#' construct a GRanges objects
+#' @param quietly logical(1) (default \code{TRUE}) Display information messages
 #'
-#' @return GRanges(1) object representing BED
+#' @return GRanges() object representing BED
 #'
 #' @examples
 #' bedbase <- BEDbase()

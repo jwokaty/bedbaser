@@ -5,7 +5,7 @@
 #' If the path is for a bedset, the path is given ".txt" as an extension.
 #'
 #' @param bedbase_path character(1) BED file url or bedset id
-#' @param cache BiocFileCache(1) object
+#' @param cache BiocFileCache() object
 #'
 #' @return character(1) file path
 #'
@@ -44,8 +44,8 @@
 #' file named after the BEDset's id that contains the BED ids.
 #'
 #' @param id character(1) BEDset id
-#' @param bedfiles list(1) BED ids
-#' @param cache BiocFileCache(1) bedbaser cache
+#' @param bedfiles list() BED ids
+#' @param cache BiocFileCache() bedbaser cache
 #'
 #' @return character(1) local file path
 #'
@@ -72,7 +72,7 @@
 #'
 #' @param id character(1) BEDbase id
 #' @param bedbase_url character(1) remote resource
-#' @param cache BiocFileCache(1) object
+#' @param cache BiocFileCache() object
 #' @param quietly logical(1) (default \code{TRUE}) display message
 #'
 #' @return character(1) filepath

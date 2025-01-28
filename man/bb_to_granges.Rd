@@ -13,7 +13,7 @@ bb_to_granges(
 )
 }
 \arguments{
-\item{bedbase}{API object of BEDbase created from \code{BEDbase()}}
+\item{bedbase}{BEDbase() API object of BEDbase created from \code{BEDbase()}}
 
 \item{bed_id}{integer(1) BED record identifier}
 
@@ -25,10 +25,14 @@ construct GRanges objects}
 \item{quietly}{logical(1) (default \code{TRUE}) display messages}
 }
 \value{
-GRanges(1) object
+GRanges() object
 }
 \description{
-Generates the column and types for broad and narrow peak files.
+Create a GRanges object given a BED id. Columns and types
+are generated for broad and narrow peak files. Known columns and types can
+be passed as a named vector through \code{extra_cols}. Otherwise,
+\code{bb_to_granges()} attempts to determine the column type and substitute dummy
+column names.
 }
 \examples{
 bedbase <- BEDbase()
