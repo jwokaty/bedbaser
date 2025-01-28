@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">bedbaser</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.19</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.20</span>
       </span>
     </div>
 
@@ -65,7 +65,7 @@
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>BEDbase(1) object</p></dd>
+<dd><p>BEDbase() object</p></dd>
 
 
 <dt id="arg-cache-type">cache_type<a class="anchor" aria-label="anchor" href="#arg-cache-type"></a></dt>
@@ -74,16 +74,16 @@
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>BiocFileCache(1) object of BED files</p>
+    <p>BiocFileCache() object of BED files</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">bedbase</span> <span class="op">&lt;-</span> <span class="fu"><a href="BEDbase.html">BEDbase</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 20727 BED files available.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 21093 BED files available.</span>
 <span class="r-in"><span><span class="fu"><a href="BEDbase.html">getCache</a></span><span class="op">(</span><span class="va">bedbase</span>, <span class="st">"bedfiles"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class: BiocFileCache</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> bfccache: /tmp/Rtmprfeoq8/bedfiles</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> bfccache: /tmp/RtmpP3UnDl/bedfiles</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> bfccount: 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> For more information see: bfcinfo() or bfcquery()</span>
 <span class="r-in"><span></span></span>
