@@ -91,10 +91,10 @@
     rid <- BiocFileCache::bfcquery(cache, id, "rname")$rid
     if (!length(rid)) {
         rpath <- .create_nested_path(bedbase_url, cache)
-        utils::download.file(bedbase_url, rpath, quiet = quietly)
+        utils::download.file(bedbase_url, rpath)
         rid <- names(BiocFileCache::bfcadd(cache,
-            rname = id, fpath = rpath,
-            rtype = "local", rpath = rpath, download = FALSE, action = "asis"
+            rname = id, fpath = rpath, rtype = "local", rpath = rpath,
+            download = FALSE, action = "asis"
         ))
     }
     BiocFileCache::bfcrpath(cache, rids = rid)

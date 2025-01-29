@@ -69,10 +69,7 @@
     quietly = TRUE) {
     file_url <- .get_url(metadata, file_type, access_type)
     if (methods::is(cache_or_path, "BiocFileCache")) {
-        bed_file <- .cache_bedfile(
-            metadata$id, file_url,
-            cache_or_path, quietly
-        )
+        bed_file <- .cache_bedfile(metadata$id, file_url, cache_or_path)
     } else {
         bed_file <- file.path(cache_or_path, .get_file_name(file_url))
         utils::download.file(file_url, bed_file, quiet = quietly)
