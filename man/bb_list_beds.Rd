@@ -21,8 +21,9 @@ bb_list_beds(bedbase, genome = NULL, bed_type = NULL, limit = 1000, offset = 0)
 \link[tibble:tibble]{tibble} of BED records
 }
 \description{
-List BED files available through bedhost. By default uses the
-bedhost default of 1000 records and an initial offset of 0.
+List BED files available through
+\href{https://api.bedbase.org}{bedhost}. By default uses the bedhost default
+of 1000 records and an initial offset of 0.
 }
 \examples{
 bedbase <- BEDbase()

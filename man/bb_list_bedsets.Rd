@@ -19,8 +19,9 @@ bb_list_bedsets(bedbase, query = NULL, limit = 1000, offset = 0)
 \link[tibble:tibble]{tibble} of BEDset records
 }
 \description{
-List BEDsets available through bedhost. By default uses the
-bedhost default of 1000 records and an initial offset of 0.
+List BEDsets available through
+\href{https://api.bedbase.org}{bedhost}. By default uses the bedhost default
+of 1000 records and an initial offset of 0.
 }
 \examples{
 bedbase <- BEDbase()

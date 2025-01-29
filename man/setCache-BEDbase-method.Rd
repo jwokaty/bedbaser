@@ -19,12 +19,7 @@ files
 }
 \description{
 Create a cache for BED files and BEDsets like
-\href{https://docs.bedbase.org/geniml}{Geniml BBClient's cache}:
-cache_path
-bedfiles
-a/f/afile.bed.gz
-bedsets
-a/s/aset.txt
+\href{https://docs.bedbase.org/geniml}{Geniml BBClient's cache}.
 }
 \examples{
 bedbase <- BEDbase(tempdir())

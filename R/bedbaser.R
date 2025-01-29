@@ -21,14 +21,8 @@
 #' GRangesList.
 #'
 #' @details \code{BEDbase()} creates a cache similar to that of the
-#' [Geniml BBClient's cache](https://docs.bedbase.org/geniml):
-#' \code{
-#'     cache_path
-#'       bedfiles
-#'         a/f/afile.bed.gz
-#'       bedsets
-#'         a/s/aset.txt
-#' }
+#' [Geniml BBClient's cache](https://docs.bedbase.org/geniml).
+#'
 #' The convenience functions are as follows
 #' * `bedbaser::BEDbase()`: API service constructor
 #' * `bedbaser::getCache()`: Retrieve cache
@@ -135,12 +129,7 @@ setGeneric(
 #' Set cache along path
 #'
 #' @description Create a cache for BED files and BEDsets like
-#' [Geniml BBClient's cache](https://docs.bedbase.org/geniml):
-#'     cache_path
-#'       bedfiles
-#'         a/f/afile.bed.gz
-#'       bedsets
-#'         a/s/aset.txt
+#' [Geniml BBClient's cache](https://docs.bedbase.org/geniml).
 #'
 #' @param x BEDbase() object
 #' @param cache_path character(1)
@@ -171,8 +160,8 @@ setMethod(
 
 #' Display API functions
 #'
-#' @description Display functions defined through the bedhost API and their
-#' corresponding parameters.
+#' @description Display functions defined through the
+#' [bedhost API](https://api.bedbase.org) and their corresponding parameters.
 #'
 #' @param x BEDbase() object
 #' @param ... other options
@@ -217,7 +206,7 @@ setMethod(
 #' Display functions for a tag
 #'
 #' @description Display functions available through the API associated with a
-#' tag keyword in bedhost.
+#' tag keyword in [bedhost](https://api.bedbase.org).
 #'
 #' @param x BEDbase() object
 #' @param .tags character() tags for filtering operations
@@ -242,9 +231,9 @@ setMethod(
 
 #' Get the example BED file or BEDset with metadata
 #'
-#' @description Get the example BED file or BEDset available through bedhost.
-#' Useful for an initial exploration of bedbaser with an example BED file and
-#' BEDset in BEDbase.
+#' @description Get the example BED file or BEDset available through
+#' [bedhost](https://api.bedbase.org). Useful for an initial exploration
+#' of bedbaser with an example BED file and BEDset in BEDbase.
 #'
 #' @param bedbase BEDbase() object
 #' @param rec_type character(1) bed or bedset
@@ -315,8 +304,9 @@ bb_metadata <- function(bedbase, id, full = FALSE) {
 
 #' List BEDs
 #'
-#' @description List BED files available through bedhost. By default uses the
-#' bedhost default of 1000 records and an initial offset of 0.
+#' @description List BED files available through
+#' [bedhost](https://api.bedbase.org). By default uses the bedhost default
+#' of 1000 records and an initial offset of 0.
 #'
 #' @rdname bb_list_beds
 #'
@@ -355,8 +345,9 @@ bb_list_beds <- function(
 
 #' List BEDsets
 #'
-#' @description List BEDsets available through bedhost. By default uses the
-#' bedhost default of 1000 records and an initial offset of 0.
+#' @description List BEDsets available through
+#' [bedhost](https://api.bedbase.org). By default uses the bedhost default
+#' of 1000 records and an initial offset of 0.
 #'
 #' @rdname bb_list_bedsets
 #'
@@ -423,9 +414,9 @@ bb_beds_in_bedset <- function(bedbase, bedset_id) {
 
 #' Search BED files by text
 #'
-#' @description Return all available BED file ranked by relevance to the
-#' keywords. Uses the bedhost default of 10 records and an initial
-#' offset of 0.
+#' @description Return all available BED files ranked by relevance to the
+#' keywords. Uses the [bedhost API](https://api.bedbase.org) default of 10
+#' records and an initial offset of 0.
 #'
 #' @rdname bb_bed_text_search
 #'

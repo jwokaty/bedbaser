@@ -18,7 +18,7 @@ list() API endpoints
 }
 \description{
 Display functions available through the API associated with a
-tag keyword in bedhost.
+tag keyword in \href{https://api.bedbase.org}{bedhost}.
 }
 \examples{
 bedbase <- BEDbase()

@@ -17,8 +17,8 @@
 list() API endpoints
 }
 \description{
-Display functions defined through the bedhost API and their
-corresponding parameters.
+Display functions defined through the
+\href{https://api.bedbase.org}{bedhost API} and their corresponding parameters.
 }
 \examples{
 bedbase <- BEDbase()

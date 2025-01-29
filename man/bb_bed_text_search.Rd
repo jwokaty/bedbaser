@@ -19,9 +19,9 @@ bb_bed_text_search(bedbase, query, limit = 10, offset = 0)
 \link[tibble:tibble]{tibble} of results
 }
 \description{
-Return all available BED file ranked by relevance to the
-keywords. Uses the bedhost default of 10 records and an initial
-offset of 0.
+Return all available BED files ranked by relevance to the
+keywords. Uses the \href{https://api.bedbase.org}{bedhost API} default of 10
+records and an initial offset of 0.
 }
 \examples{
 bedbase <- BEDbase()

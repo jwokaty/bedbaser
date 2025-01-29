@@ -15,9 +15,9 @@ bb_example(bedbase, rec_type = c("bed", "bedset"))
 list() bed files or bedsets
 }
 \description{
-Get the example BED file or BEDset available through bedhost.
-Useful for an initial exploration of bedbaser with an example BED file and
-BEDset in BEDbase.
+Get the example BED file or BEDset available through
+\href{https://api.bedbase.org}{bedhost}. Useful for an initial exploration
+of bedbaser with an example BED file and BEDset in BEDbase.
 }
 \examples{
 bedbase <- BEDbase()
