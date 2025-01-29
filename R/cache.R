@@ -48,7 +48,6 @@
 #' @param bedfiles list() BED ids
 #' @param cache [BiocFileCache][BiocFileCache::BiocFileCache-class] bedbaser
 #' cache
-#' @param quietly logical(1) (default \code{TRUE}) display message
 #'
 #' @return character(1) local file path
 #'
@@ -60,12 +59,12 @@
 #' .cache_bedset_txt(id, beds$id, cache)
 #'
 #' @noRd
-.cache_bedset_txt <- function(id, bedfiles, cache, quietly = TRUE) {
+.cache_bedset_txt <- function(id, bedfiles, cache) {
     rpath <- .create_nested_path(id, cache)
     writeLines(bedfiles, rpath)
     rid <- names(BiocFileCache::bfcadd(cache,
         rname = id, fpath = rpath, rtype = "local", rpath = rpath,
-        download = FALSE, action = "asis", verbose = !quietly
+        download = FALSE, action = "asis"
     ))
     rpath
 }
@@ -76,7 +75,6 @@
 #' @param id character(1) BEDbase id
 #' @param bedbase_url character(1) remote resource
 #' @param cache BiocFileCache() object
-#' @param quietly logical(1) (default \code{TRUE}) display message
 #'
 #' @return character(1) filepath
 #'
@@ -89,15 +87,14 @@
 #' .cache_bedfile(id, bedbase_url, BiocFileCache::BiocFileCache(tempdir()))
 #'
 #' @noRd
-.cache_bedfile <- function(id, bedbase_url, cache, quietly = TRUE) {
+.cache_bedfile <- function(id, bedbase_url, cache) {
     rid <- BiocFileCache::bfcquery(cache, id, "rname")$rid
     if (!length(rid)) {
         rpath <- .create_nested_path(bedbase_url, cache)
         utils::download.file(bedbase_url, rpath, quiet = quietly)
         rid <- names(BiocFileCache::bfcadd(cache,
             rname = id, fpath = rpath,
-            rtype = "local", rpath = rpath, download = FALSE, action = "asis",
-            verbose = !quietly
+            rtype = "local", rpath = rpath, download = FALSE, action = "asis"
         ))
     }
     BiocFileCache::bfcrpath(cache, rids = rid)
