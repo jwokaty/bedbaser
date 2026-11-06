@@ -9,7 +9,7 @@
     contains = "Service"
 )
 
-.BEDBASE_API_REFERENCE_VERSION <- "0.10.6"
+.BEDBASE_API_REFERENCE_VERSION <- "0.13.0"
 
 #' @rdname BEDbase
 #'
@@ -40,6 +40,9 @@
 #'
 #' @param cache_path character(1) cache
 #' @param quietly logical(1) (default \code{FALSE}) display messages
+#' @param host character(1) (default \code{"api.bedbase.org"}) API host,
+#' e.g., a development or test server. Prefix with \code{http://} for a
+#' server without TLS.
 #'
 #' @return BEDbase object
 #'
@@ -49,7 +52,10 @@
 #' bb_metadata(bedbase, ex_bed$id)
 #'
 #' @export
-BEDbase <- function(cache_path, quietly = FALSE) {
+BEDbase <- function(cache_path, quietly = FALSE, host = "api.bedbase.org") {
+    stopifnot(is.character(host), length(host) == 1L, nzchar(host))
+    scheme <- if (startsWith(host, "http://")) "http" else "https"
+    host <- sub("^https?://", "", host)
     if (missing(cache_path)) {
         cache_path <- tools::R_user_dir("bedbaser", which = "cache")
     }
@@ -61,12 +67,13 @@ BEDbase <- function(cache_path, quietly = FALSE) {
             bedsets = BiocFileCache::BiocFileCache(bedsets_path, ask = FALSE),
             AnVIL::Service(
                 service = "bedbase",
-                host = "api.bedbase.org",
+                host = host,
                 api_reference_version = .BEDBASE_API_REFERENCE_VERSION,
                 authenticate = FALSE,
                 package = "bedbaser",
                 api_url = character(),
-                api_reference_url = "https://api.bedbase.org/openapi.json",
+                schemes = scheme,
+                api_reference_url = paste0(scheme, "://", host, "/v1/openapi.json")
             )
         )
     )
@@ -78,6 +85,24 @@ BEDbase <- function(cache_path, quietly = FALSE) {
     }
     bedbase
 }
+
+#' @rdname BEDbase
+#'
+#' @param object BEDbase() object
+#'
+#' @importFrom methods show
+#' @export
+setMethod("show", "BEDbase", function(object) {
+    cat(
+        "BEDbase client\n",
+        "  host: ", object@host, "\n",
+        "  API spec version: ", object@api$info$version, "\n",
+        "  cache: ", dirname(BiocFileCache::bfccache(object@bedfiles)), "\n",
+        "See ?BEDbase for the bb_* functions, or use ",
+        "<object>$<tab> for API endpoints.\n",
+        sep = ""
+    )
+})
 
 #' @rdname BEDbase
 #'
@@ -308,12 +333,14 @@ bb_example <- function(bedbase, rec_type = c("bed", "bedset")) {
 bb_metadata <- function(bedbase, id, full = FALSE) {
     rsp <- bedbase$get_bed_metadata_v1_bed__bed_id__metadata_get(
         bed_id = id,
-        full = full
+        full = full,
+        test_request = .is_test_request()
     )
     if (rsp$status_code != 200) {
         rsp <- bedbase$get_bedset_metadata_v1_bedset__bedset_id__metadata_get(
             bedset_id = id,
-            full = full
+            full = full,
+            test_request = .is_test_request()
         )
     }
     result <- httr::content(rsp)
@@ -391,23 +418,13 @@ bb_list_bedsets <- function(bedbase, query = "", limit = 1000, offset = 0) {
     rsp <- bedbase$list_bedsets_v1_bedset_list_get(
         query = query,
         limit = limit,
-        offset = offset
+        offset = offset,
+        test_request = .is_test_request()
     )
     recs <- httr::content(rsp)
     results <- tibble::tibble()
-    by <- c(
-        "id", "name", "md5sum", "submission_date", "last_update_date",
-        "description", "author", "source"
-    )
     if (recs$count) {
-        results <- dplyr::bind_rows(recs$results) |>
-            tidyr::unnest(bed_ids) |>
-            dplyr::group_by(
-                id, name, md5sum, submission_date, last_update_date,
-                description, author, source
-            ) |>
-            tidyr::nest(.key = "bed_ids") |>
-            dplyr::relocate(bed_ids, .before = "author")
+        results <- dplyr::bind_rows(recs$results)
     }
     results
 }
@@ -456,6 +473,8 @@ bb_beds_in_bedset <- function(bedbase, bedset_id) {
 #'
 #' @param bedbase BEDbase() object
 #' @param query character() keywords to search
+#' @param genome character() (default NULL) genome to search
+#' @param assay character() (default NULL) assay to search
 #' @param limit integer(1) (default \code{10}) maximum number of results
 #' @param offset integer(1) (default \code{0}) page offset of results
 #'
@@ -466,12 +485,20 @@ bb_beds_in_bedset <- function(bedbase, bedset_id) {
 #' bb_bed_text_search(bedbase, "hg38")
 #'
 #' @export
-bb_bed_text_search <- function(bedbase, query, limit = 10, offset = 0) {
-    encoded_query <- utils::URLencode(query, reserved = TRUE)
-    rsp <- bedbase$text_to_bed_search_v1_bed_search_text_post(
-        query = encoded_query,
+bb_bed_text_search <- function(bedbase, query, genome = NULL, assay = NULL,
+                               limit = 10, offset = 0) {
+    query <- utils::URLencode(query, reserved = TRUE)
+    if (!is.null(genome))
+        genome <- utils::URLencode(genome, reserved = TRUE)
+    if (!is.null(assay))
+        assay <- utils::URLencode(assay, reserved = TRUE)
+    rsp <- bedbase$text_to_bed_search_v1_bed_search_text_get(
+        query = query,
+        genome = genome,
+        assay = assay,
         limit = limit,
-        offset = offset
+        offset = offset,
+        test_request = .is_test_request()
     )
     recs <- httr::content(rsp)
     results <- tibble::tibble()
@@ -507,11 +534,7 @@ bb_bed_text_search <- function(bedbase, query, limit = 10, offset = 0) {
 #'
 #' @export
 bb_to_granges <- function(bedbase, bed_id, extra_cols = NULL, quietly = TRUE) {
-    metadata <- bb_metadata(bedbase, bed_id, TRUE)
-    file_path <- .get_file(
-        metadata, getCache(bedbase, "bedfiles"), "http",
-        quietly
-    )
+    file_path <- .get_file(bedbase, bed_id, getCache(bedbase, "bedfiles"), quietly)
 
     tryCatch(
         R.utils::gunzip(file_path, remove = FALSE),
@@ -520,6 +543,7 @@ bb_to_granges <- function(bedbase, bed_id, extra_cols = NULL, quietly = TRUE) {
         }
     )
 
+    metadata <- bb_metadata(bedbase, bed_id, TRUE)
     .bed_file_to_granges(file_path, metadata, extra_cols, quietly)
 }
 
@@ -588,7 +612,6 @@ bb_save <- function(bedbase, bed_or_bedset_id, path, quietly = TRUE) {
         )
     }
     for (id in ids) {
-        metadata <- bb_metadata(bedbase, id, TRUE)
-        .get_file(metadata, path, "http", quietly)
+        .get_file(bedbase, id, path, quietly)
     }
 }

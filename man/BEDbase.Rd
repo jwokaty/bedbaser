@@ -2,11 +2,14 @@
 % Please edit documentation in R/bedbaser.R
 \name{BEDbase}
 \alias{BEDbase}
+\alias{show,BEDbase-method}
 \alias{getCache}
 \alias{setCache}
 \title{An R client for BEDbase}
 \usage{
-BEDbase(cache_path, quietly = FALSE)
+BEDbase(cache_path, quietly = FALSE, host = "api.bedbase.org")
+
+\S4method{show}{BEDbase}(object)
 
 getCache(x, cache_type = c("bedfiles", "bedsets"))
 
@@ -16,6 +19,10 @@ setCache(x, cache_path, quietly = TRUE)
 \item{cache_path}{character(1)}
 
 \item{quietly}{logical(1) (default \code{TRUE}) display messages}
+
+\item{host}{character(1) (default \code{"api.bedbase.org"}) API host,
+e.g., a development or test server. Prefix with \code{http://} for a
+server without TLS.}
 
 \item{x}{BEDbase() object}
 

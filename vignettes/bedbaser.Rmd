@@ -36,6 +36,13 @@ if (!"BiocManager" %in% rownames(installed.packages())) {
 BiocManager::install("bedbaser")
 ```
 
+```{r set-bedbaser-test_request, echo=FALSE, include=FALSE}
+# We set .is_test_request to TRUE if !interactive() so we don't inflate
+# statistics for BEDbase
+
+options(bedbaser.test_request = !interactive())
+```
+
 Load the package and create a BEDbase instance, optionally setting the cache
 to `cache_path`. If `cache_path` is not set, `r Biocpkg("bedbaser")` will
 choose the default location.
@@ -208,11 +215,11 @@ gro
 ```
 
 Download the
-[chain file](https://hgdownload.cse.ucsc.edu/downloads.html#liftover) from UCSC.
+[chain file](https://hgdownload.soe.ucsc.edu/downloads.html#liftover) from UCSC.
 
 ```{r convertCoordinates_getTheChain, message=FALSE}
 chain_url <- paste0(
-    "https://hgdownload.cse.ucsc.edu/goldenPath/mm10/liftOver/",
+    "https://hgdownload.soe.ucsc.edu/goldenPath/mm10/liftOver/",
     "mm10ToMm39.over.chain.gz"
 )
 tmpdir <- tempdir()
@@ -231,6 +238,12 @@ gro39 <- liftOver(gro, ch)
 gro39 <- unlist(gro39)
 genome(gro39) <- "mm39"
 gro39
+```
+
+```{r unset-bedbaser-test_request, echo=FALSE, include=FALSE}
+# We unset bedbaser.test_request to FALSE
+
+options(bedbaser.test_request = FALSE)
 ```
 
 # SessionInfo()

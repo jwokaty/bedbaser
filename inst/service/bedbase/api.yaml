@@ -3,7 +3,7 @@
   "info": {
     "description": "BED file/sets statistics and image server API",
     "title": "bedhost",
-    "version": "0.10.6"
+    "version": "0.13.0"
   },
   "paths": {
     "/": {
@@ -18,8 +18,8 @@
             "schema": {}
           }
         },
-        "operationId": "lending_page__get",
-        "summary": "Lending Page"
+        "operationId": "landing_page__get",
+        "summary": "Landing Page"
       }
     },
     "/v1": {
@@ -42,6 +42,68 @@
         "summary": "API intro page"
       }
     },
+    "/v1/assays": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {
+              "$ref": "#/definitions/BaseListResponse"
+            }
+          }
+        },
+        "tags": [
+          "base"
+        ],
+        "description": "Returns available assays",
+        "operationId": "get_assays_list_v1_assays_get",
+        "summary": "Get available assays"
+      }
+    },
+    "/v1/bed/analyze-genome": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ChromLengthUploadModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {
+              "$ref": "#/definitions/RefGenValidReturnModel"
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/HTTPValidationError"
+            }
+          }
+        },
+        "tags": [
+          "bed"
+        ],
+        "description": "Provide length of the chromosomes for a reference genome, and\nreturn reference genome validation results for a bed file",
+        "operationId": "analyze_reference_genome_v1_bed_analyze_genome_post",
+        "summary": "Analyze reference genome for bed file"
+      }
+    },
     "/v1/bed/embed": {
       "post": {
         "consumes": [
@@ -55,6 +117,7 @@
             "format": "binary",
             "in": "formData",
             "name": "file",
+            "required": true,
             "type": "string"
           }
         ],
@@ -114,7 +177,10 @@
         "parameters": [
           {
             "default": 1000,
+            "description": "Limit (1-10000), default 1000",
             "in": "query",
+            "maximum": 10000,
+            "minimum": 1,
             "name": "limit",
             "required": false,
             "type": "integer"
@@ -250,8 +316,8 @@
         "summary": "Search for similar bed files"
       }
     },
-    "/v1/bed/search/text": {
-      "post": {
+    "/v1/bed/search/exact": {
+      "get": {
         "produces": [
           "application/json"
         ],
@@ -263,9 +329,13 @@
             "type": "string"
           },
           {
-            "default": "hg38",
             "in": "query",
             "name": "genome",
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "assay",
             "required": false
           },
           {
@@ -301,9 +371,117 @@
           "bed",
           "search"
         ],
+        "operationId": "exact_search_v1_bed_search_exact_get",
+        "summary": "Search for exact match of metadata in bed files"
+      }
+    },
+    "/v1/bed/search/text": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "genome",
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "assay",
+            "required": false
+          },
+          {
+            "default": 10,
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "default": 0,
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "default": false,
+            "in": "query",
+            "name": "test_request",
+            "required": false,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {
+              "$ref": "#/definitions/BedListSearchResult"
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/HTTPValidationError"
+            }
+          }
+        },
+        "tags": [
+          "bed",
+          "search"
+        ],
         "description": "Search for a BedFile by a text query.\n\nBy default, it searches in the 'hg38' genome. To search in a different genome, specify the `genome` parameter. eg. mm10\nExample: query=\"cancer\"",
-        "operationId": "text_to_bed_search_v1_bed_search_text_post",
+        "operationId": "text_to_bed_search_v1_bed_search_text_get",
         "summary": "Search for a BedFile"
+      }
+    },
+    "/v1/bed/umap": {
+      "post": {
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "format": "binary",
+            "in": "formData",
+            "name": "file",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {
+              "items": {
+                "type": "number"
+              },
+              "title": "Response Umap Bed File V1 Bed Umap Post",
+              "type": "array"
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/HTTPValidationError"
+            }
+          }
+        },
+        "tags": [
+          "bed"
+        ],
+        "description": "Create embedding for bed file",
+        "operationId": "umap_bed_file_v1_bed_umap_post",
+        "summary": "Get embeddings for a bed file."
       }
     },
     "/v1/bed/{bed_id}/embedding": {
@@ -402,6 +580,13 @@
             "in": "query",
             "name": "full",
             "required": false
+          },
+          {
+            "default": false,
+            "in": "query",
+            "name": "test_request",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "responses": {
@@ -543,45 +728,6 @@
         "summary": "Get plots for a single BED record"
       }
     },
-    "/v1/bed/{bed_id}/metadata/raw": {
-      "get": {
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "description": "BED digest",
-            "in": "path",
-            "maxLength": 32,
-            "minLength": 32,
-            "name": "bed_id",
-            "pattern": "^\\w+$",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "schema": {
-              "$ref": "#/definitions/BedPEPHubRestrict"
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "schema": {
-              "$ref": "#/definitions/HTTPValidationError"
-            }
-          }
-        },
-        "tags": [
-          "bed"
-        ],
-        "description": "Returns raw metadata for a single BED record. This metadata is stored in PEPHub. And is not verified.Example\n bed_id: bbad85f21962bb8d972444f7f9a3a932",
-        "operationId": "get_bed_pephub_v1_bed__bed_id__metadata_raw_get",
-        "summary": "Get raw metadata for a single BED record"
-      }
-    },
     "/v1/bed/{bed_id}/metadata/stats": {
       "get": {
         "produces": [
@@ -674,6 +820,43 @@
         "summary": "Get nearest neighbours for a single BED record"
       }
     },
+    "/v1/bed/{bed_id}/og-image": {
+      "get": {
+        "produces": [
+          "image/png",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "description": "BED digest",
+            "in": "path",
+            "maxLength": 32,
+            "minLength": 32,
+            "name": "bed_id",
+            "pattern": "^\\w+$",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/HTTPValidationError"
+            }
+          }
+        },
+        "tags": [
+          "bed"
+        ],
+        "description": "Returns a 1200x630 PNG card with stats for link previews. Example bed_id: bbad85f21962bb8d972444f7f9a3a932",
+        "operationId": "get_bed_og_image_v1_bed__bed_id__og_image_get",
+        "summary": "Get Open Graph preview image for a BED record"
+      }
+    },
     "/v1/bed/{bed_id}/regions/{chr_num}": {
       "get": {
         "produces": [
@@ -697,8 +880,7 @@
             "name": "chr_num",
             "pattern": "^\\S+$",
             "required": true,
-            "type": "string",
-            "x-example": "chr1"
+            "type": "string"
           },
           {
             "description": "query range: start coordinate",
@@ -813,7 +995,7 @@
           "bed"
         ],
         "description": "Return link to tokenized bed file\nExample: bed: 0dcdf8986a72a3d85805bbc9493a1302 | universe: 58dee1672b7e581c8e1312bd4ca6b3c7",
-        "operationId": "get_tokens_v1_bed__bed_id__tokens__universe_id__info_get",
+        "operationId": "get_tokens_info_v1_bed__bed_id__tokens__universe_id__info_get",
         "summary": "Get link to tokenized bed file"
       }
     },
@@ -885,8 +1067,7 @@
           {
             "in": "query",
             "name": "query",
-            "required": false,
-            "type": "string"
+            "required": false
           },
           {
             "default": 1000,
@@ -901,6 +1082,13 @@
             "name": "offset",
             "required": false,
             "type": "integer"
+          },
+          {
+            "default": false,
+            "in": "query",
+            "name": "test_request",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "responses": {
@@ -979,6 +1167,13 @@
             "name": "full",
             "required": false,
             "type": "boolean"
+          },
+          {
+            "default": false,
+            "in": "query",
+            "name": "test_request",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "responses": {
@@ -1034,7 +1229,7 @@
           "bedset"
         ],
         "description": "Example\n bed_id: gse218680",
-        "operationId": "get_bedset_metadata_v1_bedset__bedset_id__metadata_plots_get",
+        "operationId": "get_bedset_plots_handler_v1_bedset__bedset_id__metadata_plots_get",
         "summary": "Get plots for single bedset record"
       }
     },
@@ -1069,7 +1264,7 @@
           "bedset"
         ],
         "description": "Example\n bed_id: gse218680",
-        "operationId": "get_bedset_metadata_v1_bedset__bedset_id__metadata_stats_get",
+        "operationId": "get_bedset_stats_handler_v1_bedset__bedset_id__metadata_stats_get",
         "summary": "Get stats for a single BEDSET record"
       }
     },
@@ -1249,6 +1444,116 @@
         "summary": "Release notes"
       }
     },
+    "/v1/exports": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "default": 1000,
+            "description": "Limit (1-10000), default 1000",
+            "in": "query",
+            "maximum": 10000,
+            "minimum": 1,
+            "name": "limit",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "default": 0,
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {
+              "$ref": "#/definitions/BedSnapshotListResult"
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/HTTPValidationError"
+            }
+          }
+        },
+        "tags": [
+          "base"
+        ],
+        "description": "Return the index of bulk metadata export artifacts published to S3, newest\nfirst. ``file_path`` is rewritten to the absolute HTTPS CDN URL. Consumers\nshould resolve the current snapshot through this endpoint rather than\nconstructing or hardcoding a filename, since artifacts are dated and\nimmutable.\n\nDeclared ``def`` (not ``async def``) so the blocking database query runs in a\nthreadpool instead of stalling the event loop.",
+        "operationId": "get_bed_exports_v1_exports_get",
+        "summary": "Index of published bulk metadata exports (newest first)"
+      }
+    },
+    "/v1/files": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "description": "Filter by file type",
+            "in": "query",
+            "name": "file_type",
+            "required": false
+          },
+          {
+            "description": "Filter by genome/assembly",
+            "in": "query",
+            "name": "genome",
+            "required": false
+          },
+          {
+            "description": "Filter by a single tag",
+            "in": "query",
+            "name": "tag",
+            "required": false
+          },
+          {
+            "default": 1000,
+            "description": "Limit (1-10000), default 1000",
+            "in": "query",
+            "maximum": 10000,
+            "minimum": 1,
+            "name": "limit",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "default": 0,
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {
+              "$ref": "#/definitions/AnalysisFileListResult"
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/HTTPValidationError"
+            }
+          }
+        },
+        "tags": [
+          "base"
+        ],
+        "description": "Return the index of standalone analysis files (openSignalMatrix, models,\nother analysis inputs) stored in S3, newest first. These files are global;\nthey are not tied to any bed file or bedset. ``file_path`` is rewritten to\nthe absolute HTTPS CDN URL.\n\nDeclared ``def`` (not ``async def``) so the blocking database query runs in a\nthreadpool instead of stalling the event loop.",
+        "operationId": "get_analysis_files_v1_files_get",
+        "summary": "Index of standalone analysis files (newest first)"
+      }
+    },
     "/v1/files/{file_path}": {
       "get": {
         "produces": [
@@ -1260,6 +1565,13 @@
             "name": "file_path",
             "required": true,
             "type": "string"
+          },
+          {
+            "default": false,
+            "in": "query",
+            "name": "test_request",
+            "required": false,
+            "type": "boolean"
           }
         ],
         "responses": {
@@ -1298,9 +1610,131 @@
         "tags": [
           "base"
         ],
-        "description": "Returns statistics",
-        "operationId": "get_bedbase_db_stats_v1_genomes_get",
+        "description": "Returns available genomes",
+        "operationId": "get_genomes_list_v1_genomes_get",
         "summary": "Get available genomes"
+      }
+    },
+    "/v1/objects/exports": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/DRSModel"
+              },
+              "title": "Response List Export Drs Objects V1 Objects Exports Get",
+              "type": "array"
+            }
+          }
+        },
+        "tags": [
+          "objects"
+        ],
+        "description": "Enumerate every published bulk-metadata export artifact as a GA4GH DRS\nobject, newest first.\n\nThe DRS object-id of an export is its bare filename (the basename of the\n``bed_snapshots.file_path`` S3 key), e.g.\n``bedbase_metadata_2026_08_03.parquet``. Resolve a single object at\n``GET /v1/objects/exports/{object_id}``.\n\nDeclared ``def`` (not ``async def``) so the blocking database query runs in a\nthreadpool instead of stalling the event loop.",
+        "operationId": "list_export_drs_objects_v1_objects_exports_get",
+        "summary": "List published bulk-metadata exports as DRS objects (newest first)"
+      }
+    },
+    "/v1/objects/exports/{object_id}": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "object_id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {
+              "$ref": "#/definitions/DRSModel"
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/HTTPValidationError"
+            }
+          }
+        },
+        "tags": [
+          "objects"
+        ],
+        "description": "Return GA4GH DRS metadata for a single published bulk-metadata export.\n\n``object_id`` is the export's bare filename (the basename of the\n``bed_snapshots.file_path`` S3 key), e.g.\n``bedbase_metadata_2026_08_03.parquet``. The id round-trips: the resolved\n``bed_snapshots`` row is the newest whose ``file_path`` basename equals\n``object_id``.\n\nDeclared ``def`` (not ``async def``) so the blocking database query runs in a\nthreadpool instead of stalling the event loop.",
+        "operationId": "get_export_drs_object_metadata_v1_objects_exports__object_id__get",
+        "summary": "Get DRS object metadata for a bulk-metadata export"
+      }
+    },
+    "/v1/objects/files": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/DRSModel"
+              },
+              "title": "Response List Analysis File Drs Objects V1 Objects Files Get",
+              "type": "array"
+            }
+          }
+        },
+        "tags": [
+          "objects"
+        ],
+        "description": "Enumerate every standalone analysis file as a GA4GH DRS object, newest\nfirst.\n\nThe DRS object-id of an analysis file is its bare filename (the basename of\nthe ``analysis_files.file_path`` S3 key). Resolve a single object at\n``GET /v1/objects/files/{object_id}``.\n\nDeclared ``def`` (not ``async def``) so the blocking database query runs in a\nthreadpool instead of stalling the event loop.",
+        "operationId": "list_analysis_file_drs_objects_v1_objects_files_get",
+        "summary": "List standalone analysis files as DRS objects (newest first)"
+      }
+    },
+    "/v1/objects/files/{object_id}": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "object_id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {
+              "$ref": "#/definitions/DRSModel"
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/HTTPValidationError"
+            }
+          }
+        },
+        "tags": [
+          "objects"
+        ],
+        "description": "Return GA4GH DRS metadata for a single standalone analysis file.\n\n``object_id`` is the file's bare filename (the basename of the\n``analysis_files.file_path`` S3 key). The id round-trips: the resolved\n``analysis_files`` row is the newest whose ``file_path`` basename equals\n``object_id``.\n\nDeclared ``def`` (not ``async def``) so the blocking database query runs in a\nthreadpool instead of stalling the event loop.",
+        "operationId": "get_analysis_file_drs_object_metadata_v1_objects_files__object_id__get",
+        "summary": "Get DRS object metadata for a standalone analysis file"
       }
     },
     "/v1/objects/{object_id}": {
@@ -1548,6 +1982,73 @@
       "title": "AccessURL",
       "type": "object"
     },
+    "AnalysisFileListResult": {
+      "properties": {
+        "count": {
+          "title": "Count",
+          "type": "integer"
+        },
+        "results": {
+          "items": {
+            "$ref": "#/definitions/AnalysisFileResult"
+          },
+          "title": "Results",
+          "type": "array"
+        }
+      },
+      "required": [
+        "count",
+        "results"
+      ],
+      "title": "AnalysisFileListResult",
+      "type": "object"
+    },
+    "AnalysisFileResult": {
+      "description": "One registered standalone analysis file.",
+      "properties": {
+        "tags": {
+          "title": "Tags"
+        },
+        "checksum": {
+          "title": "Checksum"
+        },
+        "creation_date": {
+          "format": "date-time",
+          "title": "Creation Date",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description"
+        },
+        "file_path": {
+          "title": "File Path",
+          "type": "string"
+        },
+        "file_size": {
+          "title": "File Size"
+        },
+        "file_type": {
+          "title": "File Type"
+        },
+        "genome": {
+          "title": "Genome"
+        },
+        "id": {
+          "title": "Id"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "file_path",
+        "creation_date"
+      ],
+      "title": "AnalysisFileResult",
+      "type": "object"
+    },
     "BaseListResponse": {
       "properties": {
         "count": {
@@ -1594,8 +2095,7 @@
           "title": "Data Format"
         },
         "genome_alias": {
-          "title": "Genome Alias",
-          "type": "string"
+          "title": "Genome Alias"
         },
         "genome_digest": {
           "title": "Genome Digest"
@@ -1696,11 +2196,7 @@
           "type": "integer"
         },
         "results": {
-          "items": {
-            "$ref": "#/definitions/QdrantSearchResult"
-          },
-          "title": "Results",
-          "type": "array"
+          "title": "Results"
         }
       },
       "required": [
@@ -1736,8 +2232,7 @@
         },
         "files": {},
         "genome_alias": {
-          "title": "Genome Alias",
-          "type": "string"
+          "title": "Genome Alias"
         },
         "genome_digest": {
           "title": "Genome Digest"
@@ -1774,14 +2269,9 @@
           "default": true,
           "title": "Processed"
         },
-        "raw_metadata": {
-          "title": "Raw Metadata"
-        },
         "stats": {},
         "submission_date": {
-          "format": "date-time",
-          "title": "Submission Date",
-          "type": "string"
+          "title": "Submission Date"
         },
         "universe_metadata": {}
       },
@@ -1812,8 +2302,7 @@
           "title": "Description"
         },
         "genome_alias": {
-          "title": "Genome Alias",
-          "type": "string"
+          "title": "Genome Alias"
         },
         "genome_digest": {
           "title": "Genome Digest"
@@ -1850,208 +2339,13 @@
           "title": "Processed"
         },
         "submission_date": {
-          "format": "date-time",
-          "title": "Submission Date",
-          "type": "string"
+          "title": "Submission Date"
         }
       },
       "required": [
         "id"
       ],
       "title": "BedMetadataBasic",
-      "type": "object"
-    },
-    "BedPEPHub": {
-      "additionalProperties": true,
-      "properties": {
-        "antibody": {
-          "default": "",
-          "description": "Antibody used in the assay",
-          "title": "Antibody",
-          "type": "string"
-        },
-        "cell_line": {
-          "default": "",
-          "title": "Cell Line",
-          "type": "string"
-        },
-        "cell_type": {
-          "default": "",
-          "title": "Cell Type",
-          "type": "string"
-        },
-        "description": {
-          "default": "",
-          "description": "Description of the sample",
-          "title": "Description",
-          "type": "string"
-        },
-        "exp_protocol": {
-          "default": "",
-          "description": "Experimental protocol (e.g. ChIP-seq)",
-          "title": "Exp Protocol",
-          "type": "string"
-        },
-        "genome": {
-          "default": "",
-          "title": "Genome",
-          "type": "string"
-        },
-        "genotype": {
-          "default": "",
-          "description": "Genotype of the sample",
-          "title": "Genotype",
-          "type": "string"
-        },
-        "global_experiment_id": {
-          "default": "",
-          "description": "Global experiment identifier",
-          "title": "Global Experiment Id",
-          "type": "string"
-        },
-        "global_sample_id": {
-          "default": "",
-          "description": "Global sample identifier",
-          "title": "Global Sample Id",
-          "type": "string"
-        },
-        "library_source": {
-          "default": "",
-          "description": "Library source (e.g. genomic, transcriptomic)",
-          "title": "Library Source",
-          "type": "string"
-        },
-        "organism": {
-          "default": "",
-          "title": "Organism",
-          "type": "string"
-        },
-        "sample_name": {
-          "default": "",
-          "title": "Sample Name",
-          "type": "string"
-        },
-        "species_id": {
-          "default": "",
-          "title": "Species Id",
-          "type": "string"
-        },
-        "target": {
-          "default": "",
-          "description": "Target of the assay (e.g. H3K4me3)",
-          "title": "Target",
-          "type": "string"
-        },
-        "tissue": {
-          "default": "",
-          "description": "Tissue type",
-          "title": "Tissue",
-          "type": "string"
-        },
-        "treatment": {
-          "default": "",
-          "description": "Treatment of the sample (e.g. drug treatment)",
-          "title": "Treatment",
-          "type": "string"
-        }
-      },
-      "title": "BedPEPHub",
-      "type": "object"
-    },
-    "BedPEPHubRestrict": {
-      "properties": {
-        "antibody": {
-          "default": "",
-          "description": "Antibody used in the assay",
-          "title": "Antibody",
-          "type": "string"
-        },
-        "cell_line": {
-          "default": "",
-          "title": "Cell Line",
-          "type": "string"
-        },
-        "cell_type": {
-          "default": "",
-          "title": "Cell Type",
-          "type": "string"
-        },
-        "description": {
-          "default": "",
-          "description": "Description of the sample",
-          "title": "Description",
-          "type": "string"
-        },
-        "exp_protocol": {
-          "default": "",
-          "description": "Experimental protocol (e.g. ChIP-seq)",
-          "title": "Exp Protocol",
-          "type": "string"
-        },
-        "genome": {
-          "default": "",
-          "title": "Genome",
-          "type": "string"
-        },
-        "genotype": {
-          "default": "",
-          "description": "Genotype of the sample",
-          "title": "Genotype",
-          "type": "string"
-        },
-        "global_experiment_id": {
-          "default": "",
-          "description": "Global experiment identifier",
-          "title": "Global Experiment Id",
-          "type": "string"
-        },
-        "global_sample_id": {
-          "default": "",
-          "description": "Global sample identifier",
-          "title": "Global Sample Id",
-          "type": "string"
-        },
-        "library_source": {
-          "default": "",
-          "description": "Library source (e.g. genomic, transcriptomic)",
-          "title": "Library Source",
-          "type": "string"
-        },
-        "organism": {
-          "default": "",
-          "title": "Organism",
-          "type": "string"
-        },
-        "sample_name": {
-          "default": "",
-          "title": "Sample Name",
-          "type": "string"
-        },
-        "species_id": {
-          "default": "",
-          "title": "Species Id",
-          "type": "string"
-        },
-        "target": {
-          "default": "",
-          "description": "Target of the assay (e.g. H3K4me3)",
-          "title": "Target",
-          "type": "string"
-        },
-        "tissue": {
-          "default": "",
-          "description": "Tissue type",
-          "title": "Tissue",
-          "type": "string"
-        },
-        "treatment": {
-          "default": "",
-          "description": "Treatment of the sample (e.g. drug treatment)",
-          "title": "Treatment",
-          "type": "string"
-        }
-      },
-      "title": "BedPEPHubRestrict",
       "type": "object"
     },
     "BedPlots": {
@@ -2108,6 +2402,45 @@
       "title": "BedSetBedFiles",
       "type": "object"
     },
+    "BedSetDistributions": {
+      "description": "Collection-level aggregated distribution statistics for a bedset.\n\nStored in the bedset_stats JSONB database column. Populated when\nmember bed files have been processed with the gtars analysis backend.",
+      "properties": {
+        "chromosome_summaries": {
+          "title": "Chromosome Summaries"
+        },
+        "composition": {
+          "title": "Composition"
+        },
+        "gc_content": {
+          "title": "Gc Content"
+        },
+        "n_files": {
+          "default": 0,
+          "title": "N Files",
+          "type": "integer"
+        },
+        "neighbor_distances": {
+          "title": "Neighbor Distances"
+        },
+        "partitions": {
+          "title": "Partitions"
+        },
+        "region_distribution": {
+          "title": "Region Distribution"
+        },
+        "scalar_summaries": {
+          "title": "Scalar Summaries"
+        },
+        "tss_histogram": {
+          "title": "Tss Histogram"
+        },
+        "widths_histogram": {
+          "title": "Widths Histogram"
+        }
+      },
+      "title": "BedSetDistributions",
+      "type": "object"
+    },
     "BedSetListResult": {
       "properties": {
         "count": {
@@ -2151,10 +2484,16 @@
           "title": "Bed Ids",
           "type": "array"
         },
+        "bedfile_count": {
+          "default": 0,
+          "title": "Bedfile Count",
+          "type": "integer"
+        },
         "description": {
           "title": "Description",
           "type": "string"
         },
+        "distributions": {},
         "id": {
           "title": "Id",
           "type": "string"
@@ -2197,6 +2536,11 @@
     },
     "BedSetMinimal": {
       "properties": {
+        "bedfile_count": {
+          "default": 0,
+          "title": "Bedfile Count",
+          "type": "integer"
+        },
         "description": {
           "title": "Description"
         },
@@ -2224,6 +2568,7 @@
       "type": "object"
     },
     "BedSetStats": {
+      "description": "Bedset statistics: mean/sd of scalar columns.\n\nPopulated from bedset_means and bedset_standard_deviation database columns.",
       "properties": {
         "mean": {
           "$ref": "#/definitions/BedStatsModel"
@@ -2235,8 +2580,69 @@
       "title": "BedSetStats",
       "type": "object"
     },
+    "BedSnapshotListResult": {
+      "properties": {
+        "count": {
+          "title": "Count",
+          "type": "integer"
+        },
+        "results": {
+          "items": {
+            "$ref": "#/definitions/BedSnapshotResult"
+          },
+          "title": "Results",
+          "type": "array"
+        }
+      },
+      "required": [
+        "count",
+        "results"
+      ],
+      "title": "BedSnapshotListResult",
+      "type": "object"
+    },
+    "BedSnapshotResult": {
+      "description": "One published bulk-export artifact.",
+      "properties": {
+        "checksum": {
+          "title": "Checksum"
+        },
+        "creation_date": {
+          "format": "date-time",
+          "title": "Creation Date",
+          "type": "string"
+        },
+        "file_path": {
+          "title": "File Path",
+          "type": "string"
+        },
+        "file_size": {
+          "title": "File Size"
+        },
+        "file_type": {
+          "title": "File Type",
+          "type": "string"
+        },
+        "record_count": {
+          "title": "Record Count"
+        },
+        "schema_version": {
+          "title": "Schema Version"
+        }
+      },
+      "required": [
+        "file_path",
+        "file_type",
+        "creation_date"
+      ],
+      "title": "BedSnapshotResult",
+      "type": "object"
+    },
     "BedStatsModel": {
       "properties": {
+        "distributions": {
+          "title": "Distributions"
+        },
         "exon_frequency": {
           "title": "Exon Frequency"
         },
@@ -2295,6 +2701,38 @@
       "title": "BedStatsModel",
       "type": "object"
     },
+    "BinValues": {
+      "properties": {
+        "bins": {
+          "items": {},
+          "title": "Bins",
+          "type": "array"
+        },
+        "counts": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Counts",
+          "type": "array"
+        },
+        "mean": {
+          "title": "Mean",
+          "type": "number"
+        },
+        "median": {
+          "title": "Median",
+          "type": "number"
+        }
+      },
+      "required": [
+        "bins",
+        "counts",
+        "mean",
+        "median"
+      ],
+      "title": "BinValues",
+      "type": "object"
+    },
     "Body_bed_to_bed_search_v1_bed_search_bed_post": {
       "properties": {
         "file": {
@@ -2314,7 +2752,37 @@
           "type": "string"
         }
       },
+      "required": [
+        "file"
+      ],
       "title": "Body_embed_bed_file_v1_bed_embed_post",
+      "type": "object"
+    },
+    "Body_umap_bed_file_v1_bed_umap_post": {
+      "properties": {
+        "file": {
+          "format": "binary",
+          "title": "File",
+          "type": "string"
+        }
+      },
+      "title": "Body_umap_bed_file_v1_bed_umap_post",
+      "type": "object"
+    },
+    "ChromLengthUploadModel": {
+      "properties": {
+        "bed_file": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Bed File",
+          "type": "object"
+        }
+      },
+      "required": [
+        "bed_file"
+      ],
+      "title": "ChromLengthUploadModel",
       "type": "object"
     },
     "ComponentVersions": {
@@ -2430,11 +2898,7 @@
     "FileModel": {
       "properties": {
         "access_methods": {
-          "items": {
-            "$ref": "#/definitions/AccessMethod"
-          },
-          "title": "Access Methods",
-          "type": "array"
+          "title": "Access Methods"
         },
         "description": {
           "title": "Description"
@@ -2472,6 +2936,13 @@
     },
     "FileStats": {
       "properties": {
+        "bed_comments": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Bed Comments",
+          "type": "object"
+        },
         "bed_compliance": {
           "additionalProperties": {
             "type": "integer"
@@ -2479,11 +2950,25 @@
           "title": "Bed Compliance",
           "type": "object"
         },
+        "cell_line": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Cell Line",
+          "type": "object"
+        },
         "data_format": {
           "additionalProperties": {
             "type": "integer"
           },
           "title": "Data Format",
+          "type": "object"
+        },
+        "file_assay": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "File Assay",
           "type": "object"
         },
         "file_genome": {
@@ -2499,15 +2984,71 @@
           },
           "title": "File Organism",
           "type": "object"
+        },
+        "file_size": {
+          "$ref": "#/definitions/BinValues"
+        },
+        "geo": {
+          "$ref": "#/definitions/GEOStatistics"
+        },
+        "geo_status": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Geo Status",
+          "type": "object"
+        },
+        "mean_region_width": {
+          "$ref": "#/definitions/BinValues"
+        },
+        "number_of_regions": {
+          "$ref": "#/definitions/BinValues"
         }
       },
       "required": [
         "bed_compliance",
         "data_format",
         "file_genome",
-        "file_organism"
+        "file_organism",
+        "file_assay",
+        "cell_line",
+        "geo_status",
+        "bed_comments",
+        "mean_region_width",
+        "file_size",
+        "number_of_regions",
+        "geo"
       ],
       "title": "FileStats",
+      "type": "object"
+    },
+    "GEOStatistics": {
+      "description": "GEO statistics for files.",
+      "properties": {
+        "cumulative_number_of_files": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Cumulative Number Of Files",
+          "type": "object"
+        },
+        "file_sizes": {
+          "$ref": "#/definitions/BinValues"
+        },
+        "number_of_files": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Number Of Files",
+          "type": "object"
+        }
+      },
+      "required": [
+        "number_of_files",
+        "cumulative_number_of_files",
+        "file_sizes"
+      ],
+      "title": "GEOStatistics",
       "type": "object"
     },
     "HTTPValidationError": {
@@ -2572,8 +3113,10 @@
           "type": "integer"
         },
         "compared_genome": {
-          "title": "Compared Genome",
-          "type": "string"
+          "title": "Compared Genome"
+        },
+        "genome_digest": {
+          "title": "Genome Digest"
         },
         "oobr": {
           "title": "Oobr"
@@ -2598,6 +3141,7 @@
       "required": [
         "provided_genome",
         "compared_genome",
+        "genome_digest",
         "assigned_points",
         "tier_ranking"
       ],
@@ -2696,95 +3240,71 @@
       "description": "Standardized Bed file metadata",
       "properties": {
         "antibody": {
-          "default": "",
           "description": "Antibody used in the assay",
-          "title": "Antibody",
-          "type": "string"
+          "title": "Antibody"
+        },
+        "assay": {
+          "description": "Experimental protocol (e.g. ChIP-seq)",
+          "title": "Assay"
         },
         "cell_line": {
-          "default": "",
           "description": "population of cells derived from a single cell and cultured in the lab for extended use, e.g. HeLa, HepG2, k562",
-          "title": "Cell Line",
-          "type": "string"
+          "title": "Cell Line"
         },
         "cell_type": {
-          "default": "",
           "description": "specific kind of cell with distinct characteristics found in an organism. e.g. Neurons, Hepatocytes, Adipocytes",
-          "title": "Cell Type",
-          "type": "string"
+          "title": "Cell Type"
         },
         "description": {
           "default": "",
           "title": "Description"
         },
-        "exp_protocol": {
-          "default": "",
-          "description": "Experimental protocol (e.g. ChIP-seq)",
-          "title": "Exp Protocol",
-          "type": "string"
-        },
         "genotype": {
           "default": "",
           "description": "Genotype of the sample",
-          "title": "Genotype",
-          "type": "string"
+          "title": "Genotype"
         },
         "global_experiment_id": {
-          "default": "",
           "description": "Global experiment identifier. e.g. GSE000",
           "title": "Global Experiment Id"
         },
         "global_sample_id": {
-          "default": "",
           "description": "Global sample identifier. e.g. GSM000",
           "title": "Global Sample Id"
         },
         "library_source": {
-          "default": "",
           "description": "Library source (e.g. genomic, transcriptomic)",
-          "title": "Library Source",
-          "type": "string"
+          "title": "Library Source"
         },
         "organism": {
           "default": "",
           "description": "Name of species. e.g. Homo sapiens.",
-          "title": "Organism",
-          "type": "string"
+          "title": "Organism"
         },
         "original_file_name": {
-          "default": "",
           "description": "Original file name",
-          "title": "Original File Name",
-          "type": "string"
+          "title": "Original File Name"
         },
         "phenotype": {
           "default": "",
           "description": "Phenotype of the sample",
-          "title": "Phenotype",
-          "type": "string"
+          "title": "Phenotype"
         },
         "species_id": {
           "default": "",
-          "title": "Species Id",
-          "type": "string"
+          "title": "Species Id"
         },
         "target": {
-          "default": "",
           "description": "Target of the assay (e.g. H3K4me3)",
-          "title": "Target",
-          "type": "string"
+          "title": "Target"
         },
         "tissue": {
-          "default": "",
           "description": "Tissue type",
-          "title": "Tissue",
-          "type": "string"
+          "title": "Tissue"
         },
         "treatment": {
-          "default": "",
           "description": "Treatment of the sample (e.g. drug treatment)",
-          "title": "Treatment",
-          "type": "string"
+          "title": "Treatment"
         }
       },
       "title": "StandardMeta",
@@ -2902,6 +3422,13 @@
     },
     "UsageStats": {
       "properties": {
+        "bed_downloads": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "title": "Bed Downloads",
+          "type": "object"
+        },
         "bed_metadata": {
           "additionalProperties": {
             "type": "integer"
@@ -2935,13 +3462,21 @@
         "bed_metadata",
         "bedset_metadata",
         "bed_search_terms",
-        "bedset_search_terms"
+        "bedset_search_terms",
+        "bed_downloads"
       ],
       "title": "UsageStats",
       "type": "object"
     },
     "ValidationError": {
       "properties": {
+        "ctx": {
+          "title": "Context",
+          "type": "object"
+        },
+        "input": {
+          "title": "Input"
+        },
         "loc": {
           "items": {},
           "title": "Location",

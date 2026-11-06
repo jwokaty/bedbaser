@@ -1,9 +1,9 @@
-bedbase <- BEDbase(quietly = TRUE)
+bedbase <- BEDbase(tempdir(), quietly = TRUE)
 ex_bed <- bb_example(bedbase, "bed")
 ex_bedset <- bb_example(bedbase, "bedset")
 
 test_that("setCache changes cache", {
-    path <- tempdir()
+    path <- file.path(tempdir(), "subdirectory")
     expect_true(BiocFileCache::bfccache(getCache(bedbase, "bedfiles")) != file.path(path, "bedfiles"))
     bedbase <- setCache(bedbase, path)
     expect_true(BiocFileCache::bfccache(getCache(bedbase, "bedfiles")) == file.path(path, "bedfiles"))
@@ -18,15 +18,21 @@ test_that("bb_example has 'bed_ids' given rec_type 'bedset'", {
 })
 
 test_that("bb_metadata returns metadata for BEDs", {
-    ex_metadata <- httr::content(bedbase$get_bed_metadata_v1_bed__bed_id__metadata_get(ex_bed$id, TRUE))
+    ex_metadata <- httr::content(bedbase$get_bed_metadata_v1_bed__bed_id__metadata_get(
+        ex_bed$id,
+        TRUE,
+        test_request = .is_test_request()))
     bed_metadata <- bb_metadata(bedbase, ex_bed$id, TRUE)
-    expect_identical(ex_metadata, bed_metadata)
+    expect_equal(ex_metadata, bed_metadata)
 })
 
 test_that("bb_metadata returns metadata for BEDsets", {
-    ex_bedset_metadata <- httr::content(bedbase$get_bedset_metadata_v1_bedset__bedset_id__metadata_get(ex_bedset$id, TRUE))
+    ex_bedset_metadata <- httr::content(bedbase$get_bedset_metadata_v1_bedset__bedset_id__metadata_get(
+        ex_bedset$id,
+        TRUE,
+        test_request = .is_test_request()))
     bedset_metadata <- bb_metadata(bedbase, ex_bedset$id, TRUE)
-    expect_identical(ex_bedset_metadata, bedset_metadata)
+    expect_equal(ex_bedset_metadata, bedset_metadata)
 })
 
 test_that("bb_metadata errors on invalid input", {
@@ -49,29 +55,29 @@ test_that("bb_list_beds returns same number of results for the mm39 genome", {
 test_that("bb_list_bedsets returns same number for query 'alzheimer'", {
     bedsets_raw <- httr::content(bedbase$list_bedsets_v1_bedset_list_get(
         query = "alzheimer",
-        limit = 5000
+        limit = 5000,
+        test_request = .is_test_request()
     ))
-    bedsets_names_bed_ids_list <- lapply(bedsets_raw$results, `[`, c("id", "bed_ids"))
-    bedsets_from_raw <- dplyr::bind_rows(bedsets_names_bed_ids_list) |>
-        tidyr::unnest(cols = c(bed_ids))
+    bedsets_names_ids_list <- lapply(bedsets_raw$results, `[`, c("id"))
+    bedsets_from_raw <- dplyr::bind_rows(bedsets_names_ids_list)
     bedset_ids <- bedsets_from_raw$id |> unique()
     bedsets <- bb_list_bedsets(bedbase, query = "alzheimer", limit = 5000)
     expect_equal(bedset_ids, bedsets$id)
 })
 
-test_that("bb_list_bedsets returns limited number of bed ids", {
+test_that("bb_list_bedsets returns limited number of ids", {
     bedsets_raw <- httr::content(bedbase$list_bedsets_v1_bedset_list_get(
         query = "",
-        limit = 1
+        limit = 1,
+        test_request = .is_test_request()
     ))
-    bedsets_names_bed_ids_list <- lapply(bedsets_raw$results, `[`, c("id", "bed_ids"))
-    bedsets_from_raw <- dplyr::bind_rows(bedsets_names_bed_ids_list) |>
-        tidyr::unnest(cols = c(bed_ids))
+    bedsets_names_id_list <- lapply(bedsets_raw$results, `[`, c("id"))
+    bedsets_from_raw <- dplyr::bind_rows(bedsets_names_id_list)
     bedset_ids <- bedsets_from_raw$id |> unique()
     bedsets <- bb_list_bedsets(bedbase, query = "", limit = 1)
     expect_equal(bedset_ids, bedsets$id)
 })
-
+ 
 test_that("bb_beds_in_bedset returns expected bed_ids", {
     ex_bedset <- httr::content(bedbase$get_example_bedset_record_v1_bedset_example_get())
     ex_bedset_raw <- httr::content(bedbase$get_bedfiles_in_bedset_v1_bedset__bedset_id__bedfiles_get(ex_bedset$id))
@@ -82,14 +88,23 @@ test_that("bb_beds_in_bedset returns expected bed_ids", {
 })
 
 test_that("bb_bed_text_search returns results scored against the query", {
-    beds <- bb_bed_text_search(bedbase, "hg38")
-    ex_beds <- httr::content(bedbase$text_to_bed_search_v1_bed_search_text_post(
-        query = "hg38",
+    beds <- bb_bed_text_search(bedbase, "cancer") |>
+        dplyr::arrange(id)
+    ex_beds <- httr::content(bedbase$text_to_bed_search_v1_bed_search_text_get(
+        query = "cancer",
+        genome = NULL,
+        assay = NULL,
         limit = 10,
-        offset = 0
+        offset = 0,
+        test_request = .is_test_request()
     ))
     ex_beds <- purrr::map_depth(.x = ex_beds$results, 1, \(y) unlist(y)) |>
-        dplyr::bind_rows()
+        dplyr::bind_rows() |>
+        dplyr::arrange(id)
+
+    ex_beds <- ex_beds[, sort(names(ex_beds))]
+    beds <- beds[, sort(names(beds))]
+
     expect_equal(ex_beds, beds)
     expect_true("score" %in% names(beds))
 })
@@ -170,4 +185,16 @@ test_that("bb_save saves bed files to a path", {
     for (id in bedset$bed_ids) {
         expect_true(file.exists(file.path(path, paste0(id, ".bed.gz"))))
     }
+})
+
+test_that("show prints a summary", {
+    expect_output(show(bedbase), "BEDbase client")
+    expect_output(show(bedbase), "api.bedbase.org")
+})
+
+test_that("BEDbase host argument is used", {
+    expect_equal(bedbase@host, "api.bedbase.org")
+    with_scheme <- BEDbase(tempdir(), quietly = TRUE, host = "https://api.bedbase.org")
+    expect_equal(with_scheme@host, "api.bedbase.org")
+    expect_error(BEDbase(tempdir(), quietly = TRUE, host = ""))
 })
