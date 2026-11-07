@@ -195,7 +195,8 @@ test_that("bb_bed_text_search returns results scored against the query", {
 })
 
 test_that("bb_to_granges returns a GRanges object given a 3+0 bed file", {
-    beds <- bb_list_beds(bedbase, bed_compliance = "bed3+0")
+    beds <- bb_list_beds(bedbase, bed_compliance = "bed3+0", limit = 1,
+        after = "0")
     id <- beds$id[1]
     md <- bb_metadata(bedbase, id, TRUE)
     expect_equal("bed3+0", md$bed_compliance)
@@ -204,7 +205,8 @@ test_that("bb_to_granges returns a GRanges object given a 3+0 bed file", {
 })
 
 test_that("bb_to_granges returns a GRanges object given narrowpeak (6+4) file", {
-    beds <- bb_list_beds(bedbase, bed_compliance = "bed6+4")
+    beds <- bb_list_beds(bedbase, bed_compliance = "bed6+4", limit = 1,
+        after = "0")
     id <- beds$id[1]
     md <- bb_metadata(bedbase, id, TRUE)
     expect_equal("bed6+4", md$bed_compliance)
@@ -221,7 +223,8 @@ test_that("bb_to_granges returns a GRanges object given narrowpeak (6+4) file", 
 })
 
 test_that("bb_to_granges returns GRanges object given bed4+2 with genome", {
-    beds <- bb_list_beds(bedbase, bed_compliance = "bed4+2")
+    beds <- bb_list_beds(bedbase, bed_compliance = "bed4+2", limit = 1,
+        after = "0")
     id <- beds$id[1]
     md <- bb_metadata(bedbase, id, TRUE)
     expect_equal("bed4+2", md$bed_compliance)
@@ -236,7 +239,8 @@ test_that("bb_to_granges returns GRanges object given bed4+2 with genome", {
 })
 
 test_that("bb_to_granges allows passing extra_cols", {
-    beds <- bb_list_beds(bedbase, bed_compliance = "bed6+5")
+    beds <- bb_list_beds(bedbase, bed_compliance = "bed6+5", limit = 1,
+        after = "0")
     id <- beds$id[1]
     md <- bb_metadata(bedbase, id, TRUE)
     expect_equal("bed6+5", md$bed_compliance)
