@@ -21,11 +21,14 @@
 #' @param rsp httr response
 #' @param hints character() (default \code{character()}) messages named by
 #' query parameter, added when bedhost rejects that parameter
+#' @param call environment (default \code{rlang::caller_env()}) function call
+#' to report in an error
 #'
 #' @return list() parsed content
 #'
 #' @noRd
-.get_json_content <- function(rsp, hints = character()) {
+.get_json_content <- function(rsp, hints = character(),
+                              call = rlang::caller_env()) {
     is_json <- identical(httr::http_type(rsp), "application/json")
     if (httr::http_error(rsp)) {
         msg <- httr::http_status(rsp)$message
@@ -43,13 +46,13 @@
                 }
             }
         }
-        rlang::abort(msg)
+        rlang::abort(msg, call = call)
     }
     if (!is_json) {
         rlang::abort(paste(
             "Expected a JSON response from bedhost, received",
             httr::http_type(rsp)
-        ))
+        ), call = call)
     }
     httr::content(rsp)
 }
